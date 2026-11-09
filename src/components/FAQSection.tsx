@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { COMPANY_DATA } from '@/data/company';
+import MagneticButton from './MagneticButton';
 import {
   ChevronDown,
   Headphones,
@@ -73,13 +75,27 @@ export const FAQSection: React.FC = () => {
       id="faq"
       className="py-16 lg:py-24 bg-white dark:bg-[#0A0F1D] border-t border-neutral-200 dark:border-line relative overflow-hidden transition-colors duration-200"
     >
-      {/* Subtle Ambient Background Glows */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand/5 dark:bg-brand/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
-      <div className="absolute bottom-10 left-10 w-80 h-80 bg-brand-lime/10 dark:bg-brand-lime/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+      {/* Subtle Ambient Background Glows with breathing animation */}
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-0 right-1/4 w-96 h-96 bg-brand/5 dark:bg-brand/15 rounded-full blur-3xl pointer-events-none -z-10"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        className="absolute bottom-10 left-10 w-80 h-80 bg-brand-lime/10 dark:bg-brand-lime/5 rounded-full blur-3xl pointer-events-none -z-10"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        {/* Section Header with Scroll Reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
           <span className="text-xs font-black uppercase text-brand dark:text-brand-lime tracking-widest bg-brand/5 dark:bg-brand-lime/10 px-3.5 py-1.5 rounded-full border border-brand/10 dark:border-brand-lime/20 inline-flex items-center gap-2 mb-4">
             <HelpCircle className="w-3.5 h-3.5" />
             <span>{isAr ? 'الأسئلة الشائعة • إجابات فورية' : 'FAQ • Instant Answers'}</span>
@@ -118,16 +134,20 @@ export const FAQSection: React.FC = () => {
               ? 'كل ما تحتاج لمعرفته عن خدمات كوا، معايير الأمان، وضمانات الجودة والتسعيرة العادلة.'
               : 'Everything you need to know about KOWA services, safety protocols, upfront fixed fares, and captain onboarding.'}
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* FAQ Accordion Side (col-span-7) */}
+          {/* FAQ Accordion Side (col-span-7) with Staggered Entrance */}
           <div className="lg:col-span-7 space-y-4">
-            {faqItems.map((item) => {
+            {faqItems.map((item, idx) => {
               const isOpen = openId === item.id;
               return (
-                <div
+                <motion.div
                   key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                   className={`rounded-2xl sm:rounded-3xl border transition-all duration-300 overflow-hidden ${
                     isOpen
                       ? 'bg-neutral-50/90 dark:bg-[#141E34] border-brand/30 dark:border-primary-token/50 shadow-elevated'
@@ -164,22 +184,36 @@ export const FAQSection: React.FC = () => {
                     </div>
                   </button>
 
-                  {/* Answer Block */}
-                  {isOpen && (
-                    <div
-                      id={`faq-answer-${item.id}`}
-                      className="px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base text-neutral-600 dark:text-ink-muted leading-relaxed border-t border-neutral-200/50 dark:border-line/60 mt-1 animate-fade-in"
-                    >
-                      {item.answer}
-                    </div>
-                  )}
-                </div>
+                  {/* Smooth Animated Answer Block */}
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        id={`faq-answer-${item.id}`}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base text-neutral-600 dark:text-ink-muted leading-relaxed border-t border-neutral-200/50 dark:border-line/60 mt-1">
+                          {item.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>
 
           {/* Customer Trust & Support Showcase Card (col-span-5) */}
-          <div className="lg:col-span-5">
+          <motion.div
+            initial={{ opacity: 0, x: isRtl ? -30 : 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5"
+          >
             <div className="bg-gradient-to-br from-brand via-brand-dark to-neutral-900 dark:from-[#1F0F8C] dark:via-[#140959] dark:to-[#070B14] rounded-3xl p-8 sm:p-10 text-white shadow-elevated relative overflow-hidden flex flex-col justify-between">
               {/* Subtle background glow */}
               <div className="absolute -top-16 -right-16 w-48 h-48 bg-brand-lime/15 rounded-full blur-2xl pointer-events-none"></div>
@@ -236,28 +270,24 @@ export const FAQSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Action Buttons wrapped in MagneticButton */}
               <div className="relative z-10 pt-4 border-t border-white/15 flex flex-col sm:flex-row gap-3">
-                <a
-                  href="#contact"
-                  className="flex-1 py-3 px-4 rounded-xl bg-brand-lime text-neutral-900 font-bold text-xs hover:bg-brand-accent-hover transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap cursor-pointer"
-                >
-                  <span>{isAr ? 'تواصل مع الدعم الفني' : 'Contact Support'}</span>
-                  <ArrowIcon className="w-3.5 h-3.5" />
-                </a>
+                <MagneticButton strength={0.25} href="#contact" className="flex-1">
+                  <span className="w-full py-3 px-4 rounded-xl bg-brand-lime text-neutral-900 font-bold text-xs hover:bg-brand-accent-hover transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap cursor-pointer">
+                    <span>{isAr ? 'تواصل مع الدعم الفني' : 'Contact Support'}</span>
+                    <ArrowIcon className="w-3.5 h-3.5" />
+                  </span>
+                </MagneticButton>
 
-                <a
-                  href={COMPANY_DATA.contact.whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
-                >
-                  <MessageCircle className="w-3.5 h-3.5 text-brand-lime" />
-                  <span>{isAr ? 'واتساب' : 'WhatsApp'}</span>
-                </a>
+                <MagneticButton strength={0.25} href={COMPANY_DATA.contact.whatsappLink} target="_blank" rel="noopener noreferrer">
+                  <span className="py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer">
+                    <MessageCircle className="w-3.5 h-3.5 text-brand-lime" />
+                    <span>{isAr ? 'واتساب' : 'WhatsApp'}</span>
+                  </span>
+                </MagneticButton>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

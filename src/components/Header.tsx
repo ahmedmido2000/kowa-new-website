@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import MagneticButton from '@/components/MagneticButton';
 import { Globe, Download, Menu, X } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -12,7 +14,12 @@ export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-[#0C1222]/95 backdrop-blur-md border-b border-neutral-200 dark:border-line transition-colors duration-200">
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="sticky top-0 z-50 bg-white/95 dark:bg-[#0C1222]/95 backdrop-blur-md border-b border-neutral-200 dark:border-line transition-colors duration-200"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4 lg:gap-8 flex-nowrap">
         {/* Brand Link with Logo and Brand Navy Background */}
         <a className="flex items-center gap-3 group shrink-0 flex-nowrap" href="#hero">
@@ -101,14 +108,15 @@ export const Header: React.FC = () => {
             <span className="whitespace-nowrap">{isAr ? 'EN' : 'العربية'}</span>
           </button>
 
-          {/* App CTA (Hidden on mobile, placed inside collapsed drawer) */}
-          <a
-            className="hidden sm:inline-flex items-center justify-center gap-2 font-bold text-sm px-5 py-2.5 rounded-xl bg-brand dark:bg-primary-solid text-white hover:bg-brand-dark dark:hover:bg-brand shadow-sm hover:shadow-brand-glow transition-all duration-200 whitespace-nowrap shrink-0"
-            href="#download-banner"
-          >
-            <span className="whitespace-nowrap">{isAr ? 'تحميل التطبيق' : 'Get the App'}</span>
-            <Download className="w-4 h-4 text-brand-lime shrink-0" />
-          </a>
+          {/* App CTA wrapped with MagneticButton */}
+          <div className="hidden sm:block">
+            <MagneticButton strength={0.25} href="#download-banner">
+              <span className="inline-flex items-center justify-center gap-2 font-bold text-sm px-5 py-2.5 rounded-xl bg-brand dark:bg-primary-solid text-white hover:bg-brand-dark dark:hover:bg-brand shadow-sm hover:shadow-brand-glow transition-all duration-200 whitespace-nowrap cursor-pointer">
+                <span className="whitespace-nowrap">{isAr ? 'تحميل التطبيق' : 'Get the App'}</span>
+                <Download className="w-4 h-4 text-brand-lime shrink-0" />
+              </span>
+            </MagneticButton>
+          </div>
 
           {/* Mobile Menu Trigger */}
           <button
@@ -185,6 +193,6 @@ export const Header: React.FC = () => {
           </div>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 };

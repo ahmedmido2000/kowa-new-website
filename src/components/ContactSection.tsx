@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { COMPANY_DATA } from '@/data/company';
+import MagneticButton from './MagneticButton';
 import {
   MapPin,
   Mail,
@@ -119,10 +121,16 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section className="py-16 lg:py-24 bg-neutral-50/60 dark:bg-[#0A0F1D] border-t border-neutral-200 dark:border-line transition-colors duration-200" id="contact">
+    <section className="py-16 lg:py-24 bg-neutral-50/60 dark:bg-[#0A0F1D] border-t border-neutral-200 dark:border-line transition-colors duration-200 overflow-hidden" id="contact">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        {/* Section Header with Scroll Reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
           <span className="text-xs font-black uppercase text-brand dark:text-brand-lime tracking-widest bg-brand/5 dark:bg-brand-lime/10 px-3 py-1 rounded-full border border-brand/10 dark:border-brand-lime/20">
             {isAr ? 'معلومات التواصل المعتمدة' : 'Official Contact Information'}
           </span>
@@ -134,12 +142,18 @@ export const ContactSection: React.FC = () => {
               ? 'نسعد بالإجابة عن استفساراتك واستقبال مقترحاتك وطلبات انضمام الكباتن والشركات لتقديم تجربة تنقل استثنائية تفوق توقعاتك.'
               : 'We look forward to addressing your inquiries, corporate partner requests, and captain onboarding queries.'}
           </p>
-        </div>
+        </motion.div>
 
         {/* Content Container */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Contact Details & Info Badges */}
-          <div className="lg:col-span-5 space-y-4 text-right rtl:text-right ltr:text-left">
+          <motion.div
+            initial={{ opacity: 0, x: isAr ? 30 : -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 space-y-4 text-right rtl:text-right ltr:text-left"
+          >
             {/* 1. Main Headquarters */}
             <div className="bg-white dark:bg-[#10182C] p-5 rounded-2xl border border-neutral-200/80 dark:border-line shadow-subtle flex items-start gap-4 transition hover:border-brand/40 dark:hover:border-primary-token/40">
               <div className="w-12 h-12 rounded-xl bg-brand/10 dark:bg-primary-token/20 text-brand dark:text-primary-token flex items-center justify-center shrink-0">
@@ -238,10 +252,16 @@ export const ContactSection: React.FC = () => {
                 <span>{isAr ? 'خدمة الركاب والرحلات متوفرة 24/7 دون انقطاع' : '24/7 uninterrupted fleet operations'}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Direct Contact Form */}
-          <div className="lg:col-span-7 bg-white dark:bg-[#10182C] rounded-3xl p-6 sm:p-8 border border-neutral-200/80 dark:border-line shadow-elevated transition-colors duration-200">
+          <motion.div
+            initial={{ opacity: 0, x: isAr ? -30 : 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 bg-white dark:bg-[#10182C] rounded-3xl p-6 sm:p-8 border border-neutral-200/80 dark:border-line shadow-elevated transition-colors duration-200"
+          >
             <h3 className="text-xl font-black text-neutral-900 dark:text-ink mb-2 text-right rtl:text-right ltr:text-left">
               {isAr ? 'أرسل لنا استفسارك أو طلبك' : 'Send us a Direct Message'}
             </h3>
@@ -369,24 +389,26 @@ export const ContactSection: React.FC = () => {
               </div>
 
               {/* Submit CTA */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3.5 px-6 rounded-xl bg-brand hover:bg-brand-dark dark:bg-primary-solid dark:hover:bg-brand text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm hover:shadow-brand-glow transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-              >
-                <span>
-                  {isSubmitting
-                    ? isAr
-                      ? 'جارٍ الإرسال...'
-                      : 'Sending...'
-                    : isAr
-                    ? 'إرسال الرسالة الآن'
-                    : 'Submit Message Now'}
-                </span>
-                <Send className="w-4 h-4 text-brand-lime" />
-              </button>
+              <MagneticButton strength={0.2} className="w-full">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 px-6 rounded-xl bg-brand hover:bg-brand-dark dark:bg-primary-solid dark:hover:bg-brand text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm hover:shadow-brand-glow transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <span>
+                    {isSubmitting
+                      ? isAr
+                        ? 'جارٍ الإرسال...'
+                        : 'Sending...'
+                      : isAr
+                      ? 'إرسال الرسالة الآن'
+                      : 'Submit Message Now'}
+                  </span>
+                  <Send className="w-4 h-4 text-brand-lime" />
+                </button>
+              </MagneticButton>
             </form>
-          </div>
+          </motion.div>
         </div>
 
         {/* Official Social Media Channels Grid */}

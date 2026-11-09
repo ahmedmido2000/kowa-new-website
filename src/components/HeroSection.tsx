@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { HERO_VEHICLE_OPTIONS } from '@/data/translations';
 import { BookingModal } from './BookingModal';
+import MagneticButton from './MagneticButton';
 import {
   Lock,
   Navigation,
@@ -32,6 +34,29 @@ export const HeroSection: React.FC = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(HERO_VEHICLE_OPTIONS[1]); // Comfort
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Subtle interactive mouse-tracking parallax
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 25, stiffness: 140, mass: 0.1 };
+  const bgX = useSpring(mouseX, springConfig);
+  const bgY = useSpring(mouseY, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (typeof window === 'undefined') return;
+    const { clientX, clientY } = e;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const factorX = (clientX - centerX) / centerX;
+    const factorY = (clientY - centerY) / centerY;
+    mouseX.set(factorX * -15);
+    mouseY.set(factorY * -10);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   const handleLocateMe = () => {
     setPickup(isAr ? 'موقعي الحالي (حي الصحافة، الرياض)' : 'Current Location (Al Sahafa, Riyadh)');
   };
@@ -39,20 +64,33 @@ export const HeroSection: React.FC = () => {
   return (
     <>
       <section
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="relative overflow-hidden bg-gradient-to-b from-neutral-50 via-white to-neutral-50/50 dark:from-[#0A0F1D] dark:via-[#0C1222] dark:to-[#0A0F1D] pt-10 pb-16 lg:pt-16 lg:pb-24 border-b border-neutral-200 dark:border-line transition-colors duration-200"
         id="hero"
       >
-        {/* Subtle Ambient Background Accents */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand/5 dark:bg-brand/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
-        <div className="absolute bottom-10 left-10 w-80 h-80 bg-brand-lime/20 dark:bg-brand-lime/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+        {/* Subtle Ambient Background Accents with Parallax Drift */}
+        <motion.div
+          style={{ x: bgX, y: bgY }}
+          className="absolute top-0 right-1/4 w-96 h-96 bg-brand/5 dark:bg-brand/15 rounded-full blur-3xl pointer-events-none -z-10"
+        />
+        <motion.div
+          style={{ x: bgY, y: bgX }}
+          className="absolute bottom-10 left-10 w-80 h-80 bg-brand-lime/20 dark:bg-brand-lime/10 rounded-full blur-3xl pointer-events-none -z-10"
+        />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Value Pitch & Dual-Action Booking Card */}
-            <div className="lg:col-span-6 flex flex-col gap-6">
+            <motion.div
+              initial={{ opacity: 0, x: isRtl ? 30 : -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6 flex flex-col gap-6"
+            >
               {/* Category Pill */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand/5 dark:bg-brand-lime/10 border border-brand/15 dark:border-brand-lime/20 text-brand dark:text-brand-lime text-xs font-bold w-fit">
-                <span className="w-2 h-2 rounded-full bg-brand-lime"></span>
+                <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
                 <span>
                   {isAr
                     ? 'الجيل الجديد للتنقل الذكي الفاخر في المملكة'
@@ -231,18 +269,20 @@ export const HeroSection: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(true)}
-                      className="w-full sm:w-auto py-3.5 px-6 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-primary-solid dark:hover:bg-brand text-white font-black text-sm flex items-center justify-center gap-2 shadow-sm hover:shadow-brand-glow transition-all cursor-pointer"
-                    >
-                      <span>{isAr ? 'طلب فوري الآن' : 'Request Instantly'}</span>
-                      {isRtl ? (
-                        <ArrowLeft className="w-4 h-4 text-brand-lime" />
-                      ) : (
-                        <ArrowRight className="w-4 h-4 text-brand-lime" />
-                      )}
-                    </button>
+                    <MagneticButton strength={0.2} className="w-full sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={() => setIsModalOpen(true)}
+                        className="w-full sm:w-auto py-3.5 px-6 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-primary-solid dark:hover:bg-brand text-white font-black text-sm flex items-center justify-center gap-2 shadow-sm hover:shadow-brand-glow transition-all cursor-pointer group"
+                      >
+                        <span>{isAr ? 'طلب فوري الآن' : 'Request Instantly'}</span>
+                        {isRtl ? (
+                          <ArrowLeft className="w-4 h-4 text-brand-lime group-hover:-translate-x-1 transition-transform" />
+                        ) : (
+                          <ArrowRight className="w-4 h-4 text-brand-lime group-hover:translate-x-1 transition-transform" />
+                        )}
+                      </button>
+                    </MagneticButton>
                   </div>
                 </div>
               </div>
@@ -260,10 +300,15 @@ export const HeroSection: React.FC = () => {
                   <span>mada • Apple Pay • Visa</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Visual Container Frame with Floating Badges */}
-            <div className="lg:col-span-6 relative">
+            {/* Visual Container Frame with Floating Badges and Parallax Entrance */}
+            <motion.div
+              initial={{ opacity: 0, x: isRtl ? -35 : 35 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6 relative"
+            >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 dark:border-line bg-white dark:bg-[#10182C]">
                 <div className="relative w-full h-[460px] sm:h-[500px]">
                   <Image
@@ -306,9 +351,10 @@ export const HeroSection: React.FC = () => {
               </div>
 
               {/* Floating Pill 1: Arrival Time */}
-              <div
-                className="absolute -top-4 right-6 rtl:right-6 rtl:left-auto ltr:left-6 ltr:right-auto bg-white/95 dark:bg-[#10182C]/95 backdrop-blur-md border border-neutral-200 dark:border-line shadow-float rounded-2xl p-3.5 flex items-center gap-3 animate-pulse"
-                style={{ animationDuration: '3s' }}
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute -top-4 right-6 rtl:right-6 rtl:left-auto ltr:left-6 ltr:right-auto bg-white/95 dark:bg-[#10182C]/95 backdrop-blur-md border border-neutral-200 dark:border-line shadow-float rounded-2xl p-3.5 flex items-center gap-3"
               >
                 <div className="w-10 h-10 rounded-xl bg-brand-lime/30 text-neutral-900 flex items-center justify-center font-bold">
                   <Send className="w-5 h-5 text-neutral-900" />
@@ -321,10 +367,14 @@ export const HeroSection: React.FC = () => {
                     {isAr ? 'وصل خلال دقيقتين ⚡' : 'Arrives in 2 mins ⚡'}
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Floating Pill 2: Passenger Rating */}
-              <div className="absolute -bottom-5 left-6 rtl:left-6 rtl:right-auto ltr:right-6 ltr:left-auto bg-white/95 dark:bg-[#10182C]/95 backdrop-blur-md border border-neutral-200 dark:border-line shadow-float rounded-2xl p-3.5 flex items-center gap-3">
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                className="absolute -bottom-5 left-6 rtl:left-6 rtl:right-auto ltr:right-6 ltr:left-auto bg-white/95 dark:bg-[#10182C]/95 backdrop-blur-md border border-neutral-200 dark:border-line shadow-float rounded-2xl p-3.5 flex items-center gap-3"
+              >
                 <div className="w-10 h-10 rounded-xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center font-bold">
                   <Star className="w-5 h-5 fill-brand-lime" />
                 </div>
@@ -340,8 +390,8 @@ export const HeroSection: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>

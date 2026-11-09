@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { CaptainModal } from './CaptainModal';
+import MagneticButton from './MagneticButton';
 import {
   Banknote,
   Percent,
@@ -17,6 +19,7 @@ import {
 export const CaptainEarnings: React.FC = () => {
   const { locale, isRtl } = useLanguage();
   const isAr = locale === 'ar';
+  const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
   const [hours, setHours] = useState(6);
   const [days, setDays] = useState(5);
@@ -36,14 +39,28 @@ export const CaptainEarnings: React.FC = () => {
   return (
     <>
       <section className="py-16 lg:py-24 bg-neutral-900 dark:bg-[#070B14] text-white relative overflow-hidden transition-colors duration-200" id="captain-earnings">
-        {/* Ambient Accent Glow */}
-        <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-brand/30 blur-3xl pointer-events-none"></div>
-        <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-brand-lime/10 blur-3xl pointer-events-none"></div>
+        {/* Ambient Accent Glow with smooth breathing animation */}
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-brand/30 blur-3xl pointer-events-none"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+          className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-brand-lime/15 blur-3xl pointer-events-none"
+        />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Value Proposition */}
-            <div className="lg:col-span-6 text-right rtl:text-right ltr:text-left">
+            <motion.div
+              initial={{ opacity: 0, x: isRtl ? 30 : -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6 text-right rtl:text-right ltr:text-left"
+            >
               <span className="text-xs font-black uppercase text-brand-lime tracking-widest bg-brand-lime/10 px-3 py-1 rounded-full border border-brand-lime/20 inline-block mb-3">
                 {isAr ? 'كباتن المملكة' : 'Captains of Saudi Arabia'}
               </span>
@@ -58,41 +75,45 @@ export const CaptainEarnings: React.FC = () => {
                   : 'Be your own boss. Join thousands of elite Saudi captains with the lowest take-rate commission in KSA and instant daily direct deposits to your bank account.'}
               </p>
 
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <div className="flex items-center gap-2 text-brand-lime font-black text-xl mb-1 font-en">
-                    <Percent className="w-5 h-5 text-brand-lime" />
-                    <span>{isAr ? 'عمولة 15% فقط' : '15% Lowest Fee'}</span>
+              {/* 3 Pillars */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-lime/30 transition">
+                  <div className="w-10 h-10 rounded-xl bg-brand-lime/20 flex items-center justify-center text-brand-lime shrink-0">
+                    <Percent className="w-5 h-5" />
                   </div>
-                  <div className="text-xs text-neutral-300">
-                    {isAr ? 'أدنى نسبة اقتطاع مقارنة بجميع التطبيقات' : 'The lowest platform fee in Saudi Arabia'}
+                  <div>
+                    <span className="text-sm font-bold text-white block">
+                      {isAr ? 'أقل عمولة منصة 15%' : 'Lowest 15% Platform Take'}
+                    </span>
+                    <span className="text-xs text-neutral-400">
+                      {isAr ? 'احتفظ بأكبر قدر من أرباحك' : 'Keep max trip earnings'}
+                    </span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <div className="flex items-center gap-2 text-brand-lime font-black text-xl mb-1 font-en">
-                    <Banknote className="w-5 h-5 text-brand-lime" />
-                    <span>{isAr ? 'إيداع يومي فوري' : 'Daily Payouts'}</span>
+                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-lime/30 transition">
+                  <div className="w-10 h-10 rounded-xl bg-brand-lime/20 flex items-center justify-center text-brand-lime shrink-0">
+                    <Banknote className="w-5 h-5" />
                   </div>
-                  <div className="text-xs text-neutral-300">
-                    {isAr ? 'تحويل أرباحك لحسابك البنكي دون تأخير' : 'Instant earnings direct deposit to your IBAN'}
+                  <div>
+                    <span className="text-sm font-bold text-white block">
+                      {isAr ? 'إيداع بنكي يومي' : 'Daily Direct Deposit'}
+                    </span>
+                    <span className="text-xs text-neutral-400">
+                      {isAr ? 'أرباحك بحسابك دون تأخير' : 'Immediate earnings transfer'}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-4 flex-wrap">
-                <button
-                  type="button"
-                  onClick={handleJoinClick}
-                  className="py-4 px-8 rounded-2xl bg-brand-lime text-neutral-950 font-black text-sm hover:bg-yellow-300 transition flex items-center gap-2 shadow-lime-glow cursor-pointer"
-                >
-                  <span>{isAr ? 'سجل ككابتن الآن' : 'Apply as Captain Now'}</span>
-                  {isRtl ? (
-                    <ArrowLeft className="w-4 h-4 text-neutral-950" />
-                  ) : (
-                    <ArrowRight className="w-4 h-4 text-neutral-950" />
-                  )}
-                </button>
+                <MagneticButton strength={0.25} onClick={handleJoinClick}>
+                  <span className="py-4 px-8 rounded-2xl bg-brand-lime text-neutral-950 font-black text-sm hover:bg-yellow-300 transition flex items-center gap-2 shadow-lime-glow cursor-pointer group">
+                    <span>{isAr ? 'سجل ككابتن الآن' : 'Apply as Captain Now'}</span>
+                    <ArrowIcon className="w-4 h-4 text-neutral-950 group-hover:scale-110 transition-transform" />
+                  </span>
+                </MagneticButton>
+
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(true)}
@@ -104,19 +125,29 @@ export const CaptainEarnings: React.FC = () => {
               </div>
 
               {joinedToast && (
-                <div className="mt-4 p-3 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-200 text-xs flex items-center gap-2 animate-fade-in">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-3 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-200 text-xs flex items-center gap-2"
+                >
                   <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>
                     {isAr
                       ? 'تم تحويلك لبوابة تسجيل الكباتن الرسمية في كوا. أهلاً بك!'
                       : 'Redirecting to KOWA Captain onboarding portal. Welcome aboard!'}
                   </span>
-                </div>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
 
             {/* Interactive Calculator Console */}
-            <div className="lg:col-span-6">
+            <motion.div
+              initial={{ opacity: 0, x: isRtl ? -30 : 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6"
+            >
               <div className="p-6 sm:p-8 rounded-3xl bg-neutral-800/80 dark:bg-[#10182C] border border-neutral-700/60 dark:border-line shadow-2xl backdrop-blur-md">
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-neutral-700/50 dark:border-line">
                   <div className="flex items-center gap-2">
@@ -179,26 +210,36 @@ export const CaptainEarnings: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Results Card */}
+                {/* Results Card with Smooth Spring Transitions */}
                 <div className="p-5 rounded-2xl bg-neutral-900/90 dark:bg-[#0A0F1D] border border-neutral-700/40 dark:border-line">
                   <div className="grid grid-cols-2 gap-4 text-center">
                     <div className="border-l border-neutral-700/60 rtl:border-l rtl:border-r-0 ltr:border-r ltr:border-l-0">
                       <span className="text-[11px] text-neutral-400 font-bold block mb-1">
                         {isAr ? 'الدخل الأسبوعي التقديري' : 'Est. Weekly Net'}
                       </span>
-                      <span className="text-2xl font-black text-white font-en">
+                      <motion.span
+                        key={weekly}
+                        initial={{ opacity: 0.6, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="text-2xl font-black text-white font-en inline-block"
+                      >
                         {weekly.toLocaleString()}{' '}
                         <span className="text-xs text-brand-lime font-sans">{isAr ? 'ر.س' : 'SAR'}</span>
-                      </span>
+                      </motion.span>
                     </div>
                     <div>
                       <span className="text-[11px] text-neutral-400 font-bold block mb-1">
                         {isAr ? 'الدخل الشهري التقديري' : 'Est. Monthly Net'}
                       </span>
-                      <span className="text-2xl sm:text-3xl font-black text-brand-lime font-en">
+                      <motion.span
+                        key={monthly}
+                        initial={{ opacity: 0.6, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="text-2xl sm:text-3xl font-black text-brand-lime font-en inline-block"
+                      >
                         {monthly.toLocaleString()}{' '}
                         <span className="text-xs text-white font-sans">{isAr ? 'ر.س' : 'SAR'}</span>
-                      </span>
+                      </motion.span>
                     </div>
                   </div>
                   <div className="mt-4 pt-3 border-t border-neutral-800 text-[10px] text-neutral-400 text-center">
@@ -208,7 +249,7 @@ export const CaptainEarnings: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

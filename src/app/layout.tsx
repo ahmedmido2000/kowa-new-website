@@ -3,6 +3,9 @@ import { Cairo, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { ThemeProvider } from '@/context/ThemeContext';
+import SmoothScrollProvider from '@/components/SmoothScrollProvider';
+import ScrollProgress from '@/components/ScrollProgress';
+import BackToTop from '@/components/BackToTop';
 import { COMPANY_DATA } from '@/data/company';
 
 const cairo = Cairo({
@@ -81,7 +84,13 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-canvas text-ink selection:bg-brand selection:text-white transition-colors duration-200">
         <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <SmoothScrollProvider>
+              <ScrollProgress />
+              {children}
+              <BackToTop />
+            </SmoothScrollProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
