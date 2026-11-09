@@ -1,6 +1,61 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── KOWA Dual Mode Semantic Design Tokens (matching kowa-system) ── */
+:root {
+  /* Light Mode Tokens */
+  --canvas: 248 250 253;   /* #F8FAFD */
+  --card: 255 255 255;     /* #FFFFFF */
+  --elevated: 241 245 250; /* #F1F5FA */
+  --line: 226 232 240;     /* #E2E8F0 */
+  --line-strong: 203 213 225;
+  --ink: 15 23 42;         /* #0F172A */
+  --ink-muted: 71 85 105;  /* #475569 */
+  --ink-subtle: 100 116 139;
+  --primary: 37 25 168;    /* #2519A8 */
+  --primary-soft: 238 240 254;
+  --primary-solid: 49 32 195;
+  --primary-fg: 255 255 255;
+  --accent: 218 228 35;    /* #DAE423 */
+  --accent-fg: 31 15 140;
+  --nav: 255 255 255;
+  --nav-fg: 15 23 42;
+  --nav-muted: 84 98 120;
+  --nav-line: 228 232 240;
+  --nav-active: 37 25 168;
+  --nav-active-fg: 255 255 255;
+  --nav-hover: 244 246 251;
+  color-scheme: light;
+}
+
+.dark {
+  /* Dark Mode Tokens (KOWA Modern Executive Pro Dark Mode from kowa-system) */
+  --canvas: 10 15 29;      /* #0A0F1D - Midnight luxury blue */
+  --card: 16 24 44;        /* #10182C - Rich dark card */
+  --elevated: 23 34 60;    /* #17223C - Elevated dark surface */
+  --line: 33 46 72;        /* #212E48 - Elegant border */
+  --line-strong: 51 68 102;/* #334466 */
+  --ink: 241 245 249;      /* #F1F5F9 - Bright crisp text */
+  --ink-muted: 184 196 214;/* #B8C4D6 - Muted readable text */
+  --ink-subtle: 148 163 184;/* #94A3B8 */
+  --primary: 152 140 250;  /* #988CFA - Vibrant dark mode primary */
+  --primary-soft: 38 34 82;
+  --primary-solid: 99 78 235; /* #634EEB */
+  --primary-fg: 14 10 46;
+  --accent: 222 234 44;    /* #DEEA2C - Neon electric lime */
+  --accent-fg: 26 20 70;
+  --nav: 12 18 34;         /* #0C1222 */
+  --nav-fg: 241 245 249;
+  --nav-muted: 170 184 204;
+  --nav-line: 30 40 60;
+  --nav-active: 222 234 44;
+  --nav-active-fg: 26 20 70;
+  --nav-hover: 22 32 56;
+  color-scheme: dark;
+}
+
 @theme {
   --color-brand: #1F0F8C;
   --color-brand-dark: #140959;
@@ -10,6 +65,19 @@
   --color-brand-accent-soft: #F7F8DD;
   --color-brand-accent-hover: #C0C628;
   --color-brand-lime: #D3D93C;
+
+  /* Semantic Theme tokens mapped to CSS properties */
+  --color-canvas: rgb(var(--canvas));
+  --color-card: rgb(var(--card));
+  --color-elevated: rgb(var(--elevated));
+  --color-line: rgb(var(--line));
+  --color-line-strong: rgb(var(--line-strong));
+  --color-ink: rgb(var(--ink));
+  --color-ink-muted: rgb(var(--ink-muted));
+  --color-ink-subtle: rgb(var(--ink-subtle));
+  --color-primary-token: rgb(var(--primary));
+  --color-primary-solid: rgb(var(--primary-solid));
+  --color-accent-token: rgb(var(--accent));
 
   --color-neutral-50: #F8FAFC;
   --color-neutral-100: #F1F5F9;
@@ -40,8 +108,9 @@
   
   body {
     -webkit-font-smoothing: antialiased;
-    background-color: #FFFFFF;
-    color: #0F172A;
+    background-color: rgb(var(--canvas));
+    color: rgb(var(--ink));
+    transition: background-color 200ms ease, color 200ms ease;
   }
 }
 

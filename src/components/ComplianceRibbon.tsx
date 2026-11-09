@@ -10,19 +10,19 @@ export const ComplianceRibbon: React.FC = () => {
   const isAr = locale === 'ar';
 
   return (
-    <div className="bg-neutral-900 text-white text-xs py-2 px-4 border-b border-neutral-800">
+    <div className="bg-neutral-900 dark:bg-[#070B14] text-white text-xs py-2 px-4 border-b border-neutral-800 dark:border-line transition-colors duration-200">
       <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <span className="inline-flex h-2 w-2 rounded-full bg-brand-lime animate-pulse"></span>
-          <span className="font-medium text-neutral-300">
+          <span className="font-medium text-neutral-300 dark:text-ink-muted">
             {isAr ? COMPANY_DATA.compliance.tgaLabelAr : COMPANY_DATA.compliance.tgaLabelEn}
           </span>
-          <span className="text-neutral-600 hidden sm:inline">•</span>
-          <span className="hidden sm:inline text-neutral-300">
+          <span className="text-neutral-600 dark:text-line-strong hidden sm:inline">•</span>
+          <span className="hidden sm:inline text-neutral-300 dark:text-ink-muted">
             {isAr ? COMPANY_DATA.compliance.zatcaAr : COMPANY_DATA.compliance.zatcaEn}
           </span>
         </div>
-        <div className="flex items-center gap-5 text-neutral-300">
+        <div className="flex items-center gap-5 text-neutral-300 dark:text-ink-muted">
           <a
             className="hover:text-brand-lime transition flex items-center gap-1.5 font-bold font-en text-[13px]"
             href={`tel:${COMPANY_DATA.contact.hotline}`}
@@ -30,7 +30,7 @@ export const ComplianceRibbon: React.FC = () => {
             <Phone className="w-3.5 h-3.5 text-brand-lime" />
             <span>{COMPANY_DATA.contact.hotlineDisplay}</span>
           </a>
-          <span className="text-neutral-700">|</span>
+          <span className="text-neutral-700 dark:text-line">|</span>
           <div className="flex items-center gap-1 text-emerald-400 font-medium">
             <CheckCircle className="w-3.5 h-3.5" />
             <span>{isAr ? 'تثبيت السعر الفوري 100%' : '100% Instant Price Guarantee'}</span>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Cairo, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 import { COMPANY_DATA } from '@/data/company';
 
 const cairo = Cairo({
@@ -65,9 +66,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${plusJakartaSans.variable} scroll-smooth`}>
-      <body className="font-sans antialiased bg-white text-neutral-900 selection:bg-brand selection:text-white">
-        <LanguageProvider>{children}</LanguageProvider>
+    <html
+      lang="ar"
+      dir="rtl"
+      suppressHydrationWarning
+      className={`${cairo.variable} ${plusJakartaSans.variable} scroll-smooth`}
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");}else{document.documentElement.classList.remove("dark");}}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="font-sans antialiased bg-canvas text-ink selection:bg-brand selection:text-white transition-colors duration-200">
+        <ThemeProvider>
+          <LanguageProvider>{children}</LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -11,7 +11,7 @@ import { Footer } from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col bg-white">
+    <main className="min-h-screen flex flex-col bg-canvas text-ink transition-colors duration-200">
       <ComplianceRibbon />
       <Header />
       <HeroSection />
