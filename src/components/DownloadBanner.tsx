@@ -30,20 +30,20 @@ export const DownloadBanner: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             <div className="lg:col-span-7 text-right rtl:text-right ltr:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-lime text-neutral-900 text-xs font-black mb-3">
-                <span>{isAr ? 'عرض محدود' : 'Limited Offer'}</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-lime text-neutral-900 text-xs font-black mb-3 shadow-sm">
+                <span>{isAr ? 'تنقل أذكى.. أسرع.. وأكثر راحة' : 'Smarter, Faster, Peak Comfort'}</span>
                 <span>•</span>
-                <span>{isAr ? 'خصم 20% برمز KOWA20' : '20% OFF with Code KOWA20'}</span>
+                <span>{isAr ? 'خصم 20% كود KOWA20' : '20% OFF Code KOWA20'}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-3">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-3 leading-tight">
                 {isAr
-                  ? 'حمّل تطبيق كوا واستمتع بأول مشوار مخفض'
-                  : 'Download KOWA & Enjoy 20% Off Your First Ride'}
+                  ? 'جاهز لتجربة تنقل استثنائية لم تعهدها من قبل؟'
+                  : 'Ready for an Exceptional Mobility Experience?'}
               </h2>
               <p className="text-neutral-300 text-sm sm:text-base leading-relaxed mb-6">
                 {isAr
-                  ? 'متوفر مجاناً على أجهزة iOS و Android. سجّل في 30 ثانية باستخدام النفاذ الوطني أو رقم الجوال واستمتع بتنقل ذكي فوري.'
-                  : 'Available free on iOS and Android. Register in 30 seconds via Nafath or mobile number and experience next-gen smart mobility.'}
+                  ? 'انضم إلى آلاف المستخدمين الذين يثقون في كوا يومياً في شتى أنحاء المملكة. سجّل في 30 ثانية باستخدام النفاذ الوطني أو رقم الجوال واستمتع بتسعيرة ثابتة 100%.'
+                  : 'Join thousands of daily commuters trusting KOWA across the Kingdom. Sign up in 30 seconds with Nafath or mobile number and enjoy 100% fixed fares.'}
               </p>
 
               {/* Instant SMS Download Link Sender */}

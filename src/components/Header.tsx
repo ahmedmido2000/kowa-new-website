@@ -43,7 +43,7 @@ export const Header: React.FC = () => {
         </a>
 
         {/* Desktop Navigation Links (Nowrap) */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 flex-nowrap whitespace-nowrap shrink-0">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-7 flex-nowrap whitespace-nowrap shrink-0">
           <a
             className="text-neutral-900 dark:text-ink font-bold text-sm hover:text-brand dark:hover:text-brand-lime transition whitespace-nowrap shrink-0"
             href="#hero"
@@ -52,21 +52,15 @@ export const Header: React.FC = () => {
           </a>
           <a
             className="text-neutral-600 dark:text-ink-muted font-semibold text-sm hover:text-brand dark:hover:text-brand-lime transition whitespace-nowrap shrink-0"
-            href="#value-pillars"
+            href="#how-it-works"
           >
-            {isAr ? 'ميثاق التسعير العادل' : 'Fair Pricing Charter'}
+            {isAr ? 'كيف تعمل' : 'How It Works'}
           </a>
           <a
             className="text-neutral-600 dark:text-ink-muted font-semibold text-sm hover:text-brand dark:hover:text-brand-lime transition whitespace-nowrap shrink-0"
             href="#categories"
           >
             {isAr ? 'فئات الأسطول' : 'Fleet Categories'}
-          </a>
-          <a
-            className="text-neutral-600 dark:text-ink-muted font-semibold text-sm hover:text-brand dark:hover:text-brand-lime transition whitespace-nowrap shrink-0"
-            href="#app-preview"
-          >
-            {isAr ? 'تجربة التطبيق' : 'App Experience'}
           </a>
           <a
             className="text-neutral-600 dark:text-ink-muted font-semibold text-sm hover:text-brand dark:hover:text-brand-lime transition flex items-center gap-1.5 flex-nowrap whitespace-nowrap shrink-0"
@@ -76,6 +70,12 @@ export const Header: React.FC = () => {
             <span className="bg-brand-lime text-neutral-900 text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
               {isAr ? 'أرباح 9,500+' : 'Earn 9.5K+'}
             </span>
+          </a>
+          <a
+            className="text-neutral-600 dark:text-ink-muted font-semibold text-sm hover:text-brand dark:hover:text-brand-lime transition whitespace-nowrap shrink-0"
+            href="#faq"
+          >
+            {isAr ? 'الأسئلة الشائعة' : 'FAQ'}
           </a>
           <a
             className="text-neutral-600 dark:text-ink-muted font-semibold text-sm hover:text-brand dark:hover:text-brand-lime transition whitespace-nowrap shrink-0"
@@ -135,9 +135,9 @@ export const Header: React.FC = () => {
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="text-neutral-600 dark:text-ink-muted font-semibold text-sm p-2.5 rounded-lg hover:bg-neutral-50 dark:hover:bg-elevated transition"
-              href="#value-pillars"
+              href="#how-it-works"
             >
-              {isAr ? 'ميثاق التسعير العادل' : 'Fair Pricing Charter'}
+              {isAr ? 'كيف تعمل' : 'How It Works'}
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
@@ -148,13 +148,6 @@ export const Header: React.FC = () => {
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-600 dark:text-ink-muted font-semibold text-sm p-2.5 rounded-lg hover:bg-neutral-50 dark:hover:bg-elevated transition"
-              href="#app-preview"
-            >
-              {isAr ? 'تجربة التطبيق' : 'App Experience'}
-            </a>
-            <a
-              onClick={() => setMobileMenuOpen(false)}
               className="text-neutral-600 dark:text-ink-muted font-semibold text-sm p-2.5 rounded-lg hover:bg-neutral-50 dark:hover:bg-elevated flex items-center justify-between transition"
               href="#captain-earnings"
             >
@@ -162,6 +155,13 @@ export const Header: React.FC = () => {
               <span className="bg-brand-lime text-neutral-900 text-[10px] font-black px-2 py-0.5 rounded-full">
                 {isAr ? 'أرباح 9,500+' : 'Earn 9.5K+'}
               </span>
+            </a>
+            <a
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-neutral-600 dark:text-ink-muted font-semibold text-sm p-2.5 rounded-lg hover:bg-neutral-50 dark:hover:bg-elevated transition"
+              href="#faq"
+            >
+              {isAr ? 'الأسئلة الشائعة' : 'FAQ'}
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}

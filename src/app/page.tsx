@@ -1,10 +1,13 @@
 import { ComplianceRibbon } from '@/components/ComplianceRibbon';
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
+import { AnalyticsBar } from '@/components/AnalyticsBar';
+import { HowItWorks } from '@/components/HowItWorks';
 import { ValuePillars } from '@/components/ValuePillars';
 import { FleetCategories } from '@/components/FleetCategories';
 import { AppExperience } from '@/components/AppExperience';
 import { CaptainEarnings } from '@/components/CaptainEarnings';
+import { FAQSection } from '@/components/FAQSection';
 import { ContactSection } from '@/components/ContactSection';
 import { DownloadBanner } from '@/components/DownloadBanner';
 import { Footer } from '@/components/Footer';
@@ -15,10 +18,13 @@ export default function Home() {
       <ComplianceRibbon />
       <Header />
       <HeroSection />
+      <AnalyticsBar />
+      <HowItWorks />
       <ValuePillars />
       <FleetCategories />
       <AppExperience />
       <CaptainEarnings />
+      <FAQSection />
       <ContactSection />
       <DownloadBanner />
       <Footer />
