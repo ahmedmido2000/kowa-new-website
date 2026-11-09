@@ -74,7 +74,7 @@ export const DownloadBanner: React.FC = () => {
                       onChange={(e) => setPhone(e.target.value)}
                     />
                   </div>
-                  <MagneticButton strength={0.25}>
+                  <MagneticButton strength={0.25} as="div">
                     <button
                       className="px-4 py-2.5 rounded-xl bg-brand-lime text-neutral-900 font-bold text-xs hover:bg-brand-accent-hover transition whitespace-nowrap cursor-pointer shadow-sm"
                       type="submit"

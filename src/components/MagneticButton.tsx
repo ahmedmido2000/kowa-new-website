@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 interface MagneticButtonProps {
@@ -13,6 +13,7 @@ interface MagneticButtonProps {
   strength?: number;
   role?: string;
   'aria-label'?: string;
+  as?: 'div' | 'button' | 'a';
 }
 
 export default function MagneticButton({
@@ -25,9 +26,9 @@ export default function MagneticButton({
   strength = 0.35,
   role,
   'aria-label': ariaLabel,
+  as,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [, setIsHovered] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -50,30 +51,36 @@ export default function MagneticButton({
     mouseY.set(deltaY);
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
   const handleMouseLeave = () => {
-    setIsHovered(false);
     mouseX.set(0);
     mouseY.set(0);
   };
+
+  const isFullWidth = className.includes('w-full');
 
   const content = (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{ x, y }}
-      className="inline-block relative will-change-transform"
+      className={`relative will-change-transform ${isFullWidth ? 'w-full block' : 'inline-block'}`}
     >
       {children}
     </motion.div>
   );
 
-  if (href) {
+  // If explicit 'div' requested or neither href nor onClick is passed, render a div wrapper
+  if (as === 'div' || (!href && !onClick && as !== 'button')) {
+    return (
+      <div className={className} role={role} aria-label={ariaLabel}>
+        {content}
+      </div>
+    );
+  }
+
+  // If href is present or 'a' requested
+  if (href || as === 'a') {
     return (
       <a
         href={href}
@@ -89,6 +96,7 @@ export default function MagneticButton({
     );
   }
 
+  // Fallback to button only when onClick is explicitly provided and as !== 'div'
   return (
     <button
       onClick={onClick}

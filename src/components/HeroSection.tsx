@@ -269,7 +269,7 @@ export const HeroSection: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <MagneticButton strength={0.2} className="w-full sm:w-auto">
+                    <MagneticButton strength={0.2} className="w-full sm:w-auto" as="div">
                       <button
                         type="button"
                         onClick={() => setIsModalOpen(true)}

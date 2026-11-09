@@ -389,7 +389,7 @@ export const ContactSection: React.FC = () => {
               </div>
 
               {/* Submit CTA */}
-              <MagneticButton strength={0.2} className="w-full">
+              <MagneticButton strength={0.2} className="w-full" as="div">
                 <button
                   type="submit"
                   disabled={isSubmitting}
