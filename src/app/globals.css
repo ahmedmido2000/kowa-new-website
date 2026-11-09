@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #1F0F8C;
+  --color-brand-dark: #140959;
+  --color-brand-deep: #0B0438;
+  --color-brand-surface: #F4F3FB;
+  --color-brand-accent: #D3D93C;
+  --color-brand-accent-soft: #F7F8DD;
+  --color-brand-accent-hover: #C0C628;
+  --color-brand-lime: #D3D93C;
+
+  --color-neutral-50: #F8FAFC;
+  --color-neutral-100: #F1F5F9;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-400: #94A3B8;
+  --color-neutral-500: #64748B;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1E293B;
+  --color-neutral-900: #0F172A;
+  --color-neutral-950: #020617;
+
+  --font-sans: var(--font-cairo), var(--font-jakarta), system-ui, sans-serif;
+  --font-en: var(--font-jakarta), sans-serif;
+
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 20px 40px -15px rgba(31, 15, 140, 0.08), 0 0 1px 1px rgba(226, 232, 240, 0.8);
+  --shadow-float: 0 24px 48px -12px rgba(15, 23, 42, 0.12);
+  --shadow-lime-glow: 0 8px 24px -4px rgba(211, 217, 60, 0.45);
+  --shadow-brand-glow: 0 10px 30px -5px rgba(31, 15, 140, 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+    background-color: #FFFFFF;
+    color: #0F172A;
+  }
+}
+
+/* Material Symbols configuration */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+.material-symbols-outlined.unfilled {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Range slider styling */
+input[type=range]::-webkit-slider-thumb {
+  height: 26px;
+  width: 26px;
+  border-radius: 50%;
+  background: #1F0F8C;
+  cursor: pointer;
+  border: 3px solid #D3D93C;
+  -webkit-appearance: none;
+  box-shadow: 0 4px 10px rgba(31, 15, 140, 0.3);
+  transition: transform 0.15s ease;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
