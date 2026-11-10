@@ -1,40 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
-import { HERO_VEHICLE_OPTIONS } from '@/data/translations';
-import { BookingModal } from './BookingModal';
 import MagneticButton from './MagneticButton';
 import {
-  Lock,
-  Navigation,
-  MapPin,
-  LocateFixed,
   ArrowLeft,
   ArrowRight,
-  CheckCircle,
-  CreditCard,
-  Star,
+  ChevronDown,
+  Download,
   ShieldCheck,
-  Send,
+  Sparkles,
+  Star,
+  TrendingUp,
 } from 'lucide-react';
+
+const AMBIENT_EMBERS = [
+  { id: 1, left: '12%', delay: 0, duration: 7.5, size: 3.5 },
+  { id: 2, left: '28%', delay: 1.4, duration: 9, size: 2.5 },
+  { id: 3, left: '46%', delay: 2.8, duration: 6.8, size: 4 },
+  { id: 4, left: '68%', delay: 0.9, duration: 8.5, size: 2.5 },
+  { id: 5, left: '84%', delay: 2.1, duration: 7.8, size: 3 },
+  { id: 6, left: '55%', delay: 3.6, duration: 8.2, size: 2.5 },
+];
 
 export const HeroSection: React.FC = () => {
   const { locale, isRtl } = useLanguage();
   const isAr = locale === 'ar';
+  const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
-  const [pickup, setPickup] = useState(
-    isAr ? 'الرياض - المركز المالي (KAFD)' : 'Riyadh - King Abdullah Financial District (KAFD)'
-  );
-  const [destination, setDestination] = useState(
-    isAr ? 'مطار الملك خالد الدولي (صالة 5)' : 'King Khalid International Airport (Terminal 5)'
-  );
-  const [selectedVehicle, setSelectedVehicle] = useState(HERO_VEHICLE_OPTIONS[1]); // Comfort
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Subtle interactive mouse-tracking parallax
+  // Subtle interactive mouse-tracking parallax on Hero background
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const springConfig = { damping: 25, stiffness: 140, mass: 0.1 };
@@ -48,8 +44,8 @@ export const HeroSection: React.FC = () => {
     const centerY = window.innerHeight / 2;
     const factorX = (clientX - centerX) / centerX;
     const factorY = (clientY - centerY) / centerY;
-    mouseX.set(factorX * -15);
-    mouseY.set(factorY * -10);
+    mouseX.set(factorX * -18);
+    mouseY.set(factorY * -12);
   };
 
   const handleMouseLeave = () => {
@@ -57,354 +53,293 @@ export const HeroSection: React.FC = () => {
     mouseY.set(0);
   };
 
-  const handleLocateMe = () => {
-    setPickup(isAr ? 'موقعي الحالي (حي الصحافة، الرياض)' : 'Current Location (Al Sahafa, Riyadh)');
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.09,
+        delayChildren: 0.08,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 28 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.75,
+        ease: [0.16, 1, 0.3, 1] as const,
+      },
+    },
   };
 
   return (
-    <>
-      <section
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="relative overflow-hidden bg-gradient-to-b from-neutral-50 via-white to-neutral-50/50 dark:from-[#0A0F1D] dark:via-[#0C1222] dark:to-[#0A0F1D] pt-10 pb-16 lg:pt-16 lg:pb-24 border-b border-neutral-200 dark:border-line transition-colors duration-200"
-        id="hero"
+    <section
+      id="hero"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative min-h-[86vh] lg:min-h-[92vh] flex items-center pt-16 pb-20 sm:pt-20 sm:pb-24 overflow-hidden bg-[#0A0F1D] text-white border-b border-brand/30 dark:border-line select-none"
+    >
+      {/* Bespoke KOWA Branded Background Image with Smooth Parallax */}
+      <motion.div
+        style={{ x: bgX, y: bgY, scale: 1.06 }}
+        className="absolute inset-0 z-0 will-change-transform pointer-events-none"
       >
-        {/* Subtle Ambient Background Accents with Parallax Drift */}
-        <motion.div
-          style={{ x: bgX, y: bgY }}
-          className="absolute top-0 right-1/4 w-96 h-96 bg-brand/5 dark:bg-brand/15 rounded-full blur-3xl pointer-events-none -z-10"
-        />
-        <motion.div
-          style={{ x: bgY, y: bgX }}
-          className="absolute bottom-10 left-10 w-80 h-80 bg-brand-lime/20 dark:bg-brand-lime/10 rounded-full blur-3xl pointer-events-none -z-10"
-        />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Value Pitch & Dual-Action Booking Card */}
-            <motion.div
-              initial={{ opacity: 0, x: isRtl ? 30 : -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-6 flex flex-col gap-6"
-            >
-              {/* Category Pill */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand/5 dark:bg-brand-lime/10 border border-brand/15 dark:border-brand-lime/20 text-brand dark:text-brand-lime text-xs font-bold w-fit">
-                <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
-                <span>
-                  {isAr
-                    ? 'الجيل الجديد للتنقل الذكي الفاخر في المملكة'
-                    : 'The Next Generation of Smart Luxury Mobility in KSA'}
-                </span>
-              </div>
-
-              {/* Main Impact Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-neutral-900 dark:text-ink leading-tight">
-                {isAr ? (
-                  <>
-                    مشوارك القادم، بأعلى معايير الراحة وبأفضل{' '}
-                    <span className="relative inline-block text-brand dark:text-brand-lime">
-                      سعر ثابت
-                      <svg
-                        className="absolute -bottom-1 left-0 w-full"
-                        height="7"
-                        preserveAspectRatio="none"
-                        viewBox="0 0 100 7"
-                      >
-                        <path
-                          d="M0,5 Q50,0 100,5"
-                          fill="none"
-                          stroke="#D3D93C"
-                          strokeLinecap="round"
-                          strokeWidth="7"
-                        ></path>
-                      </svg>
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    Your next journey, peak comfort with a guaranteed{' '}
-                    <span className="relative inline-block text-brand dark:text-brand-lime">
-                      fixed fare
-                      <svg
-                        className="absolute -bottom-1 left-0 w-full"
-                        height="7"
-                        preserveAspectRatio="none"
-                        viewBox="0 0 100 7"
-                      >
-                        <path
-                          d="M0,5 Q50,0 100,5"
-                          fill="none"
-                          stroke="#D3D93C"
-                          strokeLinecap="round"
-                          strokeWidth="7"
-                        ></path>
-                      </svg>
-                    </span>
-                  </>
-                )}
-              </h1>
-
-              <p className="text-base sm:text-lg text-neutral-600 dark:text-ink-muted leading-relaxed font-normal">
-                {isAr
-                  ? 'وداعاً للتسعير المفاجئ والمضاعف أوقات الذروة. احسب تسعيرتك العادلة الآن، واحصل على سيارة حديثة مكيفة وكابتن سعودي محترف بضغطة زر واحدة.'
-                  : 'Say goodbye to surge multipliers and rush-hour surprises. Lock your fair upfront price now and enjoy a modern, climate-controlled ride with an elite Saudi captain.'}
-              </p>
-
-              {/* Floating Dual-Action Booking Console */}
-              <div className="bg-white dark:bg-[#10182C] rounded-3xl p-6 shadow-elevated border border-neutral-200 dark:border-line mt-2 transition-colors duration-200">
-                <div className="flex items-center justify-between mb-5 pb-3 border-b border-neutral-100 dark:border-line">
-                  <span className="text-xs font-bold text-neutral-500 dark:text-ink-subtle uppercase tracking-wider">
-                    {isAr ? 'حاسبة التسعيرة الفورية المباشرة' : 'Instant Fare Calculator'}
-                  </span>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 text-xs font-bold">
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>{isAr ? 'سعر ثابت بدون مفاجآت' : 'Zero Surge Guarantee'}</span>
-                  </div>
-                </div>
-
-                {/* Booking Inputs */}
-                <div className="space-y-3 mb-5">
-                  {/* Pickup */}
-                  <div className="flex items-center gap-3 p-3.5 bg-neutral-50 dark:bg-[#17223C] hover:bg-neutral-100/80 dark:hover:bg-[#1C2A4A] border border-neutral-200 dark:border-line rounded-2xl transition">
-                    <div className="w-8 h-8 rounded-xl bg-brand/10 dark:bg-primary-token/20 text-brand dark:text-primary-token flex items-center justify-center shrink-0">
-                      <Navigation className="w-4 h-4 text-brand dark:text-primary-token" />
-                    </div>
-                    <div className="flex-1 text-right rtl:text-right ltr:text-left">
-                      <label className="block text-[11px] font-bold text-neutral-400 dark:text-ink-subtle">
-                        {isAr ? 'نقطة الانطلاق' : 'Pickup Location'}
-                      </label>
-                      <input
-                        className="w-full bg-transparent border-0 p-0 text-sm font-bold text-neutral-900 dark:text-ink focus:outline-none focus:ring-0 truncate"
-                        id="hero-pickup"
-                        type="text"
-                        value={pickup}
-                        onChange={(e) => setPickup(e.target.value)}
-                      />
-                    </div>
-                    <button
-                      onClick={handleLocateMe}
-                      className="text-neutral-400 dark:text-ink-subtle hover:text-brand dark:hover:text-brand-lime transition p-1 cursor-pointer"
-                      title={isAr ? 'موقعي الحالي' : 'Use Current Location'}
-                      type="button"
-                    >
-                      <LocateFixed className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* Destination */}
-                  <div className="flex items-center gap-3 p-3.5 bg-neutral-50 dark:bg-[#17223C] hover:bg-neutral-100/80 dark:hover:bg-[#1C2A4A] border border-neutral-200 dark:border-line rounded-2xl transition">
-                    <div className="w-8 h-8 rounded-xl bg-brand-lime/30 text-neutral-900 flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4 text-neutral-900" />
-                    </div>
-                    <div className="flex-1 text-right rtl:text-right ltr:text-left">
-                      <label className="block text-[11px] font-bold text-neutral-400 dark:text-ink-subtle">
-                        {isAr ? 'الوجهة المقصودة' : 'Destination'}
-                      </label>
-                      <input
-                        className="w-full bg-transparent border-0 p-0 text-sm font-bold text-neutral-900 dark:text-ink focus:outline-none focus:ring-0 truncate"
-                        id="hero-dest"
-                        type="text"
-                        value={destination}
-                        onChange={(e) => setDestination(e.target.value)}
-                      />
-                    </div>
-                    <span className="text-xs bg-white dark:bg-[#10182C] text-neutral-700 dark:text-ink px-2.5 py-1 rounded-lg border border-neutral-200 dark:border-line font-bold font-en">
-                      32 KM
-                    </span>
-                  </div>
-                </div>
-
-                {/* Fleet Selection Chips */}
-                <div className="grid grid-cols-3 gap-2 mb-5">
-                  {HERO_VEHICLE_OPTIONS.map((v) => {
-                    const isSelected = selectedVehicle.id === v.id;
-                    return (
-                      <button
-                        key={v.id}
-                        type="button"
-                        onClick={() => setSelectedVehicle(v)}
-                        className={`p-3 rounded-2xl border-2 text-right rtl:text-right ltr:text-left transition cursor-pointer ${
-                          isSelected
-                            ? 'border-brand dark:border-brand-lime bg-brand/5 dark:bg-brand-lime/10'
-                            : 'border-neutral-200 dark:border-line hover:border-brand/40 dark:hover:border-primary-token/40 bg-white dark:bg-[#17223C]'
-                        }`}
-                      >
-                        <div
-                          className={`text-[11px] font-bold flex items-center justify-between ${
-                            isSelected
-                              ? 'text-brand dark:text-brand-lime'
-                              : 'text-neutral-500 dark:text-ink-subtle'
-                          }`}
-                        >
-                          <span>{isAr ? v.name.ar : v.name.en}</span>
-                          {v.isFavorite && (
-                            <span className="text-[10px] bg-brand dark:bg-brand-lime text-white dark:text-neutral-950 px-1.5 py-0.2 rounded font-semibold">
-                              {isAr ? 'المفضل' : 'Popular'}
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-sm font-black text-brand dark:text-brand-lime mt-0.5 font-en">
-                          {v.price} <span className="font-sans text-xs">{isAr ? 'ر.س' : 'SAR'}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Guaranteed Fare Action Bar */}
-                <div className="pt-4 border-t border-neutral-100 dark:border-line flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-right rtl:text-right ltr:text-left w-full sm:w-auto">
-                    <div className="text-xs text-neutral-400 dark:text-ink-subtle font-bold">
-                      {isAr ? 'السعر النهائي المضمون' : 'Guaranteed Final Fare'}
-                    </div>
-                    <div className="text-2xl font-black text-brand dark:text-brand-lime font-en flex items-baseline gap-1" id="hero-price-display">
-                      <span>{selectedVehicle.price}</span>
-                      <span className="text-sm font-sans font-bold text-neutral-700 dark:text-ink-muted">
-                        {isAr ? 'ر.س' : 'SAR'}
-                      </span>
-                      <span className="text-[11px] font-sans font-normal text-neutral-400 dark:text-ink-subtle mr-2 rtl:mr-2 ltr:ml-2">
-                        {isAr ? '(شامل الضريبة)' : '(Incl. VAT)'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <MagneticButton strength={0.2} className="w-full sm:w-auto" as="div">
-                      <button
-                        type="button"
-                        onClick={() => setIsModalOpen(true)}
-                        className="w-full sm:w-auto py-3.5 px-6 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-primary-solid dark:hover:bg-brand text-white font-black text-sm flex items-center justify-center gap-2 shadow-sm hover:shadow-brand-glow transition-all cursor-pointer group"
-                      >
-                        <span>{isAr ? 'طلب فوري الآن' : 'Request Instantly'}</span>
-                        {isRtl ? (
-                          <ArrowLeft className="w-4 h-4 text-brand-lime group-hover:-translate-x-1 transition-transform" />
-                        ) : (
-                          <ArrowRight className="w-4 h-4 text-brand-lime group-hover:translate-x-1 transition-transform" />
-                        )}
-                      </button>
-                    </MagneticButton>
-                  </div>
-                </div>
-              </div>
-
-              {/* Micro Proof Counters */}
-              <div className="flex items-center gap-6 pt-2 text-xs text-neutral-500 dark:text-ink-subtle">
-                <div className="flex items-center gap-1.5 font-bold text-neutral-700 dark:text-ink-muted">
-                  <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span>
-                    {isAr ? 'لا رسوم إلغاء خلال أول 3 دقائق' : 'No cancellation fee within 3 mins'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 font-bold text-neutral-700 dark:text-ink-muted">
-                  <CreditCard className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span>mada • Apple Pay • Visa</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Visual Container Frame with Floating Badges and Parallax Entrance */}
-            <motion.div
-              initial={{ opacity: 0, x: isRtl ? -35 : 35 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-6 relative"
-            >
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 dark:border-line bg-white dark:bg-[#10182C]">
-                <div className="relative w-full h-[460px] sm:h-[500px]">
-                  <Image
-                    alt="Saudi executive arriving in modern luxury vehicle"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_XaJz4g4XhR21mlxqohGYsoIB-lhAHLeQOEXQtIdz5XoxedSudqDwWXvuDiHW3ROZ08FLPJwWcEx6xV9etX6K4VSKrXv91h_MofY1BqNrbM8Fzt2m17qChONLPUBa4v9s_ZORg7mO0tvUUGSzlTd-T2e14wpigR6kWaMC54L93AMi8DTkFNYfW0Xgwrz3ikCnOOHmPjvkXwl92QRyNp_rv4H_Wxu82PQCKNRyGvLN"
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-
-                {/* Gradient Overlay for Legibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/30 to-transparent pointer-events-none"></div>
-
-                {/* Driver & Fleet Pill at Bottom */}
-                <div className="absolute bottom-6 right-6 left-6 flex items-center justify-between text-white flex-wrap gap-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-brand-lime font-black">
-                      <ShieldCheck className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-white flex items-center gap-1.5">
-                        <span>{isAr ? 'كابتن فهد العتيبي' : 'Captain Fahad Al-Otaibi'}</span>
-                        <span className="bg-brand-lime text-neutral-950 text-[10px] font-black px-1.5 py-0.5 rounded">
-                          {isAr ? 'نخبة كوا' : 'KOWA Elite'}
-                        </span>
-                      </div>
-                      <div className="text-xs text-neutral-300 font-sans">
-                        {isAr
-                          ? 'تويوتا كامري جراندي 2024 • معقمة ومجهزة'
-                          : 'Toyota Camry Grande 2024 • Sanitized & Equipped'}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-xl text-xs font-black font-en text-white">
-                    LEAP 2025 PARTNER
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Pill 1: Arrival Time */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute -top-4 right-6 rtl:right-6 rtl:left-auto ltr:left-6 ltr:right-auto bg-white/95 dark:bg-[#10182C]/95 backdrop-blur-md border border-neutral-200 dark:border-line shadow-float rounded-2xl p-3.5 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-xl bg-brand-lime/30 text-neutral-900 flex items-center justify-center font-bold">
-                  <Send className="w-5 h-5 text-neutral-900" />
-                </div>
-                <div>
-                  <div className="text-[11px] font-bold text-neutral-400 dark:text-ink-subtle">
-                    {isAr ? 'كابتنك في الطريق' : 'Captain En Route'}
-                  </div>
-                  <div className="text-sm font-black text-neutral-900 dark:text-ink">
-                    {isAr ? 'وصل خلال دقيقتين ⚡' : 'Arrives in 2 mins ⚡'}
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating Pill 2: Passenger Rating */}
-              <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                className="absolute -bottom-5 left-6 rtl:left-6 rtl:right-auto ltr:right-6 ltr:left-auto bg-white/95 dark:bg-[#10182C]/95 backdrop-blur-md border border-neutral-200 dark:border-line shadow-float rounded-2xl p-3.5 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center font-bold">
-                  <Star className="w-5 h-5 fill-brand-lime" />
-                </div>
-                <div>
-                  <div className="text-[11px] font-bold text-neutral-400 dark:text-ink-subtle">
-                    {isAr ? 'تقييم الخدمة المباشر' : 'Live Passenger Rating'}
-                  </div>
-                  <div className="text-sm font-black text-neutral-900 dark:text-ink flex items-center gap-1 font-en">
-                    <span>4.98</span>
-                    <span className="text-amber-500">★★★★★</span>
-                    <span className="text-xs font-normal text-neutral-400 dark:text-ink-subtle font-sans">
-                      {isAr ? '(+140 ألف مشوار)' : '(+140k rides)'}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
+        <div className={`relative w-full h-full ${!isRtl ? '-scale-x-100' : ''}`}>
+          <Image
+            src="/hero-bg-kowa.jpg"
+            alt={
+              isAr
+                ? 'سيارة كوا التنفيذية الفاخرة على طريق الرياض ليلاً'
+                : 'KOWA luxury executive vehicle gliding through Riyadh at night'
+            }
+            fill
+            priority
+            className="object-cover object-center sm:object-[25%_center]"
+            sizes="100vw"
+          />
         </div>
-      </section>
 
-      {/* Booking Confirmation Dialog */}
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        pickup={pickup}
-        destination={destination}
-        vehicleName={isAr ? selectedVehicle.name.ar : selectedVehicle.name.en}
-        price={selectedVehicle.price}
-      />
-    </>
+        {/* Multi-layer Atmospheric Overlays matching KOWA Midnight Navy & Indigo palette */}
+        <div className="absolute inset-0 bg-[#0A0F1D]/45 lg:bg-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1D]/70 via-[#0A0F1D]/25 to-[#0A0F1D]/90" />
+        <div
+          className={`absolute inset-0 ${
+            isRtl
+              ? 'bg-gradient-to-l from-[#0A0F1D]/95 via-[#0A0F1D]/65 to-transparent'
+              : 'bg-gradient-to-r from-[#0A0F1D]/95 via-[#0A0F1D]/65 to-transparent'
+          }`}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(31,15,140,0.42),transparent_65%)]" />
+      </motion.div>
+
+      {/* Subtle Floating Electric-Lime Atmospheric Embers */}
+      {AMBIENT_EMBERS.map((ember) => (
+        <motion.div
+          key={ember.id}
+          initial={{ y: '100%', opacity: 0, x: 0 }}
+          animate={{
+            y: '-30%',
+            opacity: [0, 0.55, 0.75, 0],
+            x: [0, 12, -12, 0],
+          }}
+          transition={{
+            duration: ember.duration,
+            repeat: Infinity,
+            delay: ember.delay,
+            ease: 'easeInOut',
+          }}
+          style={{
+            left: ember.left,
+            width: ember.size,
+            height: ember.size,
+          }}
+          aria-hidden="true"
+          className="absolute bottom-0 rounded-full bg-brand-lime pointer-events-none blur-[0.8px] shadow-[0_0_10px_#D3D93C] z-[1]"
+        />
+      ))}
+
+      {/* Subtle Orbital Kinetic Energy Streams in KOWA Brand Colors */}
+      <svg
+        viewBox="0 0 1000 600"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full opacity-45 pointer-events-none z-[2]"
+      >
+        <defs>
+          <linearGradient id="kowaStreamGrad" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#1F0F8C" stopOpacity="0.6" />
+            <stop offset="50%" stopColor="#634EEB" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#D3D93C" stopOpacity="1" />
+          </linearGradient>
+          <filter id="kowaGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <g fill="none" stroke="url(#kowaStreamGrad)" strokeLinecap="round">
+          <path
+            d="M 135.9 449.8 C 158.7 509.1, 340.1 494.6, 541.2 417.4 C 742.3 340.2, 886.9 229.5, 864.1 170.2 C 841.3 110.9, 659.9 125.4, 458.8 202.6 C 257.7 279.8, 113.1 390.5, 135.9 449.8 Z"
+            strokeWidth="1.2"
+            opacity="0.16"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            d="M 70.6 474.8 C 105.2 565.1, 325.5 564.4, 562.7 473.4 C 799.9 382.3, 964.1 235.4, 929.4 145.2 C 894.8 54.9, 674.5 55.6, 437.3 146.6 C 200.1 237.7, 35.9 384.6, 70.6 474.8 Z"
+            strokeWidth="1.2"
+            opacity="0.14"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            className="st"
+            pathLength="1"
+            d="M 135.9 449.8 C 158.7 509.1, 340.1 494.6, 541.2 417.4 C 742.3 340.2, 886.9 229.5, 864.1 170.2 C 841.3 110.9, 659.9 125.4, 458.8 202.6 C 257.7 279.8, 113.1 390.5, 135.9 449.8 Z"
+            strokeWidth="3.5"
+            filter="url(#kowaGlow)"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            className="st st2"
+            pathLength="1"
+            d="M 70.6 474.8 C 105.2 565.1, 325.5 564.4, 562.7 473.4 C 799.9 382.3, 964.1 235.4, 929.4 145.2 C 894.8 54.9, 674.5 55.6, 437.3 146.6 C 200.1 237.7, 35.9 384.6, 70.6 474.8 Z"
+            strokeWidth="3"
+            filter="url(#kowaGlow)"
+            vectorEffect="non-scaling-stroke"
+          />
+        </g>
+      </svg>
+
+      {/* Main Hero Content aligned cleanly inside dark negative space */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-7 flex flex-col items-start gap-6 text-right rtl:text-right ltr:text-left"
+          >
+            {/* Brand Pill Badge */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-brand/30 border border-brand-lime/40 backdrop-blur-md shadow-sm cursor-default"
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-brand-lime animate-ping" />
+              <span className="text-brand-lime font-extrabold text-xs sm:text-sm tracking-wide">
+                {isAr
+                  ? 'المنصة الوطنية الرائدة للتنقل الذكي الفاخر بالمملكة'
+                  : 'Saudi Arabia’s Leading Smart Luxury Mobility Platform'}
+              </span>
+              <Sparkles className="w-3.5 h-3.5 text-brand-lime shrink-0" />
+            </motion.div>
+
+            {/* Cinematic Main H1 Headline */}
+            <motion.h1
+              variants={itemVariants}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.25] tracking-tight"
+            >
+              {isAr ? (
+                <>
+                  ارتقِ بتجربة تنقلك..
+                  <span className="block mt-2">
+                    <span className="text-brand-lime text-glow-lime">فخامة استثنائية</span>{' '}
+                    تليق بك
+                  </span>
+                </>
+              ) : (
+                <>
+                  Elevate Every Journey..
+                  <span className="block mt-2">
+                    <span className="text-brand-lime text-glow-lime">Exceptional Luxury</span>{' '}
+                    Made for You
+                  </span>
+                </>
+              )}
+            </motion.h1>
+
+            {/* Subtext */}
+            <motion.p
+              variants={itemVariants}
+              className="text-base sm:text-lg text-neutral-200/90 max-w-xl leading-relaxed font-medium"
+            >
+              {isAr
+                ? 'أعد تعريف تنقلك اليومي في المملكة بسيارات فاخرة 2023+، كباتن سعوديين نخبة، وتتبع مسار فوري بدقة فائقة مع تسعيرة ثابتة 100% دون أي مفاجآت.'
+                : 'Redefine your daily mobility across the Kingdom with modern 2023+ executive vehicles, verified Saudi captains, live GPS tracking, and 100% guaranteed upfront fares.'}
+            </motion.p>
+
+            {/* Action CTAs */}
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2 w-full sm:w-auto"
+            >
+              <MagneticButton strength={0.25} href="#fare-calculator" className="w-full sm:w-auto">
+                <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 bg-brand-lime hover:bg-[#e1e848] text-neutral-950 px-7 py-4 rounded-2xl font-black text-sm sm:text-base shadow-lime-glow transition-all duration-300 cursor-pointer group">
+                  <span>
+                    {isAr ? 'احسب سعيرتك واحجز الآن' : 'Calculate Fare & Book Now'}
+                  </span>
+                  <ArrowIcon className="w-4 h-4 text-neutral-950 group-hover:scale-110 transition-transform" />
+                </span>
+              </MagneticButton>
+
+              <MagneticButton strength={0.2} href="#download-banner" className="w-full sm:w-auto">
+                <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm sm:text-base text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 hover:border-brand-lime/60 transition-all duration-300 cursor-pointer">
+                  <Download className="w-4 h-4 text-brand-lime" />
+                  <span>{isAr ? 'حمّل التطبيق مجاناً' : 'Download Free App'}</span>
+                </span>
+              </MagneticButton>
+            </motion.div>
+
+            {/* Glassmorphic Trust Highlights */}
+            <motion.div
+              variants={itemVariants}
+              className="grid grid-cols-3 gap-3 sm:gap-6 pt-6 mt-2 border-t border-white/15 w-full max-w-xl"
+            >
+              <div className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/5 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-brand/40 border border-brand-lime/30 flex items-center justify-center text-brand-lime shrink-0">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-white font-en">+12,000</div>
+                  <div className="text-[11px] sm:text-xs text-neutral-300">
+                    {isAr ? 'عميل نشط' : 'Active Riders'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/5 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-brand/40 border border-brand-lime/30 flex items-center justify-center text-brand-lime shrink-0">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-white font-en">100%</div>
+                  <div className="text-[11px] sm:text-xs text-neutral-300">
+                    {isAr ? 'تسعيرة ثابتة' : 'Fixed Fares'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/5 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-brand/40 border border-brand-lime/30 flex items-center justify-center text-brand-lime shrink-0">
+                  <Star className="w-4 h-4 fill-brand-lime" />
+                </div>
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-white font-en">4.98</div>
+                  <div className="text-[11px] sm:text-xs text-neutral-300">
+                    {isAr ? 'تقييم الخدمة' : 'Avg Rating'}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Bottom Scroll Down Indicator pointing cleanly to next section (FareCalculatorSection) */}
+      <motion.a
+        href="#fare-calculator"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, y: [0, 6, 0] }}
+        transition={{
+          opacity: { delay: 1, duration: 0.6 },
+          y: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
+        }}
+        aria-label={isAr ? 'انتقل لحاسبة التسعيرة' : 'Scroll to Fare Calculator'}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 inline-flex flex-col items-center gap-1 text-xs font-bold text-neutral-300 hover:text-brand-lime transition-colors cursor-pointer"
+      >
+        <span className="hidden sm:inline">
+          {isAr ? 'احسب سعيرتك الآن' : 'Explore Instant Fare'}
+        </span>
+        <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+          <ChevronDown className="w-4 h-4 text-brand-lime" />
+        </div>
+      </motion.a>
+    </section>
   );
 };

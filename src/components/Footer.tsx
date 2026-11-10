@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-neutral-500 dark:text-ink-muted font-medium">
               <li>
-                <a className="hover:text-brand dark:hover:text-brand-lime transition" href="#hero">
+                <a className="hover:text-brand dark:hover:text-brand-lime transition" href="#fare-calculator">
                   {isAr ? 'مشاوير داخل المدينة الفورية' : 'Instant City Commutes'}
                 </a>
               </li>
@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a className="hover:text-brand dark:hover:text-brand-lime transition" href="#hero">
+                <a className="hover:text-brand dark:hover:text-brand-lime transition" href="#fare-calculator">
                   {isAr ? 'خدمة سائق خاص بالساعة' : 'Hourly Private Chauffeur'}
                 </a>
               </li>

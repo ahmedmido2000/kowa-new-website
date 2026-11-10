@@ -1,6 +1,7 @@
 import { ComplianceRibbon } from '@/components/ComplianceRibbon';
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
+import { FareCalculatorSection } from '@/components/FareCalculatorSection';
 import { AnalyticsBar } from '@/components/AnalyticsBar';
 import { HowItWorks } from '@/components/HowItWorks';
 import { ValuePillars } from '@/components/ValuePillars';
@@ -18,6 +19,7 @@ export default function Home() {
       <ComplianceRibbon />
       <Header />
       <HeroSection />
+      <FareCalculatorSection />
       <AnalyticsBar />
       <HowItWorks />
       <ValuePillars />
