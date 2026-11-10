@@ -135,7 +135,7 @@ export const FleetCategories: React.FC = () => {
                   </div>
                   <MagneticButton strength={0.25} href="#fare-calculator">
                     <span className="py-3 px-6 rounded-2xl bg-neutral-900 dark:bg-card hover:bg-neutral-800 dark:hover:bg-elevated border border-neutral-700 dark:border-line text-white font-bold text-sm flex items-center gap-2 transition cursor-pointer">
-                      <span>{isAr ? 'احجز هذه الفئة' : 'Book this Class'}</span>
+                      <span>{isAr ? 'احسب تسعيرة هذه الفئة' : 'Estimate This Class'}</span>
                       {isRtl ? (
                         <ArrowLeft className="w-4 h-4 text-brand-lime" />
                       ) : (

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSmoothScroll } from './SmoothScrollProvider';
 import { CaptainModal } from './CaptainModal';
 import MagneticButton from './MagneticButton';
 import {
@@ -13,18 +14,17 @@ import {
   Calculator,
   ArrowLeft,
   ArrowRight,
-  CheckCircle,
 } from 'lucide-react';
 
 export const CaptainEarnings: React.FC = () => {
   const { locale, isRtl } = useLanguage();
+  const { scrollTo } = useSmoothScroll();
   const isAr = locale === 'ar';
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
   const [hours, setHours] = useState(6);
   const [days, setDays] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [joinedToast, setJoinedToast] = useState(false);
 
   // Fair formula: ~48 SAR net earnings per hour after fuel & platform commission
   const hourlyNetRate = 48;
@@ -32,8 +32,10 @@ export const CaptainEarnings: React.FC = () => {
   const monthly = Math.round(weekly * 4.3);
 
   const handleJoinClick = () => {
-    setJoinedToast(true);
-    setTimeout(() => setJoinedToast(false), 3000);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('kowa:captain-inquiry'));
+    }
+    scrollTo('#contact');
   };
 
   return (
@@ -123,21 +125,6 @@ export const CaptainEarnings: React.FC = () => {
                   <span>{isAr ? 'معايير القبول والسيارات' : 'Requirements & Eligibility'}</span>
                 </button>
               </div>
-
-              {joinedToast && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-3 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-200 text-xs flex items-center gap-2"
-                >
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>
-                    {isAr
-                      ? 'تم تحويلك لبوابة تسجيل الكباتن الرسمية في كوا. أهلاً بك!'
-                      : 'Redirecting to KOWA Captain onboarding portal. Welcome aboard!'}
-                  </span>
-                </motion.div>
-              )}
             </motion.div>
 
             {/* Interactive Calculator Console */}

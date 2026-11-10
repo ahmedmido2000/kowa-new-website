@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { COMPANY_DATA } from '@/data/company';
@@ -30,6 +30,17 @@ export const ContactSection: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  useEffect(() => {
+    const handleCaptainInquiry = () => {
+      setFormData((prev) => ({
+        ...prev,
+        subject: isAr ? 'انضمام كابتن' : 'Captain Onboarding',
+      }));
+    };
+    window.addEventListener('kowa:captain-inquiry', handleCaptainInquiry);
+    return () => window.removeEventListener('kowa:captain-inquiry', handleCaptainInquiry);
+  }, [isAr]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

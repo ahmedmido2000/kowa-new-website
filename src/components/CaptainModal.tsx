@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSmoothScroll } from './SmoothScrollProvider';
 import { X, CheckCircle, Car, Award, FileCheck } from 'lucide-react';
 
 interface CaptainModalProps {
@@ -11,9 +12,18 @@ interface CaptainModalProps {
 
 export const CaptainModal: React.FC<CaptainModalProps> = ({ isOpen, onClose }) => {
   const { locale } = useLanguage();
+  const { scrollTo } = useSmoothScroll();
   const isAr = locale === 'ar';
 
   if (!isOpen) return null;
+
+  const handleProceedToForm = () => {
+    onClose();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('kowa:captain-inquiry'));
+    }
+    scrollTo('#contact');
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/60 dark:bg-black/80 backdrop-blur-sm animate-fade-in">
@@ -100,7 +110,7 @@ export const CaptainModal: React.FC<CaptainModalProps> = ({ isOpen, onClose }) =
           <div className="pt-2">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleProceedToForm}
               className="w-full py-3.5 px-6 rounded-xl bg-brand hover:bg-brand-dark dark:bg-primary-solid dark:hover:bg-brand text-white font-bold text-sm shadow-md hover:shadow-brand-glow transition cursor-pointer"
             >
               {isAr ? 'فهمت الشروط، الذهاب لنموذج التسجيل' : 'Understood, Proceed to Registration'}

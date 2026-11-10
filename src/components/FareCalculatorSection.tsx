@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { CATEGORIES, HERO_VEHICLE_OPTIONS } from '@/data/translations';
 import { COMPANY_DATA } from '@/data/company';
-import { BookingModal } from './BookingModal';
+import { AppRedirectModal } from './AppRedirectModal';
 import MagneticButton from './MagneticButton';
 import {
   Lock,
@@ -27,6 +27,7 @@ import {
   Users,
   Receipt,
   Route,
+  Smartphone,
 } from 'lucide-react';
 
 interface RoutePreset {
@@ -228,8 +229,8 @@ export const FareCalculatorSection: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse" />
               <span>
                 {isAr
-                  ? 'استوديو الحجز الذكي والمسار المباشر'
-                  : 'Smart Route & Live Fixed-Fare Studio'}
+                  ? 'حاسبة السعر التقديري ومعاينة المسار'
+                  : 'Smart Fare Estimator & Route Preview'}
               </span>
             </div>
 
@@ -281,8 +282,8 @@ export const FareCalculatorSection: React.FC = () => {
 
             <p className="text-sm sm:text-base text-neutral-600 dark:text-ink-muted leading-relaxed max-w-2xl mx-auto">
               {isAr
-                ? 'وداعاً للتسعير المفاجئ أوقات الذروة. جرّب مسارات الرياض الشائعة أو أدخل وجهتك وشاهد خط السير المباشر والتسعيرة النهائية المضمونة فوراً.'
-                : 'Say goodbye to rush-hour surge multipliers. Pick a popular Riyadh route or enter your destination to preview live telemetry and lock your guaranteed fare.'}
+                ? 'وداعاً للتسعير المفاجئ أوقات الذروة. جرّب مسارات الرياض الشائعة أو أدخل وجهتك لتقدير تكلفة رحلتك المضمونة قبل طلبها عبر تطبيق كوا.'
+                : 'Say goodbye to rush-hour surge multipliers. Pick a popular Riyadh route or enter your destination to preview live telemetry and estimate your guaranteed fare before ordering in the KOWA app.'}
             </p>
           </motion.div>
 
@@ -305,7 +306,7 @@ export const FareCalculatorSection: React.FC = () => {
                         <Route className="w-4 h-4" />
                       </div>
                       <span className="text-xs sm:text-sm font-black text-neutral-900 dark:text-ink">
-                        {isAr ? 'حاسبة المسار والتسعيرة المباشرة' : 'Instant Route & Fare Builder'}
+                        {isAr ? 'مُقدّر التكلفة ومعاينة المسار' : 'Route & Fare Estimator'}
                       </span>
                     </div>
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 text-[11px] font-bold">
@@ -485,7 +486,7 @@ export const FareCalculatorSection: React.FC = () => {
                 <div className="pt-5 border-t border-neutral-200/80 dark:border-line flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-right rtl:text-right ltr:text-left w-full sm:w-auto">
                     <span className="text-xs font-bold text-neutral-400 dark:text-ink-subtle block">
-                      {isAr ? 'السعر النهائي المضمون' : 'Guaranteed Final Fare'}
+                      {isAr ? 'التكلفة التقديرية الثابتة في التطبيق' : 'Estimated App Fixed Fare'}
                     </span>
                     <div className="flex items-baseline gap-1.5">
                       <motion.span
@@ -512,7 +513,8 @@ export const FareCalculatorSection: React.FC = () => {
                       onClick={() => setIsModalOpen(true)}
                       className="w-full sm:w-auto py-4 px-7 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-brand-lime dark:hover:bg-[#e1e848] text-white dark:text-neutral-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-brand-glow dark:hover:shadow-lime-glow transition-all cursor-pointer group"
                     >
-                      <span>{isAr ? 'تأكيد وحجز المشوار الآن' : 'Confirm & Book Now'}</span>
+                      <Smartphone className="w-4 h-4 text-brand-lime dark:text-neutral-950" />
+                      <span>{isAr ? 'اطلب رحلتك عبر التطبيق' : 'Request via KOWA App'}</span>
                       <ArrowIcon
                         className={`w-4 h-4 text-brand-lime dark:text-neutral-950 transition-transform ${
                           isRtl ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'
@@ -542,7 +544,7 @@ export const FareCalculatorSection: React.FC = () => {
                 <div className="relative z-10 flex items-center justify-between gap-3 flex-wrap">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold">
                     <span className="w-2 h-2 rounded-full bg-brand-lime animate-ping" />
-                    <span>{isAr ? 'رادار التوجيه المباشر' : 'Live Dispatch Radar'}</span>
+                    <span>{isAr ? 'معاينة المسار والتوقيت التقديري' : 'Live App Route Preview'}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-xs font-bold font-en">
@@ -683,7 +685,7 @@ export const FareCalculatorSection: React.FC = () => {
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <span className="inline-flex items-center gap-1 bg-brand-lime text-neutral-950 text-[10px] font-black px-2 py-0.5 rounded-full">
                           <Sparkles className="w-2.5 h-2.5" />
-                          <span>{isAr ? 'كابتن معتمد جاهز' : 'Verified Ready'}</span>
+                          <span>{isAr ? 'معاينة فئة التطبيق' : 'App Class Preview'}</span>
                         </span>
                         <span className="text-xs font-black font-en text-amber-400 flex items-center gap-1">
                           <Star className="w-3.5 h-3.5 fill-amber-400" />
@@ -701,7 +703,7 @@ export const FareCalculatorSection: React.FC = () => {
 
                       <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-white/10 text-[11px] text-neutral-300">
                         <span className="font-bold text-brand-lime">
-                          ⚡ {isAr ? `يصل خلال ${captain.arrivalMin} دقائق` : `Arrives in ${captain.arrivalMin} min`}
+                          ⚡ {isAr ? `متوسط الوصول بالتطبيق: ${captain.arrivalMin} دقائق` : `App Avg ETA: ${captain.arrivalMin} min`}
                         </span>
                         <span className="font-en text-neutral-400">
                           {isAr ? captain.plateAr : captain.plateEn}
@@ -738,8 +740,8 @@ export const FareCalculatorSection: React.FC = () => {
         </div>
       </section>
 
-      {/* Booking Confirmation Dialog */}
-      <BookingModal
+      {/* App Redirect Modal directing users to KOWA Mobile App */}
+      <AppRedirectModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         pickup={pickup}

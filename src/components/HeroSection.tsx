@@ -262,7 +262,7 @@ export const HeroSection: React.FC = () => {
               <MagneticButton strength={0.25} href="#fare-calculator" className="w-full sm:w-auto">
                 <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 bg-brand-lime hover:bg-[#e1e848] text-neutral-950 px-7 py-4 rounded-2xl font-black text-sm sm:text-base shadow-lime-glow transition-all duration-300 cursor-pointer group">
                   <span>
-                    {isAr ? 'احسب سعيرتك واحجز الآن' : 'Calculate Fare & Book Now'}
+                    {isAr ? 'احسب سعيرتك التقديرية' : 'Estimate Ride Fare'}
                   </span>
                   <ArrowIcon className="w-4 h-4 text-neutral-950 group-hover:scale-110 transition-transform" />
                 </span>
