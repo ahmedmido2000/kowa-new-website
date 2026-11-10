@@ -223,7 +223,7 @@ export const CaptainEarnings: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-2xl font-black text-white font-en inline-block"
                       >
-                        {weekly.toLocaleString()}{' '}
+                        {weekly.toLocaleString('en-US')}{' '}
                         <span className="text-xs text-brand-lime font-sans">{isAr ? 'ر.س' : 'SAR'}</span>
                       </motion.span>
                     </div>
@@ -237,7 +237,7 @@ export const CaptainEarnings: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-2xl sm:text-3xl font-black text-brand-lime font-en inline-block"
                       >
-                        {monthly.toLocaleString()}{' '}
+                        {monthly.toLocaleString('en-US')}{' '}
                         <span className="text-xs text-white font-sans">{isAr ? 'ر.س' : 'SAR'}</span>
                       </motion.span>
                     </div>
