@@ -19,8 +19,7 @@ export default function Home() {
     <main className="min-h-screen flex flex-col bg-canvas text-ink transition-colors duration-200">
       <ComplianceRibbon />
       <Header />
-      <PreviousHero />
-      {/* <HeroSection /> */}
+      <HeroSection />
       <FareCalculatorSection />
       <AnalyticsBar />
       <HowItWorks />
