@@ -317,8 +317,8 @@ export const PreviousHero: React.FC = () => {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 dark:border-line bg-white dark:bg-[#10182C]">
                 <div className="relative w-full h-[460px] sm:h-[500px]">
                   <Image
-                    alt="Saudi executive arriving in modern luxury vehicle"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_XaJz4g4XhR21mlxqohGYsoIB-lhAHLeQOEXQtIdz5XoxedSudqDwWXvuDiHW3ROZ08FLPJwWcEx6xV9etX6K4VSKrXv91h_MofY1BqNrbM8Fzt2m17qChONLPUBa4v9s_ZORg7mO0tvUUGSzlTd-T2e14wpigR6kWaMC54L93AMi8DTkFNYfW0Xgwrz3ikCnOOHmPjvkXwl92QRyNp_rv4H_Wxu82PQCKNRyGvLN"
+                    alt="Twilight arrival at Faisaliah Tower"
+                    src="/image/Twilight Arrival at Faisaliah Tower.webp"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
