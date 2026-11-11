@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { X, CheckCircle, ShieldCheck, MapPin, Navigation, Car } from 'lucide-react';
+import { useModalScrollLock } from './SmoothScrollProvider';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const isAr = locale === 'ar';
   const [confirmed, setConfirmed] = useState(false);
 
+  useModalScrollLock(isOpen);
+
   if (!isOpen) return null;
 
   const handleConfirm = () => {
@@ -40,7 +43,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/60 dark:bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white dark:bg-[#10182C] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-neutral-200 dark:border-line relative overflow-hidden transition-colors duration-200">
+      <div
+        role="dialog"
+        aria-modal="true"
+        data-lenis-prevent
+        className="bg-white dark:bg-[#10182C] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-neutral-200 dark:border-line relative max-h-[90vh] overflow-x-hidden overflow-y-auto overscroll-contain transition-colors duration-200"
+      >
         <button
           onClick={onClose}
           className="absolute top-5 left-5 rtl:left-auto rtl:right-5 p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-[#17223C] text-neutral-400 dark:text-ink-subtle hover:text-neutral-700 dark:hover:text-ink transition cursor-pointer"

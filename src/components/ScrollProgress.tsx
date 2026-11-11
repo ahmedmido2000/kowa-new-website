@@ -2,14 +2,20 @@
 
 import React from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 export default function ScrollProgress() {
+  const { featureFlags } = useWebsiteConfig();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   });
+
+  if (!featureFlags.enableScrollProgress) {
+    return null;
+  }
 
   return (
     <motion.div

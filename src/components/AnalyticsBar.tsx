@@ -3,52 +3,47 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
-import { Users, ShieldCheck, Clock } from 'lucide-react';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 import Counter from './Counter';
+import { CmsIcon } from './CmsIcon';
 
 export const AnalyticsBar: React.FC = () => {
-  const { locale } = useLanguage();
-  const isAr = locale === 'ar';
+  const { pick } = useLanguage();
+  const { sections } = useWebsiteConfig();
+  const data = sections.analytics_bar;
 
-  const statistics = [
-    {
-      numeric: 12000,
-      prefix: '+',
-      suffix: '',
-      label: isAr ? 'مستخدم مسجَّل' : 'Registered Users',
-      subtext: isAr ? 'في مختلف مناطق المملكة' : 'Across the Kingdom',
-      badge: isAr ? 'ثقة متنامية' : 'Growing Trust',
-      icon: Users,
-    },
-    {
-      numeric: 318,
-      prefix: '+',
-      suffix: '',
-      label: isAr ? 'سائق نشط ومعتمد' : 'Active Verified Captains',
-      subtext: isAr ? 'نخبة كباتن سعوديين' : 'Elite Saudi Captains',
-      badge: isAr ? 'فحص أمني 100%' : '100% Vetted',
-      icon: ShieldCheck,
-    },
-    {
-      numeric: 12,
-      prefix: '',
-      suffix: isAr ? ' د' : ' min',
-      label: isAr ? 'متوسط وقت الوصول' : 'Average Arrival Time',
-      subtext: isAr ? 'دقة مواعيد وسرعة استجابة' : 'Punctual & Responsive',
-      badge: isAr ? 'استجابة سريعة' : 'Fast Response',
-      icon: Clock,
-    },
-  ];
+  const items = (data?.items || []).filter((stat) => {
+    if (
+      stat.isEnabled === false ||
+      stat.numeric === null ||
+      stat.numeric === undefined ||
+      String(stat.numeric).trim() === ''
+    ) {
+      return false;
+    }
+    const parsed = Number(stat.numeric);
+    return Number.isFinite(parsed);
+  });
+
+  if (!data || items.length === 0) return null;
 
   return (
     <section className="w-full bg-white dark:bg-[#0A0F1D] border-b border-neutral-200 dark:border-line transition-colors duration-200 py-8 lg:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {statistics.map((stat, index) => {
-            const IconComponent = stat.icon;
+        <div
+          className={`grid grid-cols-1 ${
+            items.length === 2 ? 'md:grid-cols-2' : items.length >= 3 ? 'md:grid-cols-3' : ''
+          } gap-6`}
+        >
+          {items.map((stat, index) => {
+            const label = pick(stat.label);
+            const subtext = pick(stat.subtext);
+            const badge = pick(stat.badge);
+            const suffix = pick(stat.suffix);
+
             return (
               <motion.div
-                key={index}
+                key={stat.id || index}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
@@ -56,33 +51,31 @@ export const AnalyticsBar: React.FC = () => {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="p-6 rounded-2xl bg-neutral-50/70 dark:bg-[#10182C] border border-neutral-200/80 dark:border-line hover:border-brand/30 dark:hover:border-primary-token/40 hover:shadow-subtle transition-all duration-300 flex items-center gap-5 group"
               >
-                {/* Icon Container with subtle scale on hover */}
                 <div className="w-14 h-14 rounded-2xl bg-brand/5 dark:bg-brand-lime/10 border border-brand/10 dark:border-brand-lime/20 text-brand dark:text-brand-lime flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-brand-lime group-hover:text-neutral-900 transition-all duration-200">
-                  <IconComponent className="w-7 h-7" />
+                  <CmsIcon name={stat.icon} className="w-7 h-7" />
                 </div>
 
-                {/* Numbers with animated count-up and Labels */}
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <span className="text-3xl sm:text-4xl font-black text-neutral-900 dark:text-ink font-en leading-none">
                       <Counter
-                        to={stat.numeric}
-                        prefix={stat.prefix}
-                        suffix={stat.suffix}
+                        to={Number(stat.numeric)}
+                        prefix={stat.prefix || ''}
+                        suffix={suffix}
                         duration={2.0 + index * 0.3}
                       />
                     </span>
-                    <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-brand/5 dark:bg-brand-lime/10 text-brand dark:text-brand-lime border border-brand/10 dark:border-brand-lime/20">
-                      {stat.badge}
-                    </span>
+                    {badge ? (
+                      <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-brand/5 dark:bg-brand-lime/10 text-brand dark:text-brand-lime border border-brand/10 dark:border-brand-lime/20">
+                        {badge}
+                      </span>
+                    ) : null}
                   </div>
 
-                  <div className="text-sm font-bold text-neutral-800 dark:text-ink">
-                    {stat.label}
-                  </div>
-                  <div className="text-xs text-neutral-500 dark:text-ink-muted">
-                    {stat.subtext}
-                  </div>
+                  <div className="text-sm font-bold text-neutral-800 dark:text-ink">{label}</div>
+                  {subtext ? (
+                    <div className="text-xs text-neutral-500 dark:text-ink-muted">{subtext}</div>
+                  ) : null}
                 </div>
               </motion.div>
             );

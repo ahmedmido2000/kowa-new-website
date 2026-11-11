@@ -5,14 +5,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { useSmoothScroll } from './SmoothScrollProvider';
 import { useLanguage } from '@/context/LanguageContext';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 export default function BackToTop() {
+  const { featureFlags } = useWebsiteConfig();
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const { scrollTo } = useSmoothScroll();
   const { isRtl } = useLanguage();
 
   useEffect(() => {
+    if (!featureFlags.enableBackToTop) {
+      return;
+    }
+
     const handleScroll = () => {
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
       const currentScroll = window.scrollY;
@@ -24,7 +30,11 @@ export default function BackToTop() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [featureFlags.enableBackToTop]);
+
+  if (!featureFlags.enableBackToTop) {
+    return null;
+  }
 
   const scrollToTop = () => {
     scrollTo(0, { duration: 1.2 });

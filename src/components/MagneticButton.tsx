@@ -2,6 +2,7 @@
 
 import React, { useRef } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ export default function MagneticButton({
   'aria-label': ariaLabel,
   as,
 }: MagneticButtonProps) {
+  const { featureFlags } = useWebsiteConfig();
   const ref = useRef<HTMLDivElement>(null);
 
   const mouseX = useMotionValue(0);
@@ -37,8 +39,10 @@ export default function MagneticButton({
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
 
+  const enabled = featureFlags.enableMagneticButtons;
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (!enabled || !ref.current) return;
     const { clientX, clientY } = e;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     const centerX = left + width / 2;
@@ -58,7 +62,7 @@ export default function MagneticButton({
 
   const isFullWidth = className.includes('w-full');
 
-  const content = (
+  const content = enabled ? (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
@@ -68,9 +72,10 @@ export default function MagneticButton({
     >
       {children}
     </motion.div>
+  ) : (
+    <div className={`relative ${isFullWidth ? 'w-full block' : 'inline-block'}`}>{children}</div>
   );
 
-  // If explicit 'div' requested or neither href nor onClick is passed, render a div wrapper
   if (as === 'div' || (!href && !onClick && as !== 'button')) {
     return (
       <div className={className} role={role} aria-label={ariaLabel}>
@@ -79,7 +84,6 @@ export default function MagneticButton({
     );
   }
 
-  // If href is present or 'a' requested
   if (href || as === 'a') {
     return (
       <a
@@ -96,7 +100,6 @@ export default function MagneticButton({
     );
   }
 
-  // Fallback to button only when onClick is explicitly provided and as !== 'div'
   return (
     <button
       onClick={onClick}

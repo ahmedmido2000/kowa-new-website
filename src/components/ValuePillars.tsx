@@ -3,56 +3,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
-import { DollarSign, Shield, HeartHandshake, CheckCircle, Sparkles, UserCheck } from 'lucide-react';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 import TiltCard from './TiltCard';
+import { CmsIcon } from './CmsIcon';
+
+const BADGE_STYLE_MAP: Record<string, string> = {
+  lime: 'bg-brand-lime text-neutral-900 font-black',
+  emerald: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300',
+  neutral: 'bg-neutral-200 dark:bg-[#1C2A4A] text-neutral-800 dark:text-neutral-200',
+};
 
 export const ValuePillars: React.FC = () => {
-  const { locale } = useLanguage();
-  const isAr = locale === 'ar';
+  const { pick } = useLanguage();
+  const { sections } = useWebsiteConfig();
+  const data = sections.value_pillars;
 
-  const pillars = [
-    {
-      id: 1,
-      icon: DollarSign,
-      title: isAr ? 'لا تسعير مفاجئ في الذروة' : 'Zero Surge Pricing in Rush Hours',
-      badge: isAr ? 'سعر عادل' : 'Fair Fare',
-      badgeColor: 'bg-brand-lime text-neutral-900 font-black',
-      description: isAr
-        ? 'شفافية مطلقة وتثبيت للسعر مهما اشتد الزحام أو ساعات المطر. الرقم الذي تراه في التطبيق عند التأكيد هو المبلغ الفعلي المستحق دون مضاعفات غير مبررة.'
-        : 'Absolute transparency with 100% price lock regardless of traffic congestion or rain. The fare shown at booking is the exact amount charged—no sudden multipliers.',
-      featureText: isAr ? 'ضمان السعر الثابت 100%' : '100% Fixed Fare Guarantee',
-      featureIcon: CheckCircle,
-    },
-    {
-      id: 2,
-      icon: Sparkles,
-      title: isAr ? 'أسطول معتمد ومكيف 2023+' : 'Modern 2023+ Fleet with Supreme AC',
-      badge: isAr ? 'طراز حديث' : 'Modern Models',
-      badgeColor: 'bg-neutral-200 dark:bg-[#1C2A4A] text-neutral-800 dark:text-neutral-200',
-      description: isAr
-        ? 'سيارات حديثة لا يتجاوز عمرها سنتين، تخضع لفحص دوري أسبوعي ونظافة يومية فائقة، مع تكييف مثالي ملائم لصيف المملكة وشواحن مجانية لكل راكب.'
-        : 'Vehicles under 2 years old, undergoing rigorous weekly mechanical inspections and daily sanitization, optimized for Saudi summer climate with complimentary chargers.',
-      featureText: isAr ? 'تعقيم وضيافة سعودية معطرة' : 'Scented Sanitization & Hospitality',
-      featureIcon: HeartHandshake,
-    },
-    {
-      id: 3,
-      icon: UserCheck,
-      title: isAr ? 'كباتن سعوديون نخبة' : 'Elite Verified Saudi Captains',
-      badge: isAr ? 'معتمد 100%' : '100% Certified',
-      badgeColor: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300',
-      description: isAr
-        ? 'تدريب عالي على كرم الضيافة وأصول القيادة الآمنة والخصوصية التامة. جميع الكباتن خضعوا لفحص أمني وطبي ولديهم سجل قيادة نظيف وموثق.'
-        : 'Thoroughly vetted with background checks, professional hospitality training, and safe driving records. Complete dedication to family privacy and respect.',
-      featureText: isAr ? 'احترام تام للخصوصية العائلية' : 'Full Respect for Family Privacy',
-      featureIcon: Shield,
-    },
-  ];
+  if (!data) return null;
+
+  const pillars = (data.pillars || []).filter((p) => p.isEnabled !== false);
 
   return (
-    <section className="py-16 lg:py-24 bg-white dark:bg-[#0A0F1D] transition-colors duration-200 overflow-hidden" id="value-pillars">
+    <section
+      className="py-16 lg:py-24 bg-white dark:bg-[#0A0F1D] transition-colors duration-200 overflow-hidden"
+      id="value-pillars"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Reveal */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -61,57 +36,67 @@ export const ValuePillars: React.FC = () => {
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <span className="text-xs font-black uppercase text-brand dark:text-brand-lime tracking-widest bg-brand/5 dark:bg-brand-lime/10 px-3 py-1 rounded-full border border-brand/10 dark:border-brand-lime/20 inline-block mb-3">
-            {isAr ? 'ميثاق كوا للتنقل' : 'The KOWA Mobility Charter'}
+            {pick(data.badge)}
           </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-900 dark:text-ink mt-2 mb-4">
-            {isAr ? 'لماذا يختار عملاء المملكة كوا بديلاً ذكياً؟' : 'Why Commuters Across KSA Choose KOWA'}
+            {pick(data.headline)}
           </h2>
           <p className="text-neutral-600 dark:text-ink-muted text-sm sm:text-base leading-relaxed">
-            {isAr
-              ? 'بنينا كوا لتقديم معادلة واضحة: أعلى مستويات الجودة والنظافة، مع تسعيرة عادلة لا تتبدل عند تغير الأحوال الجوية أو ذروة الخروج.'
-              : 'Built to deliver a straightforward promise: pristine vehicle comfort and dependable Saudi hospitality with transparent pricing that never surges.'}
+            {pick(data.subtitle)}
           </p>
         </motion.div>
 
-        {/* 3 Value Pillars with 3D Tilt & Stagger */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pillars.map((pillar, idx) => {
-            const IconComponent = pillar.icon;
-            const FeatureIcon = pillar.featureIcon;
-            return (
-              <motion.div
-                key={pillar.id}
-                initial={{ opacity: 0, y: 35 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.6, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <TiltCard
-                  maxTilt={6}
-                  glare={true}
-                  className="h-full p-8 rounded-3xl bg-neutral-50/70 dark:bg-[#10182C] border border-neutral-200 dark:border-line hover:border-brand/30 dark:hover:border-primary-token/40 shadow-subtle hover:shadow-elevated transition-colors duration-300 flex flex-col justify-between group"
+        {pillars.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {pillars.map((pillar, idx) => {
+              const badgeClass = BADGE_STYLE_MAP[pillar.badgeStyle] || BADGE_STYLE_MAP.neutral;
+
+              return (
+                <motion.div
+                  key={pillar.id || idx}
+                  initial={{ opacity: 0, y: 35 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.6, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <div>
-                    <div className="w-14 h-14 rounded-2xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-lime group-hover:text-neutral-900 transition-all duration-300 shadow-sm">
-                      <IconComponent className="w-7 h-7" />
+                  <TiltCard
+                    maxTilt={6}
+                    glare={true}
+                    className="h-full p-8 rounded-3xl bg-neutral-50/70 dark:bg-[#10182C] border border-neutral-200 dark:border-line hover:border-brand/30 dark:hover:border-primary-token/40 shadow-subtle hover:shadow-elevated transition-colors duration-300 flex flex-col justify-between group"
+                  >
+                    <div>
+                      <div className="w-14 h-14 rounded-2xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-lime group-hover:text-neutral-900 transition-all duration-300 shadow-sm">
+                        <CmsIcon name={pillar.icon} className="w-7 h-7" />
+                      </div>
+                      <div className="flex items-center gap-2 mb-3 flex-wrap">
+                        <h3 className="text-xl font-bold text-neutral-900 dark:text-ink">
+                          {pick(pillar.title)}
+                        </h3>
+                        {pick(pillar.badge) ? (
+                          <span
+                            className={`text-[10px] font-black px-2 py-0.5 rounded-full ${badgeClass}`}
+                          >
+                            {pick(pillar.badge)}
+                          </span>
+                        ) : null}
+                      </div>
+                      <p className="text-sm text-neutral-600 dark:text-ink-muted leading-relaxed mb-6">
+                        {pick(pillar.description)}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <h3 className="text-xl font-bold text-neutral-900 dark:text-ink">{pillar.title}</h3>
-                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${pillar.badgeColor}`}>
-                        {pillar.badge}
-                      </span>
+                    <div className="pt-4 border-t border-neutral-200/60 dark:border-line flex items-center gap-2 text-xs font-bold text-brand dark:text-brand-lime">
+                      <CmsIcon
+                        name={pillar.featureIcon}
+                        className="w-4 h-4 text-brand dark:text-brand-lime shrink-0"
+                      />
+                      <span>{pick(pillar.featureText)}</span>
                     </div>
-                    <p className="text-sm text-neutral-600 dark:text-ink-muted leading-relaxed mb-6">{pillar.description}</p>
-                  </div>
-                  <div className="pt-4 border-t border-neutral-200/60 dark:border-line flex items-center gap-2 text-xs font-bold text-brand dark:text-brand-lime">
-                    <FeatureIcon className="w-4 h-4 text-brand dark:text-brand-lime" />
-                    <span>{pillar.featureText}</span>
-                  </div>
-                </TiltCard>
-              </motion.div>
-            );
-          })}
-        </div>
+                  </TiltCard>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
     </section>
   );

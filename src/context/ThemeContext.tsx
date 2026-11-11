@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useSyncExternalStore } from 'react';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 export type Theme = 'light' | 'dark';
 
@@ -8,57 +9,103 @@ interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
+  allowToggle: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: 'light',
   toggleTheme: () => {},
   setTheme: () => {},
+  allowToggle: true,
 });
 
+const THEME_EVENT = 'kowa:theme-change';
+
+function subscribeThemeStore(callback: () => void) {
+  window.addEventListener('storage', callback);
+  window.addEventListener(THEME_EVENT, callback);
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+  media.addEventListener('change', callback);
+  return () => {
+    window.removeEventListener('storage', callback);
+    window.removeEventListener(THEME_EVENT, callback);
+    media.removeEventListener('change', callback);
+  };
+}
+
+function getStoredThemeSnapshot(): Theme | null {
+  try {
+    const saved = localStorage.getItem('theme');
+    return saved === 'dark' || saved === 'light' ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
+function getSystemDarkSnapshot(): boolean {
+  try {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  } catch {
+    return false;
+  }
+}
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('light');
+  const { settings, featureFlags } = useWebsiteConfig();
+  const defaultTheme = settings.defaultTheme || 'light';
+  const allowToggle = featureFlags.enableThemeToggle;
+
+  const storedTheme = useSyncExternalStore<Theme | null>(
+    subscribeThemeStore,
+    getStoredThemeSnapshot,
+    () => null
+  );
+
+  const systemPrefersDark = useSyncExternalStore<boolean>(
+    subscribeThemeStore,
+    getSystemDarkSnapshot,
+    () => false
+  );
+
+  const fallbackTheme: Theme =
+    defaultTheme === 'dark'
+      ? 'dark'
+      : defaultTheme === 'light'
+        ? 'light'
+        : systemPrefersDark
+          ? 'dark'
+          : 'light';
+
+  const theme: Theme = allowToggle && storedTheme ? storedTheme : fallbackTheme;
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('theme') as Theme | null;
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = saved === 'dark' || (!saved && prefersDark);
-
-      const resolved: Theme = isDark ? 'dark' : 'light';
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setThemeState(resolved);
-
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    } catch {
-      // Graceful fallback for restricted environments
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  }, []);
+  }, [theme]);
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    try {
-      localStorage.setItem('theme', newTheme);
-      if (newTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
+  const setTheme = useCallback(
+    (newTheme: Theme) => {
+      if (!allowToggle) return;
+      try {
+        localStorage.setItem('theme', newTheme);
+        window.dispatchEvent(new Event(THEME_EVENT));
+      } catch {
+        // Graceful fallback
       }
-    } catch {
-      // Graceful fallback
-    }
-  };
+    },
+    [allowToggle]
+  );
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
+    if (!allowToggle) return;
     setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  }, [allowToggle, setTheme, theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme, allowToggle }}>
       {children}
     </ThemeContext.Provider>
   );

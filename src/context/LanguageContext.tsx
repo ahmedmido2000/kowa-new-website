@@ -1,13 +1,17 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Locale } from '@/data/translations';
+import React, { createContext, useCallback, useContext, useEffect, useSyncExternalStore } from 'react';
+import type { Locale, LocalizedText } from '@/types/website-cms';
+import { pickText } from '@/lib/cms-helpers';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 interface LanguageContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   toggleLocale: () => void;
   isRtl: boolean;
+  allowSwitch: boolean;
+  pick: (value: LocalizedText | string | null | undefined, fallback?: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -15,36 +19,76 @@ const LanguageContext = createContext<LanguageContextType>({
   setLocale: () => {},
   toggleLocale: () => {},
   isRtl: true,
+  allowSwitch: true,
+  pick: (value, fallback = '') => pickText(value, 'ar', fallback),
 });
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [locale, setLocaleState] = useState<Locale>('ar');
+const LOCALE_EVENT = 'kowa:locale-change';
 
-  useEffect(() => {
-    const saved = localStorage.getItem('kowa_locale') as Locale | null;
-    if (saved === 'ar' || saved === 'en') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLocaleState(saved);
-    }
-  }, []);
+function subscribeLocaleStore(callback: () => void) {
+  window.addEventListener('storage', callback);
+  window.addEventListener(LOCALE_EVENT, callback);
+  return () => {
+    window.removeEventListener('storage', callback);
+    window.removeEventListener(LOCALE_EVENT, callback);
+  };
+}
+
+function getLocaleSnapshot(): Locale | null {
+  try {
+    const saved = localStorage.getItem('kowa_locale');
+    return saved === 'ar' || saved === 'en' ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { settings, featureFlags } = useWebsiteConfig();
+  const defaultLocale: Locale = settings.defaultLocale === 'en' ? 'en' : 'ar';
+  const allowSwitch = featureFlags.enableLanguageSwitch;
+
+  const storedLocale = useSyncExternalStore<Locale | null>(
+    subscribeLocaleStore,
+    getLocaleSnapshot,
+    () => null
+  );
+
+  const locale: Locale = allowSwitch && storedLocale ? storedLocale : defaultLocale;
 
   useEffect(() => {
     document.documentElement.setAttribute('lang', locale);
     document.documentElement.setAttribute('dir', locale === 'ar' ? 'rtl' : 'ltr');
   }, [locale]);
 
-  const setLocale = (newLocale: Locale) => {
-    setLocaleState(newLocale);
-    localStorage.setItem('kowa_locale', newLocale);
-  };
+  const setLocale = useCallback(
+    (newLocale: Locale) => {
+      if (!allowSwitch) return;
+      try {
+        localStorage.setItem('kowa_locale', newLocale);
+        window.dispatchEvent(new Event(LOCALE_EVENT));
+      } catch {
+        // Ignore storage write failures
+      }
+    },
+    [allowSwitch]
+  );
 
-  const toggleLocale = () => {
-    const next = locale === 'ar' ? 'en' : 'ar';
-    setLocale(next);
-  };
+  const toggleLocale = useCallback(() => {
+    if (!allowSwitch) return;
+    setLocale(locale === 'ar' ? 'en' : 'ar');
+  }, [allowSwitch, locale, setLocale]);
+
+  const pick = useCallback(
+    (value: LocalizedText | string | null | undefined, fallback = '') =>
+      pickText(value, locale, fallback),
+    [locale]
+  );
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, toggleLocale, isRtl: locale === 'ar' }}>
+    <LanguageContext.Provider
+      value={{ locale, setLocale, toggleLocale, isRtl: locale === 'ar', allowSwitch, pick }}
+    >
       {children}
     </LanguageContext.Provider>
   );

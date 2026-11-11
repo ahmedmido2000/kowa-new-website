@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 interface TiltCardProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export default function TiltCard({
   maxTilt = 7,
   glare = true,
 }: TiltCardProps) {
+  const { featureFlags } = useWebsiteConfig();
   const cardRef = useRef<HTMLDivElement>(null);
   const [canTilt, setCanTilt] = useState(false);
 
@@ -35,7 +37,7 @@ export default function TiltCard({
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     const updateCapability = () => {
-      setCanTilt(hoverQuery.matches && !motionQuery.matches);
+      setCanTilt(featureFlags.enable3DTiltCards && hoverQuery.matches && !motionQuery.matches);
     };
 
     updateCapability();
@@ -46,7 +48,7 @@ export default function TiltCard({
       hoverQuery.removeEventListener('change', updateCapability);
       motionQuery.removeEventListener('change', updateCapability);
     };
-  }, []);
+  }, [featureFlags.enable3DTiltCards]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!canTilt || !cardRef.current) return;
