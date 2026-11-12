@@ -184,3 +184,38 @@ input[type=range]::-webkit-slider-thumb:hover {
   animation-duration: 8s;
   animation-delay: -5s;
 }
+
+/* Leaflet map font & stacking polish */
+.leaflet-container {
+  font-family: inherit;
+  background: #e8ecf4 !important;
+}
+
+.dark .leaflet-container {
+  background: #0b1120 !important;
+}
+
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  color: #334155 !important;
+  backdrop-filter: blur(4px);
+}
+
+.dark .leaflet-control-attribution {
+  background: rgba(10, 15, 29, 0.78) !important;
+  color: #cbd5e1 !important;
+}
+
+.dark .leaflet-control-attribution a {
+  color: #D3D93C !important;
+}
+
+.kowa-map-pin-wrapper {
+  background: transparent;
+  border: 0;
+}
+
+.dark .leaflet-tile-pane {
+  filter: brightness(0.76) invert(1) contrast(1.06) hue-rotate(205deg) saturate(0.4);
+}

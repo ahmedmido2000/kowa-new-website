@@ -130,7 +130,40 @@ export interface AppRedirectPromo {
   text: LocalizedText;
 }
 
+export interface FareCalculatorServiceArea {
+  south: number;
+  north: number;
+  west: number;
+  east: number;
+}
+
+export interface FareCalculatorDynamicLabels {
+  calculateButton: LocalizedText;
+  loading: LocalizedText;
+  selectPickup: LocalizedText;
+  selectDestination: LocalizedText;
+  selectCategory: LocalizedText;
+  noCategories: LocalizedText;
+  error: LocalizedText;
+  noRoute: LocalizedText;
+  distance: LocalizedText;
+  duration: LocalizedText;
+  total: LocalizedText;
+  disclaimer: LocalizedText;
+}
+
+export interface FareCalculatorDynamicConfig {
+  enabled: boolean;
+  showMap: boolean;
+  showBreakdown: boolean;
+  allowedCategoryIds?: string[];
+  maxDistanceKm?: number;
+  serviceArea?: FareCalculatorServiceArea | null;
+  labels: FareCalculatorDynamicLabels;
+}
+
 export interface FareCalculatorContent {
+  dynamic?: FareCalculatorDynamicConfig | null;
   badge: LocalizedText;
   headline: {
     lead: LocalizedText;
@@ -647,4 +680,63 @@ export interface SmsAppLinkRequest {
 
 export interface SmsAppLinkResponse {
   sent: boolean;
+}
+
+export interface GeoPoint {
+  latitude: number;
+  longitude: number;
+}
+
+export interface DynamicFareCategoryItem {
+  id: string;
+  code: string;
+  name: LocalizedText | string;
+  description: string;
+  imageUrl: string | null;
+  sortOrder: number;
+  configured: boolean;
+  available: boolean;
+}
+
+export interface FareCalculatorCategoriesResponse {
+  cityId: string | null;
+  governorate: string;
+  items: DynamicFareCategoryItem[];
+}
+
+export interface EstimateFareRequest {
+  pickup: GeoPoint;
+  destination: GeoPoint;
+  deliveryCategoryId: string;
+}
+
+export interface EstimateFareBreakdown {
+  fareBeforeVat: number;
+  vatAmount: number;
+  total: number;
+}
+
+export interface EstimateFareRouteGeometry {
+  type: 'LineString';
+  coordinates: [number, number][];
+}
+
+export interface EstimateFareResponse {
+  deliveryCategoryId: string;
+  cityId: string;
+  governorate: string;
+  currency: string;
+  estimated: boolean;
+  includesVat: boolean;
+  pickup: GeoPoint;
+  destination: GeoPoint;
+  route: {
+    distanceKm: number;
+    durationMinutes: number;
+    geometry: EstimateFareRouteGeometry;
+  };
+  price: number;
+  breakdown?: EstimateFareBreakdown | null;
+  pricingVersion: number;
+  calculatedAt: string;
 }

@@ -2,6 +2,9 @@ import axios from 'axios';
 import type {
   ContactSubmissionRequest,
   ContactSubmissionResponse,
+  EstimateFareRequest,
+  EstimateFareResponse,
+  FareCalculatorCategoriesResponse,
   LocalizedText,
   Locale,
   SmsAppLinkRequest,
@@ -171,5 +174,72 @@ export async function requestAppLinkSms(
     return response.data.data;
   } catch (error) {
     throw parseAxiosError(error, 'SMS app link request failed');
+  }
+}
+
+export function isRequestAbortedError(error: unknown): boolean {
+  if (axios.isCancel(error)) return true;
+  if (error instanceof Error && (error.name === 'AbortError' || error.name === 'CanceledError')) {
+    return true;
+  }
+  return false;
+}
+
+export async function fetchFareCalculatorCategories(
+  params: {
+    pickupLatitude: number;
+    pickupLongitude: number;
+    locale?: Locale | 'all';
+  },
+  signal?: AbortSignal
+): Promise<FareCalculatorCategoriesResponse> {
+  try {
+    const response = await clientApi.get<{ data: FareCalculatorCategoriesResponse }>(
+      '/website/fare-calculator/categories',
+      {
+        params: {
+          pickupLatitude: Number(params.pickupLatitude),
+          pickupLongitude: Number(params.pickupLongitude),
+          locale: params.locale ?? 'all',
+        },
+        signal,
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    if (isRequestAbortedError(error)) {
+      throw error;
+    }
+    throw parseAxiosError(error, 'Failed to load fare categories');
+  }
+}
+
+export async function estimateWebsiteTripFare(
+  payload: EstimateFareRequest,
+  signal?: AbortSignal
+): Promise<EstimateFareResponse> {
+  try {
+    const body: EstimateFareRequest = {
+      pickup: {
+        latitude: Number(payload.pickup.latitude),
+        longitude: Number(payload.pickup.longitude),
+      },
+      destination: {
+        latitude: Number(payload.destination.latitude),
+        longitude: Number(payload.destination.longitude),
+      },
+      deliveryCategoryId: payload.deliveryCategoryId,
+    };
+    const response = await clientApi.post<{ data: EstimateFareResponse }>(
+      '/website/trips/estimate-fare',
+      body,
+      { signal }
+    );
+    return response.data.data;
+  } catch (error) {
+    if (isRequestAbortedError(error)) {
+      throw error;
+    }
+    throw parseAxiosError(error, 'Failed to estimate trip fare');
   }
 }

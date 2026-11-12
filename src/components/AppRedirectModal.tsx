@@ -71,7 +71,10 @@ export const AppRedirectModal: React.FC<AppRedirectModalProps> = ({
       ? 'تتم طلبات الرحلات وتتبع الكابتن والدفع الآمن داخل التطبيق الرسمي فقط'
       : 'Ride dispatch, live captain GPS & payments happen inside the official mobile app'
   );
-  const demoNotice = pick(fareCalc?.demoNotice);
+  const isDynamicMode = Boolean(fareCalc?.dynamic?.enabled);
+  const demoNotice = isDynamicMode
+    ? pick(fareCalc?.dynamic?.labels?.disclaimer)
+    : pick(fareCalc?.demoNotice);
 
   const rawPromo = modalData?.promo;
   const promo =
@@ -186,58 +189,86 @@ export const AppRedirectModal: React.FC<AppRedirectModalProps> = ({
           </div>
         </div>
 
-        <div className="space-y-3 bg-neutral-50 dark:bg-[#17223C] p-4 rounded-2xl border border-neutral-200/80 dark:border-line mb-4">
-          <div className="flex items-start gap-2.5">
-            <Navigation className="w-4 h-4 text-brand dark:text-brand-lime shrink-0 mt-0.5" />
-            <div className="text-right rtl:text-right ltr:text-left flex-1 min-w-0">
-              <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
-                {pick(fareCalc?.labels?.pickupPoint, isAr ? 'نقطة الانطلاق' : 'Pickup Point')}
-              </span>
-              <span className="text-xs font-bold text-neutral-900 dark:text-ink block truncate">
-                {pickup}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 pt-2.5 border-t border-neutral-200/60 dark:border-line">
-            <MapPin className="w-4 h-4 text-brand-lime shrink-0 mt-0.5" />
-            <div className="text-right rtl:text-right ltr:text-left flex-1 min-w-0">
-              <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
-                {pick(fareCalc?.labels?.destination, isAr ? 'الوجهة المقصودة' : 'Destination')}
-              </span>
-              <span className="text-xs font-bold text-neutral-900 dark:text-ink block truncate">
-                {destination}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between pt-2.5 border-t border-neutral-200/60 dark:border-line gap-3">
-            <div>
-              <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
-                {pick(fareCalc?.labels?.previewBadge, isAr ? 'معاينة فئة التطبيق' : 'App Class Preview')}
-              </span>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{vehicleName}</span>
+        {pickup || destination || vehicleName || startingPriceLabel ? (
+          <div className="space-y-3 bg-neutral-50 dark:bg-[#17223C] p-4 rounded-2xl border border-neutral-200/80 dark:border-line mb-4">
+            {pickup ? (
+              <div className="flex items-start gap-2.5">
+                <Navigation className="w-4 h-4 text-brand dark:text-brand-lime shrink-0 mt-0.5" />
+                <div className="text-right rtl:text-right ltr:text-left flex-1 min-w-0">
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
+                    {pick(fareCalc?.labels?.pickupPoint, isAr ? 'نقطة الانطلاق' : 'Pickup Point')}
+                  </span>
+                  <span className="text-xs font-bold text-neutral-900 dark:text-ink block truncate">
+                    {pickup}
+                  </span>
+                </div>
               </div>
-            </div>
-            {startingPriceLabel ? (
-              <div className="text-sm sm:text-base font-black text-brand dark:text-brand-lime text-end">
-                {startingPriceLabel}
-              </div>
-            ) : (
-              <span className="text-xs font-bold text-neutral-500 dark:text-ink-muted">
-                {pick(fareCalc?.labels?.surgeLock)}
-              </span>
-            )}
-          </div>
+            ) : null}
 
-          {demoNotice ? (
-            <p className="text-[11px] text-neutral-500 dark:text-ink-subtle pt-2 border-t border-neutral-200/60 dark:border-line leading-relaxed">
+            {destination ? (
+              <div
+                className={`flex items-start gap-2.5 ${
+                  pickup ? 'pt-2.5 border-t border-neutral-200/60 dark:border-line' : ''
+                }`}
+              >
+                <MapPin className="w-4 h-4 text-brand-lime shrink-0 mt-0.5" />
+                <div className="text-right rtl:text-right ltr:text-left flex-1 min-w-0">
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
+                    {pick(fareCalc?.labels?.destination, isAr ? 'الوجهة المقصودة' : 'Destination')}
+                  </span>
+                  <span className="text-xs font-bold text-neutral-900 dark:text-ink block truncate">
+                    {destination}
+                  </span>
+                </div>
+              </div>
+            ) : null}
+
+            {vehicleName || startingPriceLabel ? (
+              <div
+                className={`flex items-center justify-between gap-3 ${
+                  pickup || destination
+                    ? 'pt-2.5 border-t border-neutral-200/60 dark:border-line'
+                    : ''
+                }`}
+              >
+                {vehicleName ? (
+                  <div>
+                    <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
+                      {pick(fareCalc?.labels?.previewBadge, isAr ? 'معاينة فئة التطبيق' : 'App Class Preview')}
+                    </span>
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span>{vehicleName}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div />
+                )}
+                {startingPriceLabel ? (
+                  <div className="text-sm sm:text-base font-black text-brand dark:text-brand-lime text-end">
+                    {startingPriceLabel}
+                  </div>
+                ) : !isDynamicMode ? (
+                  <span className="text-xs font-bold text-neutral-500 dark:text-ink-muted">
+                    {pick(fareCalc?.labels?.surgeLock)}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+
+            {demoNotice ? (
+              <p className="text-[11px] text-neutral-500 dark:text-ink-subtle pt-2 border-t border-neutral-200/60 dark:border-line leading-relaxed">
+                {demoNotice}
+              </p>
+            ) : null}
+          </div>
+        ) : demoNotice ? (
+          <div className="rounded-2xl bg-neutral-50 dark:bg-[#17223C] p-3.5 border border-neutral-200/80 dark:border-line mb-4">
+            <p className="text-[11px] text-neutral-500 dark:text-ink-subtle leading-relaxed">
               {demoNotice}
             </p>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
         {promo ? (
           <div className="p-3 rounded-2xl bg-brand/5 dark:bg-brand-lime/10 border border-brand/15 dark:border-brand-lime/25 flex items-center justify-between gap-3 mb-5">
