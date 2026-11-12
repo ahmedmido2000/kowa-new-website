@@ -156,7 +156,7 @@ export const HeroSection: React.FC = () => {
               height: ember.size,
             }}
             aria-hidden="true"
-            className="absolute bottom-0 rounded-full bg-brand-lime pointer-events-none blur-[0.8px] shadow-[0_0_10px_#D3D93C] z-[1]"
+            className="absolute bottom-0 rounded-full bg-white pointer-events-none blur-[0.8px] shadow-[0_0_10px_rgba(255,255,255,0.85)] z-[1]"
           />
         ))}
 
@@ -171,7 +171,7 @@ export const HeroSection: React.FC = () => {
             <linearGradient id="kowaStreamGrad" x1="0" y1="1" x2="1" y2="0">
               <stop offset="0%" stopColor="#1F0F8C" stopOpacity="0.6" />
               <stop offset="50%" stopColor="#634EEB" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#D3D93C" stopOpacity="1" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
             </linearGradient>
             <filter id="kowaGlow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="3" result="coloredBlur" />
@@ -227,13 +227,13 @@ export const HeroSection: React.FC = () => {
               <motion.div
                 variants={itemVariants}
                 whileHover={{ scale: 1.03 }}
-                className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-brand/30 border border-brand-lime/40 backdrop-blur-md shadow-sm cursor-default"
+                className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/15 border border-white/30 backdrop-blur-md shadow-sm cursor-default"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-brand-lime animate-ping" />
-                <span className="text-brand-lime font-extrabold text-xs sm:text-sm tracking-wide">
+                <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping" />
+                <span className="text-white font-extrabold text-xs sm:text-sm tracking-wide">
                   {kicker}
                 </span>
-                <Sparkles className="w-3.5 h-3.5 text-brand-lime shrink-0" />
+                <Sparkles className="w-3.5 h-3.5 text-white shrink-0" />
               </motion.div>
             ) : null}
 
@@ -245,7 +245,7 @@ export const HeroSection: React.FC = () => {
               {(headlineHighlight || headlineTail) ? (
                 <span className="block mt-2">
                   {headlineHighlight ? (
-                    <span className="text-brand-lime text-glow-lime">{headlineHighlight}</span>
+                    <span className="text-white text-glow-lime">{headlineHighlight}</span>
                   ) : null}{' '}
                   {headlineTail}
                 </span>
@@ -267,7 +267,7 @@ export const HeroSection: React.FC = () => {
             >
               {primaryLabel ? (
                 <MagneticButton strength={0.25} href={primaryHref} className="w-full sm:w-auto">
-                  <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 bg-brand-lime hover:bg-[#e1e848] text-neutral-950 px-7 py-4 rounded-2xl font-black text-sm sm:text-base shadow-lime-glow transition-all duration-300 cursor-pointer group">
+                  <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 bg-white hover:bg-[#EFF6FF] text-brand px-7 py-4 rounded-2xl font-black text-sm sm:text-base shadow-lime-glow transition-all duration-300 cursor-pointer group">
                     <span>{primaryLabel}</span>
                     <ArrowIcon className="w-4 h-4 text-neutral-950 group-hover:scale-110 transition-transform" />
                   </span>
@@ -276,8 +276,8 @@ export const HeroSection: React.FC = () => {
 
               {secondaryLabel ? (
                 <MagneticButton strength={0.2} href={secondaryHref} className="w-full sm:w-auto">
-                  <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm sm:text-base text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 hover:border-brand-lime/60 transition-all duration-300 cursor-pointer">
-                    <Download className="w-4 h-4 text-brand-lime" />
+                  <span className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm sm:text-base text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 hover:border-white/70 transition-all duration-300 cursor-pointer">
+                    <Download className="w-4 h-4 text-white" />
                     <span>{secondaryLabel}</span>
                   </span>
                 </MagneticButton>
@@ -294,7 +294,7 @@ export const HeroSection: React.FC = () => {
                     key={stat.id}
                     className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/5 transition-colors"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-brand/40 border border-brand-lime/30 flex items-center justify-center text-brand-lime shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white shrink-0">
                       <CmsIcon name={stat.icon} className="w-4 h-4" />
                     </div>
                     <div>
@@ -323,11 +323,11 @@ export const HeroSection: React.FC = () => {
             y: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
           }}
           aria-label={scrollCueLabel}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 inline-flex flex-col items-center gap-1 text-xs font-bold text-neutral-300 hover:text-brand-lime transition-colors cursor-pointer"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 inline-flex flex-col items-center gap-1 text-xs font-bold text-neutral-300 hover:text-white transition-colors cursor-pointer"
         >
           <span className="hidden sm:inline">{scrollCueLabel}</span>
           <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
-            <ChevronDown className="w-4 h-4 text-brand-lime" />
+            <ChevronDown className="w-4 h-4 text-white" />
           </div>
         </motion.a>
       ) : null}

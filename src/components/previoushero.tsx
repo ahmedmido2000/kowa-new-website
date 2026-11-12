@@ -118,7 +118,7 @@ export const PreviousHero: React.FC = () => {
                         <path
                           d="M0,5 Q50,0 100,5"
                           fill="none"
-                          stroke="#D3D93C"
+                          stroke="#2563EB"
                           strokeLinecap="round"
                           strokeWidth="7"
                         ></path>
@@ -139,7 +139,7 @@ export const PreviousHero: React.FC = () => {
                         <path
                           d="M0,5 Q50,0 100,5"
                           fill="none"
-                          stroke="#D3D93C"
+                          stroke="#2563EB"
                           strokeLinecap="round"
                           strokeWidth="7"
                         ></path>

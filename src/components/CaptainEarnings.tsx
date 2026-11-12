@@ -68,7 +68,7 @@ export const CaptainEarnings: React.FC = () => {
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-          className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-brand-lime/15 blur-3xl pointer-events-none"
+          className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-white/15 blur-3xl pointer-events-none"
         />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -80,7 +80,7 @@ export const CaptainEarnings: React.FC = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-6 text-right rtl:text-right ltr:text-left"
             >
-              <span className="text-xs font-black uppercase text-brand-lime tracking-widest bg-brand-lime/10 px-3 py-1 rounded-full border border-brand-lime/20 inline-block mb-3">
+              <span className="text-xs font-black uppercase text-white tracking-widest bg-white/15 px-3 py-1 rounded-full border border-white/25 inline-block mb-3">
                 {pick(data.badge)}
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-white mb-4 leading-tight">
@@ -99,9 +99,9 @@ export const CaptainEarnings: React.FC = () => {
                   {highlights.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-lime/30 transition"
+                      className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-white/35 transition"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-brand-lime/20 flex items-center justify-center text-brand-lime shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white shrink-0">
                         <CmsIcon name={item.icon} className="w-5 h-5" />
                       </div>
                       <div>
@@ -117,9 +117,9 @@ export const CaptainEarnings: React.FC = () => {
 
               <div className="flex items-center gap-4 flex-wrap">
                 <MagneticButton strength={0.25} onClick={handleJoinClick}>
-                  <span className="py-4 px-8 rounded-2xl bg-brand-lime text-neutral-950 font-black text-sm hover:bg-yellow-300 transition flex items-center gap-2 shadow-lime-glow cursor-pointer group">
+                  <span className="py-4 px-8 rounded-2xl bg-white text-brand font-black text-sm hover:bg-[#EFF6FF] transition flex items-center gap-2 shadow-lime-glow cursor-pointer group">
                     <span>{pick(data.primaryCta?.label)}</span>
-                    <ArrowIcon className="w-4 h-4 text-neutral-950 group-hover:scale-110 transition-transform" />
+                    <ArrowIcon className="w-4 h-4 text-brand group-hover:scale-110 transition-transform" />
                   </span>
                 </MagneticButton>
 
@@ -144,11 +144,11 @@ export const CaptainEarnings: React.FC = () => {
               <div className="p-6 sm:p-8 rounded-3xl bg-neutral-800/80 dark:bg-[#10182C] border border-neutral-700/60 dark:border-line shadow-2xl backdrop-blur-md">
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-neutral-700/50 dark:border-line gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <Calculator className="w-5 h-5 text-brand-lime" />
+                    <Calculator className="w-5 h-5 text-white" />
                     <span className="font-bold text-sm text-neutral-200">{pick(calc.title)}</span>
                   </div>
                   {pick(calc.benchmarkBadge) ? (
-                    <span className="text-xs bg-white/10 px-2.5 py-1 rounded-full text-brand-lime font-bold">
+                    <span className="text-xs bg-white/15 px-2.5 py-1 rounded-full text-white font-bold">
                       {pick(calc.benchmarkBadge)}
                     </span>
                   ) : null}
@@ -157,10 +157,10 @@ export const CaptainEarnings: React.FC = () => {
                 <div className="mb-6">
                   <div className="flex items-center justify-between text-xs font-bold text-neutral-300 mb-2">
                     <span className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-brand-lime" />
+                      <Clock className="w-4 h-4 text-sky-300" />
                       <span>{pick(calc.hoursLabel)}</span>
                     </span>
-                    <span className="text-base text-brand-lime font-en">
+                    <span className="text-base text-white font-en">
                       {clampedHours} {isAr ? 'ساعات' : 'hrs'}
                     </span>
                   </div>
@@ -171,7 +171,7 @@ export const CaptainEarnings: React.FC = () => {
                     step="1"
                     value={clampedHours}
                     onChange={(e) => setHours(Number(e.target.value))}
-                    className="w-full accent-brand-lime cursor-pointer bg-neutral-700 h-2 rounded-lg"
+                    className="w-full accent-white cursor-pointer bg-neutral-700 h-2 rounded-lg"
                     aria-label="Hours slider"
                   />
                   <div className="flex justify-between text-[10px] text-neutral-400 mt-1 font-en">
@@ -190,7 +190,7 @@ export const CaptainEarnings: React.FC = () => {
                 <div className="mb-8">
                   <div className="flex items-center justify-between text-xs font-bold text-neutral-300 mb-2">
                     <span>{pick(calc.daysLabel)}</span>
-                    <span className="text-base text-brand-lime font-en">
+                    <span className="text-base text-white font-en">
                       {clampedDays} {isAr ? 'أيام' : 'days'}
                     </span>
                   </div>
@@ -201,7 +201,7 @@ export const CaptainEarnings: React.FC = () => {
                     step="1"
                     value={clampedDays}
                     onChange={(e) => setDays(Number(e.target.value))}
-                    className="w-full accent-brand-lime cursor-pointer bg-neutral-700 h-2 rounded-lg"
+                    className="w-full accent-white cursor-pointer bg-neutral-700 h-2 rounded-lg"
                     aria-label="Days slider"
                   />
                   <div className="flex justify-between text-[10px] text-neutral-400 mt-1 font-en">
@@ -231,7 +231,7 @@ export const CaptainEarnings: React.FC = () => {
                           className="text-2xl font-black text-white font-en inline-block"
                         >
                           {weekly.toLocaleString('en-US')}{' '}
-                          <span className="text-xs text-brand-lime font-sans">
+                          <span className="text-xs text-sky-300 font-sans">
                             {isAr ? 'ر.س' : 'SAR'}
                           </span>
                         </motion.span>
@@ -244,10 +244,10 @@ export const CaptainEarnings: React.FC = () => {
                           key={monthly}
                           initial={{ opacity: 0.6, scale: 0.96 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="text-2xl sm:text-3xl font-black text-brand-lime font-en inline-block"
+                          className="text-2xl sm:text-3xl font-black text-white font-en inline-block"
                         >
                           {monthly.toLocaleString('en-US')}{' '}
-                          <span className="text-xs text-white font-sans">
+                          <span className="text-xs text-sky-300 font-sans">
                             {isAr ? 'ر.س' : 'SAR'}
                           </span>
                         </motion.span>
@@ -255,7 +255,7 @@ export const CaptainEarnings: React.FC = () => {
                     </div>
                   ) : (
                     <div className="text-center space-y-2 py-2">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-brand-lime">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-white">
                         <Clock className="w-3.5 h-3.5" />
                         <span>
                           {isAr
@@ -273,7 +273,7 @@ export const CaptainEarnings: React.FC = () => {
 
                   {pick(calc.demoNotice) ? (
                     <div className="flex items-start gap-2 rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-[11px] text-neutral-300 leading-relaxed">
-                      <Info className="w-3.5 h-3.5 text-brand-lime shrink-0 mt-0.5" />
+                      <Info className="w-3.5 h-3.5 text-sky-300 shrink-0 mt-0.5" />
                       <span>{pick(calc.demoNotice)}</span>
                     </div>
                   ) : null}

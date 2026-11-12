@@ -86,7 +86,7 @@ export const Footer: React.FC<FooterProps> = ({ hashBasePath = '' }) => {
                   width={48}
                   height={48}
                   unoptimized
-                  className="h-12 w-auto max-w-[180px] object-contain shrink-0"
+                  className="h-12 w-auto max-w-[180px] object-contain rounded-xl shrink-0"
                 />
               ) : null}
               <div>

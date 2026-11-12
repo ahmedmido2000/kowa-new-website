@@ -32,7 +32,7 @@ export const ComplianceRibbon: React.FC = () => {
     <div className="bg-neutral-900 dark:bg-[#070B14] text-white text-xs py-2 px-4 border-b border-neutral-800 dark:border-line transition-colors duration-200">
       <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <span className="inline-flex h-2 w-2 rounded-full bg-brand-lime animate-pulse" />
+          <span className="inline-flex h-2 w-2 rounded-full bg-white animate-pulse" />
           {tgaText ? (
             <span className="font-medium text-neutral-300 dark:text-ink-muted">{tgaText}</span>
           ) : null}

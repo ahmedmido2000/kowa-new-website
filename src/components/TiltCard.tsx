@@ -105,7 +105,7 @@ export default function TiltCard({
           className="absolute inset-0 rounded-[inherit] pointer-events-none transition-opacity duration-300"
           style={{
             opacity: glareOpacity,
-            background: `radial-gradient(circle 320px at ${glareXMotion.get()}% ${glareYMotion.get()}%, rgba(211, 217, 60, 0.12), transparent 70%)`,
+            background: `radial-gradient(circle 320px at ${glareXMotion.get()}% ${glareYMotion.get()}%, rgba(56, 189, 248, 0.14), transparent 70%)`,
           }}
         />
       )}

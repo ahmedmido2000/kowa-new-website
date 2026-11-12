@@ -57,7 +57,7 @@ export const AppExperience: React.FC = () => {
                     aria-hidden="true"
                     className="w-full h-full bg-gradient-to-br from-[#0F172A] via-[#1A1354] to-[#111827] flex items-center justify-center"
                   >
-                    <Smartphone className="w-12 h-12 text-brand-lime/70" />
+                    <Smartphone className="w-12 h-12 text-white/80" />
                   </div>
                 )}
               </div>
@@ -93,7 +93,7 @@ export const AppExperience: React.FC = () => {
                   whileHover={{ x: isRtl ? -6 : 6, transition: { duration: 0.2 } }}
                   className="flex items-start gap-4 p-4 rounded-2xl bg-neutral-50/40 dark:bg-[#10182C]/40 hover:bg-neutral-50 dark:hover:bg-[#10182C] transition-all border border-neutral-200/50 dark:border-line/50 hover:border-brand/30 dark:hover:border-primary-token/40 group cursor-default"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-brand/10 dark:bg-primary-token/20 text-brand dark:text-brand-lime flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-brand dark:group-hover:bg-primary-solid group-hover:text-brand-lime transition-all duration-300">
+                  <div className="w-12 h-12 rounded-2xl bg-brand/10 dark:bg-primary-token/20 text-brand dark:text-brand-lime flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-brand dark:group-hover:bg-primary-solid group-hover:text-white transition-all duration-300">
                     <CmsIcon name={feat.icon} className="w-6 h-6" />
                   </div>
                   <div>

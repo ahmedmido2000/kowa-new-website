@@ -35,8 +35,8 @@ export const COMPANY_DATA = {
   },
   website: 'https://kowa.sa',
   currentYear: '2026',
-  logo: '/kowa-badge-navy.png',
-  logoFav: '/kowa-badge-navy.png',
+  logo: '/kowa-logo.png',
+  logoFav: '/logo-fav.png',
   socials: [
     {
       id: 'x',

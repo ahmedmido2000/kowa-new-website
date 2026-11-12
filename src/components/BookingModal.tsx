@@ -85,7 +85,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
 
               <div className="flex items-start gap-3 pt-2 border-t border-neutral-200/60 dark:border-line">
-                <MapPin className="w-4 h-4 text-brand-lime shrink-0 mt-1" />
+                <MapPin className="w-4 h-4 text-brand dark:text-brand-lime shrink-0 mt-1" />
                 <div className="text-right rtl:text-right ltr:text-left">
                   <span className="text-[11px] font-bold text-neutral-400 dark:text-ink-subtle block">
                     {isAr ? 'الوجهة المقصودة:' : 'Destination:'}

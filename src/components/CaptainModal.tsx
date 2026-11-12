@@ -54,7 +54,7 @@ export const CaptainModal: React.FC<CaptainModalProps> = ({ isOpen, onClose }) =
         </button>
 
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-brand dark:bg-primary-solid text-white flex items-center justify-center shrink-0">
             <Car className="w-6 h-6" />
           </div>
           <div>

@@ -169,9 +169,9 @@ export const FleetCategories: React.FC = () => {
                     <span className="py-3 px-6 rounded-2xl bg-neutral-900 dark:bg-card hover:bg-neutral-800 dark:hover:bg-elevated border border-neutral-700 dark:border-line text-white font-bold text-sm flex items-center gap-2 transition cursor-pointer">
                       <span>{pick(data.labels?.cta)}</span>
                       {isRtl ? (
-                        <ArrowLeft className="w-4 h-4 text-brand-lime" />
+                        <ArrowLeft className="w-4 h-4 text-white" />
                       ) : (
-                        <ArrowRight className="w-4 h-4 text-brand-lime" />
+                        <ArrowRight className="w-4 h-4 text-white" />
                       )}
                     </span>
                   </MagneticButton>
@@ -192,7 +192,7 @@ export const FleetCategories: React.FC = () => {
                   <div className="absolute bottom-4 right-4 left-4 flex items-center justify-between text-white text-xs font-bold gap-2">
                     {inspectionBadge ? (
                       <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
-                        <ShieldCheck className="w-4 h-4 text-brand-lime" />
+                        <ShieldCheck className="w-4 h-4 text-white" />
                         <span>{inspectionBadge}</span>
                       </div>
                     ) : null}

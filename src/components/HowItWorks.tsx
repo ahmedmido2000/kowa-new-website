@@ -26,7 +26,7 @@ export const HowItWorks: React.FC = () => {
       : '';
 
   const getBadgeStyle = (index: number) => {
-    if (index === 1) return 'bg-brand-lime text-neutral-900 font-black';
+    if (index === 1) return 'bg-brand dark:bg-white text-white dark:text-brand font-black';
     if (index === 2) {
       return 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40';
     }
@@ -74,7 +74,7 @@ export const HowItWorks: React.FC = () => {
                 <path
                   d="M0 5 Q 50 0 100 5"
                   fill="none"
-                  stroke="#D3D93C"
+                  stroke="#2563EB"
                   strokeLinecap="round"
                   strokeWidth="3"
                 />
@@ -106,7 +106,7 @@ export const HowItWorks: React.FC = () => {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-6">
-                        <div className="w-14 h-14 rounded-2xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center group-hover:scale-110 group-hover:bg-brand-lime group-hover:text-neutral-900 transition-all duration-300 shadow-sm">
+                        <div className="w-14 h-14 rounded-2xl bg-brand dark:bg-primary-solid text-white flex items-center justify-center group-hover:scale-110 group-hover:bg-[#2563EB] dark:group-hover:bg-white dark:group-hover:text-brand transition-all duration-300 shadow-sm">
                           <CmsIcon name={step.icon} className="w-7 h-7" />
                         </div>
 
@@ -156,7 +156,7 @@ export const HowItWorks: React.FC = () => {
             className="mt-12 bg-white dark:bg-[#10182C] rounded-2xl p-4 sm:p-6 border border-neutral-200 dark:border-line flex flex-col sm:flex-row items-center justify-between gap-4 shadow-subtle"
           >
             <div className="flex items-center gap-3 text-center sm:text-right rtl:sm:text-right ltr:sm:text-left">
-              <div className="w-10 h-10 rounded-xl bg-brand-lime/20 dark:bg-brand-lime/10 flex items-center justify-center text-neutral-900 dark:text-brand-lime shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-brand/10 dark:bg-brand-lime/10 flex items-center justify-center text-brand dark:text-brand-lime shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -175,7 +175,7 @@ export const HowItWorks: React.FC = () => {
             >
               <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand dark:bg-primary-solid text-white font-bold text-xs hover:bg-brand-dark dark:hover:bg-brand shadow-sm hover:shadow-brand-glow transition-all whitespace-nowrap">
                 <span>{pick(footerPromo.ctaLabel)}</span>
-                <ArrowIcon className="w-4 h-4 text-brand-lime" />
+                <ArrowIcon className="w-4 h-4 text-white" />
               </span>
             </MagneticButton>
           </motion.div>

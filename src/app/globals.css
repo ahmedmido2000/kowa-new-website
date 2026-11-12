@@ -18,8 +18,8 @@
   --primary-soft: 238 240 254;
   --primary-solid: 49 32 195;
   --primary-fg: 255 255 255;
-  --accent: 218 228 35;    /* #DAE423 */
-  --accent-fg: 31 15 140;
+  --accent: 56 189 248;    /* #38BDF8 - Ice Sky accent matching Royal Blue & White brand */
+  --accent-fg: 10 50 109;  /* #0A326D */
   --nav: 255 255 255;
   --nav-fg: 15 23 42;
   --nav-muted: 84 98 120;
@@ -44,13 +44,13 @@
   --primary-soft: 38 34 82;
   --primary-solid: 99 78 235; /* #634EEB */
   --primary-fg: 14 10 46;
-  --accent: 222 234 44;    /* #DEEA2C - Neon electric lime */
-  --accent-fg: 26 20 70;
+  --accent: 56 189 248;    /* #38BDF8 - Crisp Ice Sky accent */
+  --accent-fg: 10 50 109;  /* #0A326D */
   --nav: 12 18 34;         /* #0C1222 */
   --nav-fg: 241 245 249;
   --nav-muted: 170 184 204;
   --nav-line: 30 40 60;
-  --nav-active: 222 234 44;
+  --nav-active: 255 255 255;
   --nav-active-fg: 26 20 70;
   --nav-hover: 22 32 56;
   color-scheme: dark;
@@ -61,10 +61,10 @@
   --color-brand-dark: #140959;
   --color-brand-deep: #0B0438;
   --color-brand-surface: #F4F3FB;
-  --color-brand-accent: #D3D93C;
-  --color-brand-accent-soft: #F7F8DD;
-  --color-brand-accent-hover: #C0C628;
-  --color-brand-lime: #D3D93C;
+  --color-brand-accent: #2563EB;
+  --color-brand-accent-soft: #EFF6FF;
+  --color-brand-accent-hover: #1D4ED8;
+  --color-brand-lime: #38BDF8;
 
   /* Semantic Theme tokens mapped to CSS properties */
   --color-canvas: rgb(var(--canvas));
@@ -97,7 +97,7 @@
   --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   --shadow-elevated: 0 20px 40px -15px rgba(31, 15, 140, 0.08), 0 0 1px 1px rgba(226, 232, 240, 0.8);
   --shadow-float: 0 24px 48px -12px rgba(15, 23, 42, 0.12);
-  --shadow-lime-glow: 0 8px 24px -4px rgba(211, 217, 60, 0.45);
+  --shadow-lime-glow: 0 8px 24px -4px rgba(255, 255, 255, 0.35);
   --shadow-brand-glow: 0 10px 30px -5px rgba(31, 15, 140, 0.35);
 }
 
@@ -144,7 +144,7 @@ input[type=range]::-webkit-slider-thumb {
   border-radius: 50%;
   background: #1F0F8C;
   cursor: pointer;
-  border: 3px solid #D3D93C;
+  border: 3px solid #FFFFFF;
   -webkit-appearance: none;
   box-shadow: 0 4px 10px rgba(31, 15, 140, 0.3);
   transition: transform 0.15s ease;
@@ -156,7 +156,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 
 /* KOWA Hero Glows & Kinetic Stream Animations */
 .text-glow-lime {
-  text-shadow: 0 0 24px rgba(211, 217, 60, 0.45), 0 0 48px rgba(31, 15, 140, 0.4);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.45), 0 0 48px rgba(56, 189, 248, 0.35);
 }
 
 @keyframes flow {
@@ -208,7 +208,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 }
 
 .dark .leaflet-control-attribution a {
-  color: #D3D93C !important;
+  color: #93C5FD !important;
 }
 
 .kowa-map-pin-wrapper {

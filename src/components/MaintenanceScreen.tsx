@@ -46,7 +46,7 @@ export function MaintenanceGate({ children }: { children: React.ReactNode }) {
               width={120}
               height={40}
               unoptimized
-              className="h-10 w-auto object-contain"
+              className="h-10 w-auto object-contain rounded-xl"
             />
           ) : (
             <span className="text-lg font-black text-ink">{companyName}</span>
@@ -71,7 +71,7 @@ export function MaintenanceGate({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="space-y-2">
-          <span className="inline-flex px-3 py-1 rounded-full bg-brand-lime/20 text-brand-dark dark:text-brand-lime text-xs font-extrabold">
+          <span className="inline-flex px-3 py-1 rounded-full bg-brand/10 dark:bg-brand-lime/20 text-brand dark:text-brand-lime text-xs font-extrabold">
             {isRtl ? 'وضع الصيانة المؤقت' : 'Scheduled Maintenance'}
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-ink">{companyName}</h1>

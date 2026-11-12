@@ -29,7 +29,7 @@ export const DEFAULT_FEATURE_FLAGS: WebsiteFeatureFlags = {
 export const DEFAULT_THEME_TOKENS: WebsiteThemeTokens = {
   brandPrimary: '#1F0F8C',
   brandDark: '#140959',
-  brandLimeAccent: '#D3D93C',
+  brandLimeAccent: '#38BDF8',
   darkCanvas: '#0A0F1D',
   darkCard: '#10182C',
   darkElevated: '#17223C',

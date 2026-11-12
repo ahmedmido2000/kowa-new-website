@@ -51,7 +51,7 @@ export const AnalyticsBar: React.FC = () => {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="p-6 rounded-2xl bg-neutral-50/70 dark:bg-[#10182C] border border-neutral-200/80 dark:border-line hover:border-brand/30 dark:hover:border-primary-token/40 hover:shadow-subtle transition-all duration-300 flex items-center gap-5 group"
               >
-                <div className="w-14 h-14 rounded-2xl bg-brand/5 dark:bg-brand-lime/10 border border-brand/10 dark:border-brand-lime/20 text-brand dark:text-brand-lime flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-brand-lime group-hover:text-neutral-900 transition-all duration-200">
+                <div className="w-14 h-14 rounded-2xl bg-brand/5 dark:bg-brand-lime/10 border border-brand/10 dark:border-brand-lime/20 text-brand dark:text-brand-lime flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-brand dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-brand transition-all duration-200">
                   <CmsIcon name={stat.icon} className="w-7 h-7" />
                 </div>
 

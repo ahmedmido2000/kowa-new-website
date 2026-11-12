@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
               width={44}
               height={44}
               unoptimized
-              className="h-10 sm:h-11 w-auto max-w-[160px] object-contain group-hover:scale-105 transition-transform duration-200 shrink-0"
+              className="h-10 sm:h-11 w-auto max-w-[160px] object-contain rounded-xl group-hover:scale-105 transition-transform duration-200 shrink-0"
               priority
             />
           ) : null}
@@ -68,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
                 {brandTitle}
               </span>
               {brandBadge ? (
-                <span className="text-xs font-black tracking-wider text-brand dark:text-brand-lime font-en px-1.5 py-0.5 rounded bg-brand/5 dark:bg-brand-lime/10 border border-brand/10 dark:border-brand-lime/20">
+                <span className="text-xs font-black tracking-wider text-brand dark:text-sky-300 font-en px-1.5 py-0.5 rounded bg-brand/5 dark:bg-sky-400/10 border border-brand/10 dark:border-sky-400/20">
                   {brandBadge}
                 </span>
               ) : null}
@@ -95,12 +95,12 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
                   index === 0
                     ? 'text-neutral-900 dark:text-ink font-bold'
                     : 'text-neutral-600 dark:text-ink-muted font-semibold'
-                } text-sm hover:text-brand dark:hover:text-brand-lime transition flex items-center gap-1.5 flex-nowrap whitespace-nowrap shrink-0`}
+                } text-sm hover:text-brand dark:hover:text-white transition flex items-center gap-1.5 flex-nowrap whitespace-nowrap shrink-0`}
                 href={href}
               >
                 <span>{label}</span>
                 {badgeText ? (
-                  <span className="bg-brand-lime text-neutral-900 text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
+                  <span className="bg-brand/10 dark:bg-white text-brand dark:text-brand border border-brand/20 dark:border-transparent text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
                     {badgeText}
                   </span>
                 ) : null}
@@ -128,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
             <MagneticButton strength={0.25} href={ctaHref}>
               <span className="inline-flex items-center justify-center gap-2 font-bold text-sm px-5 py-2.5 rounded-xl bg-brand dark:bg-primary-solid text-white hover:bg-brand-dark dark:hover:bg-brand shadow-sm hover:shadow-brand-glow transition-all duration-200 whitespace-nowrap cursor-pointer">
                 <span className="whitespace-nowrap">{ctaLabel}</span>
-                <Download className="w-4 h-4 text-brand-lime shrink-0" />
+                <Download className="w-4 h-4 text-white shrink-0" />
               </span>
             </MagneticButton>
           </div>
@@ -166,7 +166,7 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
                 >
                   <span>{label}</span>
                   {badgeText ? (
-                    <span className="bg-brand-lime text-neutral-900 text-[10px] font-black px-2 py-0.5 rounded-full">
+                    <span className="bg-brand/10 dark:bg-white text-brand dark:text-brand border border-brand/20 dark:border-transparent text-[10px] font-black px-2 py-0.5 rounded-full">
                       {badgeText}
                     </span>
                   ) : null}
@@ -182,7 +182,7 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
               href={ctaHref}
             >
               <span>{ctaMobileLabel}</span>
-              <Download className="w-4 h-4 text-brand-lime" />
+              <Download className="w-4 h-4 text-white" />
             </a>
           </div>
         </div>

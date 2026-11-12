@@ -490,9 +490,9 @@ export const ContactSection: React.FC = () => {
                       : pick(data.form?.submitLabel)}
                   </span>
                   {isSubmitting ? (
-                    <Loader2 className="w-4 h-4 text-brand-lime animate-spin" />
+                    <Loader2 className="w-4 h-4 text-white animate-spin" />
                   ) : (
-                    <Send className="w-4 h-4 text-brand-lime" />
+                    <Send className="w-4 h-4 text-white" />
                   )}
                 </button>
               </MagneticButton>

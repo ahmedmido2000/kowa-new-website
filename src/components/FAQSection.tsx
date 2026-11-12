@@ -92,7 +92,7 @@ export const FAQSection: React.FC = () => {
                 <path
                   d="M0 5 Q 50 0 100 5"
                   fill="none"
-                  stroke="#D3D93C"
+                  stroke="#2563EB"
                   strokeLinecap="round"
                   strokeWidth="3"
                 />
@@ -144,7 +144,7 @@ export const FAQSection: React.FC = () => {
                     <div
                       className={`w-9 h-9 min-w-[36px] rounded-xl border flex items-center justify-center transition-all duration-300 shrink-0 ${
                         isOpen
-                          ? 'bg-brand dark:bg-primary-solid text-brand-lime border-brand dark:border-primary-solid shadow-sm rotate-180'
+                          ? 'bg-brand dark:bg-primary-solid text-white border-brand dark:border-primary-solid shadow-sm rotate-180'
                           : 'bg-white dark:bg-[#17223C] text-neutral-500 dark:text-ink-muted border-neutral-200 dark:border-line group-hover:border-brand/30'
                       }`}
                     >
@@ -182,11 +182,11 @@ export const FAQSection: React.FC = () => {
               className="lg:col-span-5"
             >
               <div className="bg-gradient-to-br from-brand via-brand-dark to-neutral-900 dark:from-[#1F0F8C] dark:via-[#140959] dark:to-[#070B14] rounded-3xl p-8 sm:p-10 text-white shadow-elevated relative overflow-hidden flex flex-col justify-between">
-                <div className="absolute -top-16 -right-16 w-48 h-48 bg-brand-lime/15 rounded-full blur-2xl pointer-events-none" />
-                <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-brand-lime/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute -top-16 -right-16 w-48 h-48 bg-white/15 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-sky-400/15 rounded-full blur-2xl pointer-events-none" />
 
                 <div className="relative z-10">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-lime text-neutral-900 text-xs font-black mb-6 shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-brand text-xs font-black mb-6 shadow-sm">
                     <Headphones className="w-3.5 h-3.5" />
                     <span>{pick(data.supportCard.badge)}</span>
                   </div>
@@ -206,7 +206,7 @@ export const FAQSection: React.FC = () => {
                           key={metric.id}
                           className="flex items-center gap-3 p-3 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/15 dark:border-white/10"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-brand-lime/20 flex items-center justify-center text-brand-lime shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center text-white shrink-0">
                             <CmsIcon name={metric.icon} className="w-4 h-4" />
                           </div>
                           <div>
@@ -221,7 +221,7 @@ export const FAQSection: React.FC = () => {
 
                 <div className="relative z-10 pt-4 border-t border-white/15 flex flex-col sm:flex-row gap-3">
                   <MagneticButton strength={0.25} href={primaryHref} className="flex-1">
-                    <span className="w-full py-3 px-4 rounded-xl bg-brand-lime text-neutral-900 font-bold text-xs hover:bg-brand-accent-hover transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap cursor-pointer">
+                    <span className="w-full py-3 px-4 rounded-xl bg-white text-brand font-bold text-xs hover:bg-[#EFF6FF] transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap cursor-pointer">
                       <span>{pick(data.supportCard.primaryCta?.label)}</span>
                       <ArrowIcon className="w-3.5 h-3.5" />
                     </span>
@@ -235,7 +235,7 @@ export const FAQSection: React.FC = () => {
                       rel="noopener noreferrer"
                     >
                       <span className="py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer">
-                        <MessageCircle className="w-3.5 h-3.5 text-brand-lime" />
+                        <MessageCircle className="w-3.5 h-3.5 text-white" />
                         <span>{pick(data.supportCard.whatsappLabel)}</span>
                       </span>
                     </MagneticButton>

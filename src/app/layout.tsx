@@ -34,7 +34,12 @@ function buildSafeThemeCss(tokens: Partial<WebsiteThemeTokens> | undefined): str
 
   const brandPrimary = validHex(tokens.brandPrimary);
   const brandDark = validHex(tokens.brandDark);
-  const brandLime = validHex(tokens.brandLimeAccent);
+  const rawBrandLime = validHex(tokens.brandLimeAccent);
+  const LEGACY_YELLOW_HEXES = new Set(['#D3D93C', '#DAE423', '#DEEA2C', '#E1E848', '#C0C628']);
+  const brandLime =
+    rawBrandLime && !LEGACY_YELLOW_HEXES.has(rawBrandLime.toUpperCase())
+      ? rawBrandLime
+      : null;
   const darkCanvas = hexToRgbTriplet(tokens.darkCanvas);
   const darkCard = hexToRgbTriplet(tokens.darkCard);
   const darkElevated = hexToRgbTriplet(tokens.darkElevated);

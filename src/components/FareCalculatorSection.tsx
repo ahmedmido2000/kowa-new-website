@@ -270,11 +270,11 @@ const DisabledFareCalculatorView: React.FC<{
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="py-4 px-8 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-brand-lime dark:hover:bg-[#e1e848] text-white dark:text-neutral-950 font-black text-sm inline-flex items-center justify-center gap-2.5 shadow-md transition-all cursor-pointer group"
+                className="py-4 px-8 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-white dark:hover:bg-[#EFF6FF] text-white dark:text-brand font-black text-sm inline-flex items-center justify-center gap-2.5 shadow-md transition-all cursor-pointer group"
               >
-                <Smartphone className="w-4 h-4 text-brand-lime dark:text-neutral-950" />
+                <Smartphone className="w-4 h-4 text-white dark:text-brand" />
                 <span>{pick(data.labels?.cta)}</span>
-                <ArrowIcon className="w-4 h-4 text-brand-lime dark:text-neutral-950" />
+                <ArrowIcon className="w-4 h-4 text-white dark:text-brand" />
               </button>
             </MagneticButton>
           </div>
@@ -1195,7 +1195,7 @@ const DynamicFareCalculatorView: React.FC<{
                   <path
                     d="M0,5 Q50,0 100,5"
                     fill="none"
-                    stroke="#D3D93C"
+                    stroke="#2563EB"
                     strokeLinecap="round"
                     strokeWidth="6"
                   />
@@ -1375,16 +1375,16 @@ const DynamicFareCalculatorView: React.FC<{
                       <div
                         className={`relative flex items-center gap-2.5 px-3.5 py-3 transition-colors ${
                           showMap && activeSelection === 'destination'
-                            ? 'bg-brand-lime/[0.1] dark:bg-brand-lime/[0.08]'
+                            ? 'bg-sky-50/70 dark:bg-sky-400/10'
                             : ''
                         }`}
                       >
                         <span
                           className={`w-3 h-3 rounded-sm shrink-0 transition-transform ${
                             destination
-                              ? 'bg-brand-lime ring-4 ring-brand-lime/25'
+                              ? 'bg-[#0EA5E9] ring-4 ring-sky-400/25'
                               : activeSelection === 'destination'
-                                ? 'border-2 border-brand-lime bg-white dark:bg-[#0E1528] scale-110'
+                                ? 'border-2 border-[#0EA5E9] bg-white dark:bg-[#0E1528] scale-110'
                                 : 'border-2 border-neutral-400 dark:border-ink-subtle bg-transparent'
                           }`}
                         />
@@ -1792,12 +1792,12 @@ const DynamicFareCalculatorView: React.FC<{
                       <button
                         type="button"
                         onClick={() => setIsModalOpen(true)}
-                        className="w-full sm:w-auto py-4 px-7 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-brand-lime dark:hover:bg-[#e1e848] text-white dark:text-neutral-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-brand-glow dark:hover:shadow-lime-glow transition-all cursor-pointer group"
+                        className="w-full sm:w-auto py-4 px-7 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-white dark:hover:bg-[#EFF6FF] text-white dark:text-brand font-black text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-brand-glow dark:hover:shadow-lime-glow transition-all cursor-pointer group"
                       >
-                        <Smartphone className="w-4 h-4 text-brand-lime dark:text-neutral-950" />
+                        <Smartphone className="w-4 h-4 text-white dark:text-brand" />
                         <span>{pick(data.labels?.cta)}</span>
                         <ArrowIcon
-                          className={`w-4 h-4 text-brand-lime dark:text-neutral-950 transition-transform ${
+                          className={`w-4 h-4 text-white dark:text-brand transition-transform ${
                             isRtl ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'
                           }`}
                         />
@@ -1827,24 +1827,24 @@ const DynamicFareCalculatorView: React.FC<{
                   className="absolute inset-0 opacity-20 pointer-events-none"
                   style={{
                     backgroundImage:
-                      'radial-gradient(rgba(211, 217, 60, 0.35) 1px, transparent 1px)',
+                      'radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px)',
                     backgroundSize: '24px 24px',
                   }}
                 />
                 <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-brand/30 blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-brand-lime/15 blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-white/10 blur-3xl pointer-events-none" />
 
                 {/* Top Route Badges (Strictly from actual estimate response) */}
                 <div className="relative z-10 flex items-center justify-between gap-3 flex-wrap">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold">
-                    <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                     <span>{pick(data.labels?.radarBadge)}</span>
                   </div>
 
                   {estimateResult ? (
                     <div className="flex items-center gap-2 text-xs font-bold">
                       <span className="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15 text-neutral-200 flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-brand-lime" />
+                        <Clock className="w-3.5 h-3.5 text-sky-300" />
                         <span>
                           {pick(dynLabels?.duration, isAr ? 'المدة' : 'Duration')}:{' '}
                           <strong className="font-en">
@@ -1853,7 +1853,7 @@ const DynamicFareCalculatorView: React.FC<{
                           </strong>
                         </span>
                       </span>
-                      <span className="px-2.5 py-1 rounded-lg bg-brand-lime text-neutral-950 font-black font-en">
+                      <span className="px-2.5 py-1 rounded-lg bg-white text-brand font-black font-en">
                         {estimateResult.route.distanceKm.toFixed(1)} KM
                       </span>
                     </div>
@@ -1890,7 +1890,7 @@ const DynamicFareCalculatorView: React.FC<{
                   </div>
                 ) : (
                   <div className="relative z-10 rounded-3xl bg-[#070B16]/75 border border-white/10 p-6 text-center space-y-2">
-                    <Route className="w-8 h-8 text-brand-lime mx-auto opacity-85" />
+                    <Route className="w-8 h-8 text-white mx-auto opacity-85" />
                     <p className="text-sm font-black text-white">
                       {pick(data.labels?.radarBadge)}
                     </p>
@@ -1926,11 +1926,11 @@ const DynamicFareCalculatorView: React.FC<{
                           </span>
                         </div>
 
-                        <div className="rounded-xl bg-brand-lime/15 border border-brand-lime/40 p-2.5">
-                          <span className="block text-[10px] text-brand-lime font-bold mb-1">
+                        <div className="rounded-xl bg-white/15 border border-white/35 p-2.5">
+                          <span className="block text-[10px] text-sky-200 font-bold mb-1">
                             {pick(dynLabels?.total, isAr ? 'الإجمالي' : 'Total')}
                           </span>
-                          <span className="text-sm sm:text-base font-black text-brand-lime font-en">
+                          <span className="text-sm sm:text-base font-black text-white font-en">
                             {formatPrice(estimateResult.price)} {estimateResult.currency}
                           </span>
                         </div>
@@ -1940,7 +1940,7 @@ const DynamicFareCalculatorView: React.FC<{
                         <div className="pt-3 border-t border-white/10 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between text-neutral-300">
                             <span className="inline-flex items-center gap-1.5">
-                              <Receipt className="w-3.5 h-3.5 text-brand-lime" />
+                              <Receipt className="w-3.5 h-3.5 text-sky-300" />
                               <span>{isAr ? 'الأجرة قبل الضريبة' : 'Fare before VAT'}</span>
                             </span>
                             <span className="font-bold font-en">
@@ -1957,7 +1957,7 @@ const DynamicFareCalculatorView: React.FC<{
                           </div>
                           <div className="flex items-center justify-between text-white font-black pt-1 border-t border-white/10">
                             <span>{pick(dynLabels?.total, isAr ? 'الإجمالي' : 'Total')}</span>
-                            <span className="text-brand-lime font-en">
+                            <span className="text-white font-en">
                               {formatPrice(estimateResult.breakdown.total)}{' '}
                               {estimateResult.currency}
                             </span>
@@ -2002,7 +2002,7 @@ const DynamicFareCalculatorView: React.FC<{
                                   )}
                         </span>
                       </div>
-                      <Sparkles className="w-5 h-5 text-brand-lime shrink-0" />
+                      <Sparkles className="w-5 h-5 text-white shrink-0" />
                     </div>
                   )}
                 </div>
@@ -2201,7 +2201,7 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                             onClick={() => handleSelectPreset(preset)}
                             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
                               isActive
-                                ? 'bg-brand dark:bg-brand-lime text-white dark:text-neutral-950 border-brand dark:border-brand-lime shadow-sm'
+                                ? 'bg-brand dark:bg-white text-white dark:text-brand border-brand dark:border-white shadow-sm'
                                 : 'bg-neutral-50 dark:bg-[#141D35] text-neutral-600 dark:text-ink-muted border-neutral-200 dark:border-line'
                             }`}
                           >
@@ -2236,7 +2236,7 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                       </motion.button>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-brand-lime text-neutral-950 flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-xl bg-[#2563EB] dark:bg-white text-white dark:text-brand flex items-center justify-center shrink-0">
                         <MapPin className="w-4 h-4" />
                       </div>
                       <input
@@ -2280,7 +2280,7 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                               <div className="flex items-center justify-between gap-1 mb-1">
                                 <span className="text-[11px] font-black truncate">{pick(v.name)}</span>
                                 {v.isFavorite && favoriteBadgeText ? (
-                                  <span className="text-[9px] bg-brand dark:bg-brand-lime text-white dark:text-neutral-950 px-1.5 py-0.5 rounded font-black">
+                                  <span className="text-[9px] bg-brand dark:bg-white text-white dark:text-brand px-1.5 py-0.5 rounded font-black">
                                     {favoriteBadgeText}
                                   </span>
                                 ) : null}
@@ -2316,11 +2316,11 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                     <button
                       type="button"
                       onClick={() => setIsModalOpen(true)}
-                      className="w-full sm:w-auto py-4 px-7 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-brand-lime dark:hover:bg-[#e1e848] text-white dark:text-neutral-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-md transition-all cursor-pointer group"
+                      className="w-full sm:w-auto py-4 px-7 rounded-2xl bg-brand hover:bg-brand-dark dark:bg-white dark:hover:bg-[#EFF6FF] text-white dark:text-brand font-black text-sm flex items-center justify-center gap-2.5 shadow-md transition-all cursor-pointer group"
                     >
-                      <Smartphone className="w-4 h-4 text-brand-lime dark:text-neutral-950" />
+                      <Smartphone className="w-4 h-4 text-white dark:text-brand" />
                       <span>{pick(data.labels?.cta)}</span>
-                      <ArrowIcon className="w-4 h-4 text-brand-lime dark:text-neutral-950" />
+                      <ArrowIcon className="w-4 h-4 text-white dark:text-brand" />
                     </button>
                   </MagneticButton>
                 </div>
@@ -2329,16 +2329,16 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
               <div className="lg:col-span-6 bg-gradient-to-br from-[#0E152B] via-[#130C47] to-[#080C18] text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-bold">
-                    <span className="w-2 h-2 rounded-full bg-brand-lime animate-ping" />
+                    <span className="w-2 h-2 rounded-full bg-white animate-ping" />
                     <span>{pick(data.labels?.radarBadge)}</span>
                   </div>
                   {activePreset ? (
                     <div className="flex items-center gap-2 text-xs font-bold font-en">
                       <span className="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15 text-neutral-200 flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-brand-lime" />
+                        <Clock className="w-3.5 h-3.5 text-sky-300" />
                         <span>~{activePreset.etaMin} MIN</span>
                       </span>
-                      <span className="px-2.5 py-1 rounded-lg bg-brand-lime text-neutral-950 font-black">
+                      <span className="px-2.5 py-1 rounded-lg bg-white text-brand font-black">
                         {activePreset.km} KM
                       </span>
                     </div>
@@ -2348,20 +2348,20 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                 <div className="rounded-3xl bg-[#070B16]/75 border border-white/10 p-5 sm:p-6 space-y-4">
                   <div className="flex items-center justify-between gap-4 text-xs">
                     <span className="text-neutral-300 font-bold truncate">{pickup}</span>
-                    <span className="text-brand-lime font-bold truncate">{destination}</span>
+                    <span className="text-sky-300 font-bold truncate">{destination}</span>
                   </div>
                   {activeCategoryData ? (
                     <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/10 text-[11px] text-neutral-300">
                       <span className="inline-flex items-center gap-1.5">
-                        <Snowflake className="w-3.5 h-3.5 text-brand-lime" />
+                        <Snowflake className="w-3.5 h-3.5 text-sky-300" />
                         {pick(activeCategoryData.feature)}
                       </span>
                       <span className="inline-flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-brand-lime" />
+                        <Users className="w-3.5 h-3.5 text-sky-300" />
                         {pick(activeCategoryData.capacity)}
                       </span>
                       <span className="inline-flex items-center gap-1.5">
-                        <Wifi className="w-3.5 h-3.5 text-brand-lime" />
+                        <Wifi className="w-3.5 h-3.5 text-sky-300" />
                         {pick(activeCategoryData.badge)}
                       </span>
                     </div>
@@ -2380,7 +2380,7 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <span className="inline-flex items-center gap-1 bg-brand-lime text-neutral-950 text-[10px] font-black px-2 py-0.5 rounded-full mb-1">
+                    <span className="inline-flex items-center gap-1 bg-white text-brand text-[10px] font-black px-2 py-0.5 rounded-full mb-1">
                       <Sparkles className="w-2.5 h-2.5" />
                       <span>{pick(data.labels?.previewBadge)}</span>
                     </span>

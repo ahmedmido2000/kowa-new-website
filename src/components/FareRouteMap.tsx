@@ -228,8 +228,8 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
                 <span style="width:16px;height:16px;border-radius:9999px;background:#634EEB;border:3px solid #FFFFFF;box-shadow:0 3px 10px rgba(0,0,0,0.35);"></span>
               </div>`
             : `<div style="position:relative;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">
-                <span style="position:absolute;inset:0;border-radius:9999px;background:rgba(211,217,60,0.32);"></span>
-                <span style="width:17px;height:17px;border-radius:9999px;background:#D3D93C;border:3px solid #0E1528;box-shadow:0 3px 10px rgba(0,0,0,0.35);"></span>
+                <span style="position:absolute;inset:0;border-radius:9999px;background:rgba(14,165,233,0.34);"></span>
+                <span style="width:17px;height:17px;border-radius:9999px;background:#0EA5E9;border:3px solid #FFFFFF;box-shadow:0 3px 10px rgba(0,0,0,0.4);"></span>
               </div>`,
         iconSize: variant === 'pickup' ? [28, 28] : [30, 30],
         iconAnchor: variant === 'pickup' ? [14, 14] : [15, 15],
@@ -323,7 +323,7 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
         }).addTo(group);
 
         const mainRoute = L.polyline(latLngs, {
-          color: theme === 'dark' ? '#D3D93C' : '#634EEB',
+          color: theme === 'dark' ? '#FFFFFF' : '#2563EB',
           weight: 4.5,
           opacity: 0.96,
           lineCap: 'round',
@@ -430,7 +430,7 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
               onClick={() => onActiveSelectionChange('destination')}
               className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-black transition cursor-pointer ${
                 activeSelection === 'destination'
-                  ? 'bg-brand-lime text-neutral-950 shadow-sm'
+                  ? 'bg-[#0EA5E9] dark:bg-white text-white dark:text-brand shadow-sm'
                   : 'text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/10'
               }`}
             >
@@ -488,7 +488,7 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
           ) : (
             <span
               className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-                activeSelection === 'pickup' ? 'bg-brand animate-pulse' : 'bg-brand-lime animate-pulse'
+                activeSelection === 'pickup' ? 'bg-brand animate-pulse' : 'bg-[#0EA5E9] animate-pulse'
               }`}
             />
           )}

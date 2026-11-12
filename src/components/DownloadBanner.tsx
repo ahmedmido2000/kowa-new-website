@@ -97,7 +97,7 @@ export const DownloadBanner: React.FC = () => {
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.16, 0.08] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -right-12 -bottom-12 w-64 h-64 border-8 border-brand-lime/20 rounded-full pointer-events-none"
+            className="absolute -right-12 -bottom-12 w-64 h-64 border-8 border-white/20 rounded-full pointer-events-none"
           />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
@@ -107,7 +107,7 @@ export const DownloadBanner: React.FC = () => {
               } text-right rtl:text-right ltr:text-left`}
             >
               {badgeTagline || promoDisplay ? (
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-lime text-neutral-900 text-xs font-black mb-3 shadow-sm flex-wrap">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-brand text-xs font-black mb-3 shadow-sm flex-wrap">
                   {badgeTagline ? <span>{badgeTagline}</span> : null}
                   {badgeTagline && promoDisplay ? <span>•</span> : null}
                   {promoDisplay ? <span>{promoDisplay}</span> : null}
@@ -141,7 +141,7 @@ export const DownloadBanner: React.FC = () => {
                       </div>
                       <MagneticButton strength={0.25} as="div">
                         <button
-                          className="px-4 py-2.5 rounded-xl bg-brand-lime text-neutral-900 font-bold text-xs hover:bg-brand-accent-hover transition whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-60 inline-flex items-center gap-1.5"
+                          className="px-4 py-2.5 rounded-xl bg-white text-brand font-bold text-xs hover:bg-[#EFF6FF] transition whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-60 inline-flex items-center gap-1.5"
                           type="submit"
                           disabled={smsLoading}
                         >
@@ -158,7 +158,7 @@ export const DownloadBanner: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="mb-6 p-3 bg-emerald-500/20 border border-emerald-400/40 rounded-xl text-xs text-emerald-200 flex items-center gap-2 max-w-lg"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-brand-lime shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
                       <span>{pick(data.smsForm?.successMessage)}</span>
                     </motion.div>
                   ) : null}

@@ -53,7 +53,7 @@ export default function BackToTop() {
           aria-label={isRtl ? 'الرجوع للأعلى' : 'Back to top'}
           className={`fixed bottom-6 ${
             isRtl ? 'right-6' : 'left-6'
-          } z-40 w-12 h-12 rounded-full bg-white dark:bg-[#10182C] border border-neutral-200 dark:border-line text-neutral-900 dark:text-ink flex items-center justify-center shadow-elevated hover:border-brand-lime transition-colors group cursor-pointer`}
+          } z-40 w-12 h-12 rounded-full bg-white dark:bg-[#10182C] border border-neutral-200 dark:border-line text-neutral-900 dark:text-ink flex items-center justify-center shadow-elevated hover:border-brand dark:hover:border-white transition-colors group cursor-pointer`}
         >
           {/* Circular progress SVG */}
           <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none p-0.5">
@@ -70,7 +70,7 @@ export default function BackToTop() {
               cx="22"
               cy="22"
               r="20"
-              stroke="#D3D93C"
+              stroke="#2563EB"
               strokeWidth="2.5"
               strokeDasharray={125.6}
               strokeDashoffset={125.6 - (125.6 * scrollProgress) / 100}

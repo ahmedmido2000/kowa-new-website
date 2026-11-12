@@ -8,7 +8,7 @@ import TiltCard from './TiltCard';
 import { CmsIcon } from './CmsIcon';
 
 const BADGE_STYLE_MAP: Record<string, string> = {
-  lime: 'bg-brand-lime text-neutral-900 font-black',
+  lime: 'bg-brand dark:bg-white text-white dark:text-brand font-black',
   emerald: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300',
   neutral: 'bg-neutral-200 dark:bg-[#1C2A4A] text-neutral-800 dark:text-neutral-200',
 };
@@ -65,7 +65,7 @@ export const ValuePillars: React.FC = () => {
                     className="h-full p-8 rounded-3xl bg-neutral-50/70 dark:bg-[#10182C] border border-neutral-200 dark:border-line hover:border-brand/30 dark:hover:border-primary-token/40 shadow-subtle hover:shadow-elevated transition-colors duration-300 flex flex-col justify-between group"
                   >
                     <div>
-                      <div className="w-14 h-14 rounded-2xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-lime group-hover:text-neutral-900 transition-all duration-300 shadow-sm">
+                      <div className="w-14 h-14 rounded-2xl bg-brand dark:bg-primary-solid text-white flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#2563EB] dark:group-hover:bg-white dark:group-hover:text-brand transition-all duration-300 shadow-sm">
                         <CmsIcon name={pillar.icon} className="w-7 h-7" />
                       </div>
                       <div className="flex items-center gap-2 mb-3 flex-wrap">

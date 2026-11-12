@@ -180,7 +180,7 @@ export const AppRedirectModal: React.FC<AppRedirectModalProps> = ({
         </button>
 
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-11 h-11 rounded-2xl bg-brand dark:bg-primary-solid text-brand-lime flex items-center justify-center shrink-0 shadow-sm">
+          <div className="w-11 h-11 rounded-2xl bg-brand dark:bg-primary-solid text-white flex items-center justify-center shrink-0 shadow-sm">
             <Smartphone className="w-5 h-5" />
           </div>
           <div className="text-right rtl:text-right ltr:text-left">
@@ -211,7 +211,7 @@ export const AppRedirectModal: React.FC<AppRedirectModalProps> = ({
                   pickup ? 'pt-2.5 border-t border-neutral-200/60 dark:border-line' : ''
                 }`}
               >
-                <MapPin className="w-4 h-4 text-brand-lime shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#2563EB] dark:text-brand-lime shrink-0 mt-0.5" />
                 <div className="text-right rtl:text-right ltr:text-left flex-1 min-w-0">
                   <span className="text-[10px] font-bold text-neutral-400 dark:text-ink-subtle block">
                     {pick(fareCalc?.labels?.destination, isAr ? 'الوجهة المقصودة' : 'Destination')}
@@ -280,7 +280,7 @@ export const AppRedirectModal: React.FC<AppRedirectModalProps> = ({
               <button
                 type="button"
                 onClick={handleCopyPromo}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand dark:bg-brand-lime text-white dark:text-neutral-950 font-black font-en text-xs shadow-sm hover:opacity-90 transition cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand dark:bg-white text-white dark:text-brand font-black font-en text-xs shadow-sm hover:opacity-90 transition cursor-pointer shrink-0"
               >
                 <span>{promo.code}</span>
                 {copiedCode ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
@@ -439,7 +439,7 @@ export const AppRedirectModal: React.FC<AppRedirectModalProps> = ({
                 <button
                   type="submit"
                   disabled={smsLoading}
-                  className="px-3.5 py-2 rounded-xl bg-brand dark:bg-brand-lime text-white dark:text-neutral-950 font-black text-xs inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+                  className="px-3.5 py-2 rounded-xl bg-brand dark:bg-white text-white dark:text-brand font-black text-xs inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
                 >
                   {smsLoading ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
