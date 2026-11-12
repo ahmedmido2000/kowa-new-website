@@ -1,18 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Car, MapPin, MessageSquare, Phone, Share2 } from 'lucide-react';
+import { Smartphone } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 import { CmsIcon } from './CmsIcon';
-import { isSafeHref, normalizeTelHref } from '@/lib/cms-helpers';
+import { isSafeHref } from '@/lib/cms-helpers';
 
 export const AppExperience: React.FC = () => {
   const { isRtl, pick } = useLanguage();
   const { sections } = useWebsiteConfig();
-  const [copiedShare, setCopiedShare] = useState(false);
 
   const data = sections.app_experience;
   if (!data) return null;
@@ -20,13 +19,6 @@ export const AppExperience: React.FC = () => {
   const features = (data.features || []).filter((f) => f.isEnabled !== false);
   const demo = data.phoneMockupDemo;
   const mapUrl = demo?.mapImage?.url && isSafeHref(demo.mapImage.url) ? demo.mapImage.url.trim() : '';
-  const captainTelHref = normalizeTelHref(demo?.captainPhone);
-  const fixedFareDisplay = (demo?.fixedFareDisplay || '').trim();
-
-  const handleShare = () => {
-    setCopiedShare(true);
-    setTimeout(() => setCopiedShare(false), 2500);
-  };
 
   return (
     <section
@@ -45,160 +37,29 @@ export const AppExperience: React.FC = () => {
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              className="w-[300px] sm:w-[330px] rounded-[48px] p-3.5 bg-neutral-900 shadow-2xl border-4 border-neutral-800 relative will-change-transform"
+              className="w-[300px] sm:w-[320px] rounded-[48px] p-3 bg-neutral-900 shadow-2xl border-4 border-neutral-800 relative will-change-transform"
             >
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-5 bg-neutral-950 rounded-full z-30 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-neutral-800 ml-4" />
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-950" />
-              </div>
-
-              <div className="rounded-[38px] overflow-hidden bg-white dark:bg-[#10182C] text-neutral-900 dark:text-ink flex flex-col h-[600px] border border-neutral-700/50 relative">
-                <div className="h-[280px] bg-neutral-100 dark:bg-[#17223C] relative overflow-hidden">
-                  {mapUrl ? (
-                    <Image
-                      alt={pick(demo?.mapImage?.alt, 'City route navigation map')}
-                      src={mapUrl}
-                      fill
-                      unoptimized
-                      className="object-cover filter contrast-125 opacity-70 dark:opacity-50"
-                      sizes="330px"
-                    />
-                  ) : (
-                    <div
-                      aria-hidden="true"
-                      className="w-full h-full bg-gradient-to-br from-[#0F172A] via-[#1A1354] to-[#111827] relative"
-                    >
-                      <div
-                        className="absolute inset-0 opacity-25"
-                        style={{
-                          backgroundImage:
-                            'linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)',
-                          backgroundSize: '28px 28px',
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-brand/10 dark:bg-brand/20 pointer-events-none" />
-
-                  <svg
-                    className="absolute inset-0 w-full h-full pointer-events-none"
-                    viewBox="0 0 300 280"
+              <div className="rounded-[38px] overflow-hidden bg-neutral-950 aspect-[393/852] border border-neutral-700/50 relative">
+                {mapUrl ? (
+                  <Image
+                    alt={pick(
+                      demo?.mapImage?.alt,
+                      isRtl ? 'معاينة تطبيق كوا' : 'KOWA app preview'
+                    )}
+                    src={mapUrl}
+                    fill
+                    unoptimized
+                    className="object-cover object-top"
+                    sizes="320px"
+                  />
+                ) : (
+                  <div
+                    aria-hidden="true"
+                    className="w-full h-full bg-gradient-to-br from-[#0F172A] via-[#1A1354] to-[#111827] flex items-center justify-center"
                   >
-                    <path
-                      d="M60 210 Q 150 140 240 80"
-                      fill="none"
-                      stroke="#1F0F8C"
-                      strokeDasharray="6 4"
-                      strokeLinecap="round"
-                      strokeWidth="5"
-                    />
-                    <path
-                      d="M60 210 Q 150 140 240 80"
-                      fill="none"
-                      stroke="#D3D93C"
-                      strokeLinecap="round"
-                      strokeWidth="3"
-                    />
-                    <circle cx="240" cy="80" fill="#1F0F8C" r="8" />
-                    <circle cx="240" cy="80" fill="#D3D93C" r="4" />
-                    <circle cx="145" cy="140" fill="#1F0F8C" r="14" />
-                    <circle cx="145" cy="140" fill="#FFFFFF" r="5" />
-                  </svg>
-
-                  <div className="absolute top-12 left-4 right-4 bg-white/90 dark:bg-[#10182C]/90 backdrop-blur-md p-2.5 rounded-2xl shadow-sm border border-neutral-200/60 dark:border-line flex items-center justify-between text-xs font-bold">
-                    <div className="flex items-center gap-1.5 text-brand dark:text-brand-lime">
-                      <Car className="w-4 h-4" />
-                      <span>{pick(demo?.statusText)}</span>
-                    </div>
-                    {demo?.etaBadge ? (
-                      <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md font-en font-black">
-                        {demo.etaBadge}
-                      </span>
-                    ) : null}
+                    <Smartphone className="w-12 h-12 text-brand-lime/70" />
                   </div>
-
-                  {pick(demo?.destinationPin) ? (
-                    <div className="absolute top-[74px] right-4 bg-neutral-900 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-md border border-white/10">
-                      <MapPin className="w-3 h-3 text-brand-lime" />
-                      <span>{pick(demo?.destinationPin)}</span>
-                    </div>
-                  ) : null}
-                </div>
-
-                <div className="p-4 bg-white dark:bg-[#10182C] flex-1 flex flex-col justify-between text-right rtl:text-right ltr:text-left transition-colors duration-200">
-                  <div className="flex items-center justify-between bg-neutral-50 dark:bg-[#17223C] p-3 rounded-2xl border border-neutral-200/80 dark:border-line">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-10 h-10 rounded-full bg-brand-lime text-neutral-950 flex items-center justify-center font-bold text-sm shrink-0">
-                        {demo?.captainInitials || 'ك'}
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-neutral-900 dark:text-ink">
-                          {pick(demo?.captainName)}
-                        </div>
-                        <div className="text-[10px] text-neutral-400 dark:text-ink-subtle">
-                          {pick(demo?.vehicleText)}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      {captainTelHref ? (
-                        <a
-                          href={captainTelHref}
-                          className="w-8 h-8 rounded-xl bg-white dark:bg-[#10182C] border border-neutral-200 dark:border-line flex items-center justify-center text-brand dark:text-brand-lime shadow-sm hover:scale-105 transition"
-                          title={isRtl ? 'اتصال بالكابتن' : 'Call Captain'}
-                        >
-                          <Phone className="w-3.5 h-3.5" />
-                        </a>
-                      ) : (
-                        <span
-                          aria-hidden="true"
-                          className="w-8 h-8 rounded-xl bg-white dark:bg-[#10182C] border border-neutral-200 dark:border-line flex items-center justify-center text-brand/60 dark:text-brand-lime/60"
-                        >
-                          <Phone className="w-3.5 h-3.5" />
-                        </span>
-                      )}
-                      <span
-                        aria-hidden="true"
-                        className="w-8 h-8 rounded-xl bg-white dark:bg-[#10182C] border border-neutral-200 dark:border-line flex items-center justify-center text-brand/60 dark:text-brand-lime/60"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="py-2 space-y-2 border-y border-neutral-100 dark:border-line text-xs">
-                    <div className="flex justify-between items-center text-neutral-500 dark:text-ink-muted">
-                      <span>{isRtl ? 'طريقة الدفع' : 'Payment Method'}</span>
-                      <span className="font-bold text-neutral-900 dark:text-ink flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        {demo?.paymentMethod || 'Apple Pay'}
-                      </span>
-                    </div>
-                    {fixedFareDisplay ? (
-                      <div className="flex justify-between items-center">
-                        <span className="text-neutral-500 dark:text-ink-muted">
-                          {isRtl ? 'السعر الثابت' : 'Fixed Fare'}
-                        </span>
-                        <span className="font-bold text-brand dark:text-brand-lime font-en text-sm">
-                          {fixedFareDisplay}
-                        </span>
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div className="pt-2">
-                    <button
-                      onClick={handleShare}
-                      className="w-full py-2.5 px-4 rounded-xl bg-neutral-900 dark:bg-card hover:bg-neutral-800 dark:hover:bg-elevated text-white text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-sm border border-neutral-700 dark:border-line"
-                      type="button"
-                    >
-                      <span>
-                        {copiedShare ? pick(demo?.shareCopiedLabel) : pick(demo?.shareButtonLabel)}
-                      </span>
-                      <Share2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
+                )}
               </div>
             </motion.div>
           </motion.div>
