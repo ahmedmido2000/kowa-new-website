@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, Smartphone, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 import MagneticButton from './MagneticButton';
@@ -81,57 +81,133 @@ export const DownloadBanner: React.FC = () => {
     }
   };
 
+  const storeItems = [
+    {
+      key: 'ios',
+      name: 'App Store',
+      caption: pick(data.storeBadges?.appStoreCaption),
+      href: iosUrl,
+      iconSrc: '/apple.svg',
+      invertOnDark: true,
+    },
+    {
+      key: 'android',
+      name: 'Google Play',
+      caption: pick(data.storeBadges?.googlePlayCaption),
+      href: androidUrl,
+      iconSrc: '/google-play.svg',
+      invertOnDark: false,
+    },
+  ];
+
+  const showTopDockContent = Boolean(hasQr || featureFlags.enableSmsAppLink);
+
   return (
     <section
-      className="py-16 lg:py-20 bg-neutral-50 dark:bg-[#0A0F1D] border-t border-neutral-200 dark:border-line transition-colors duration-200 overflow-hidden"
+      className="py-16 lg:py-24 bg-neutral-50 dark:bg-[#0A0F1D] border-t border-neutral-200 dark:border-line transition-colors duration-200 overflow-hidden"
       id="download-banner"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, scale: 0.98, y: 30 }}
+          initial={{ opacity: 0, scale: 0.98, y: 24 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="bg-gradient-to-br from-brand via-brand-dark to-neutral-900 dark:from-[#1F0F8C] dark:via-[#140959] dark:to-[#070B14] rounded-3xl p-8 sm:p-12 text-white shadow-elevated relative overflow-hidden"
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#180C76] via-[#1F0F8C] to-[#091233] dark:from-[#180C76] dark:via-[#110852] dark:to-[#060A18] p-6 sm:p-10 lg:p-14 text-white shadow-[0_32px_70px_-20px_rgba(31,15,140,0.48)] border border-white/15"
         >
+          {/* Subtle atmospheric glow & geometric accents */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage: 'radial-gradient(rgba(255,255,255,0.85) 1px, transparent 1px)',
+              backgroundSize: '24px 24px',
+            }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#3B82F6]/25 blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-28 right-1/4 w-96 h-96 rounded-full bg-white/[0.06] blur-3xl"
+          />
           <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.16, 0.08] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -right-12 -bottom-12 w-64 h-64 border-8 border-white/20 rounded-full pointer-events-none"
+            aria-hidden="true"
+            animate={{ scale: [1, 1.12, 1], opacity: [0.12, 0.22, 0.12] }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+            className="pointer-events-none absolute -right-16 -bottom-16 w-72 h-72 border border-white/20 rounded-full"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div
-              className={`${
-                hasQr ? 'lg:col-span-7' : 'lg:col-span-12'
-              } text-right rtl:text-right ltr:text-left`}
-            >
-              {badgeTagline || promoDisplay ? (
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-brand text-xs font-black mb-3 shadow-sm flex-wrap">
-                  {badgeTagline ? <span>{badgeTagline}</span> : null}
-                  {badgeTagline && promoDisplay ? <span>•</span> : null}
-                  {promoDisplay ? <span>{promoDisplay}</span> : null}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Editorial Value Column */}
+            <div className="lg:col-span-6 text-right rtl:text-right ltr:text-left">
+              {(badgeTagline || promoDisplay) ? (
+                <div className="flex flex-wrap items-center gap-2.5 mb-5">
+                  {badgeTagline ? (
+                    <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white/[0.11] backdrop-blur-md border border-white/20 text-blue-50 text-xs font-semibold">
+                      {badgeTagline}
+                    </span>
+                  ) : null}
+                  {promoDisplay ? (
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-brand text-xs font-bold shadow-sm">
+                      <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                      <span>{promoDisplay}</span>
+                    </span>
+                  ) : null}
                 </div>
               ) : null}
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-3 leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-bold text-white mb-4 leading-[1.26] tracking-tight">
                 {pick(data.headline)}
               </h2>
-              <p className="text-neutral-300 text-sm sm:text-base leading-relaxed mb-6 max-w-2xl">
+              <p className="text-blue-100/80 text-sm sm:text-base lg:text-[1.05rem] leading-relaxed max-w-xl">
                 {pick(data.subtitle)}
               </p>
+            </div>
 
-              {featureFlags.enableSmsAppLink ? (
-                <>
-                  <div className="bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 max-w-lg mb-4">
-                    <form className="flex items-center gap-2" onSubmit={handleSubmit}>
-                      <div className="flex items-center gap-2 flex-1 px-3">
-                        <span className="text-xs font-bold text-neutral-300 font-en" dir="ltr">
+            {/* Elevated Glass Action Dock */}
+            <div className="lg:col-span-6">
+              <div className="rounded-3xl bg-white/[0.08] backdrop-blur-xl border border-white/20 p-5 sm:p-7 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.4)] space-y-4">
+                {hasQr ? (
+                  <div className="rounded-2xl bg-white/95 dark:bg-[#10182C] p-4 border border-white/30 dark:border-line shadow-md flex items-center gap-4 text-neutral-900 dark:text-ink transition-colors duration-200">
+                    <div className="w-24 h-24 shrink-0 bg-white rounded-xl p-1.5 flex items-center justify-center border border-neutral-200">
+                      <QrCodeDisplay
+                        qrImageUrl={qrImageUrl}
+                        qrTargetUrl={qrTargetUrl}
+                        alt={pick(data.qrBox?.title)}
+                        size={84}
+                      />
+                    </div>
+                    <div className="min-w-0 text-right rtl:text-right ltr:text-left">
+                      <div className="text-sm font-bold text-neutral-900 dark:text-ink mb-1">
+                        {pick(data.qrBox?.title)}
+                      </div>
+                      <div className="text-xs text-neutral-500 dark:text-ink-subtle leading-relaxed">
+                        {pick(data.qrBox?.subtitle)}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {featureFlags.enableSmsAppLink ? (
+                  <div>
+                    <form
+                      onSubmit={handleSubmit}
+                      className="rounded-2xl bg-[#070C24]/70 border border-white/15 focus-within:border-white/50 p-1.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-colors"
+                    >
+                      <div
+                        className="flex items-center gap-2.5 flex-1 px-3 py-2 sm:py-0 min-w-0"
+                        dir="ltr"
+                      >
+                        <Smartphone className="w-4 h-4 text-blue-200/70 shrink-0" />
+                        <span className="text-xs font-bold text-blue-100 font-en bg-white/[0.09] px-2.5 py-1 rounded-lg shrink-0">
                           {countryCode}
                         </span>
                         <input
-                          className="w-full bg-transparent border-0 p-0 text-sm font-bold text-white placeholder-neutral-400 focus:outline-none focus:ring-0"
+                          className="w-full min-w-0 bg-transparent border-0 p-0 text-sm font-semibold text-white placeholder-white/45 focus:outline-none focus:ring-0 font-en"
                           dir="ltr"
+                          aria-label={data.smsForm?.placeholder || '5XXXXXXXX'}
                           placeholder={data.smsForm?.placeholder || '5XXXXXXXX'}
                           required
                           type="tel"
@@ -139,166 +215,105 @@ export const DownloadBanner: React.FC = () => {
                           onChange={(e) => setPhone(e.target.value)}
                         />
                       </div>
-                      <MagneticButton strength={0.25} as="div">
+
+                      <MagneticButton strength={0.2} as="div" className="w-full sm:w-auto shrink-0">
                         <button
-                          className="px-4 py-2.5 rounded-xl bg-white text-brand font-bold text-xs hover:bg-[#EFF6FF] transition whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-60 inline-flex items-center gap-1.5"
+                          className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white text-brand font-bold text-xs sm:text-sm hover:bg-[#EFF6FF] transition-colors whitespace-nowrap cursor-pointer shadow-md disabled:opacity-60 inline-flex items-center justify-center gap-2"
                           type="submit"
                           disabled={smsLoading}
                         >
-                          {smsLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
+                          {smsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                           <span>{pick(data.smsForm?.buttonLabel)}</span>
                         </button>
                       </MagneticButton>
                     </form>
+
+                    {smsSent ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-3 p-3 bg-emerald-500/20 border border-emerald-400/40 rounded-xl text-xs text-emerald-100 flex items-center gap-2"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-emerald-200 shrink-0" />
+                        <span>{pick(data.smsForm?.successMessage)}</span>
+                      </motion.div>
+                    ) : null}
+
+                    {smsError ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-3 p-3 bg-rose-500/20 border border-rose-400/40 rounded-xl text-xs text-rose-100 flex items-start gap-2"
+                      >
+                        <AlertCircle className="w-4 h-4 text-rose-300 shrink-0 mt-0.5" />
+                        <span>{smsError}</span>
+                      </motion.div>
+                    ) : null}
                   </div>
+                ) : null}
 
-                  {smsSent ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mb-6 p-3 bg-emerald-500/20 border border-emerald-400/40 rounded-xl text-xs text-emerald-200 flex items-center gap-2 max-w-lg"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                      <span>{pick(data.smsForm?.successMessage)}</span>
-                    </motion.div>
-                  ) : null}
-
-                  {smsError ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mb-6 p-3 bg-rose-500/20 border border-rose-400/40 rounded-xl text-xs text-rose-100 flex items-start gap-2 max-w-lg"
-                    >
-                      <AlertCircle className="w-4 h-4 text-rose-300 shrink-0 mt-0.5" />
-                      <span>{smsError}</span>
-                    </motion.div>
-                  ) : null}
-                </>
-              ) : null}
-
-              <div className="flex flex-wrap items-center gap-3 mt-2">
-                {iosUrl ? (
-                  <MagneticButton
-                    strength={0.2}
-                    href={iosUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white hover:bg-neutral-100 text-neutral-900 shadow-md transition-all duration-200 cursor-pointer">
-                      <Image
-                        src="/apple.svg"
-                        alt="App Store"
-                        width={24}
-                        height={24}
-                        className="w-6 h-6 object-contain"
-                      />
-                      <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
-                        <span className="text-[10px] text-neutral-500 font-medium leading-tight">
-                          {pick(data.storeBadges?.appStoreCaption)}
+                <div
+                  className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${
+                    showTopDockContent ? 'pt-4 border-t border-white/15' : ''
+                  }`}
+                >
+                  {storeItems.map((store) =>
+                    store.href ? (
+                      <MagneticButton
+                        key={store.key}
+                        strength={0.18}
+                        href={store.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <span className="w-full inline-flex items-center justify-center sm:justify-start gap-3 px-4 py-3 rounded-2xl bg-white hover:bg-[#EFF6FF] text-neutral-900 shadow-md transition-all duration-200 cursor-pointer">
+                          <Image
+                            src={store.iconSrc}
+                            alt={store.name}
+                            width={24}
+                            height={24}
+                            className="w-6 h-6 object-contain shrink-0"
+                          />
+                          <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
+                            <span className="text-[11px] text-neutral-500 font-medium leading-tight mb-0.5">
+                              {store.caption}
+                            </span>
+                            <span className="text-sm font-bold font-en text-neutral-900 leading-tight">
+                              {store.name}
+                            </span>
+                          </div>
                         </span>
-                        <span className="text-sm font-black font-en text-neutral-900 leading-tight">
-                          App Store
-                        </span>
+                      </MagneticButton>
+                    ) : (
+                      <div
+                        key={store.key}
+                        aria-disabled="true"
+                        className="w-full inline-flex items-center justify-center sm:justify-start gap-3 px-4 py-3 rounded-2xl bg-white/[0.1] border border-white/20 text-white"
+                      >
+                        <Image
+                          src={store.iconSrc}
+                          alt={store.name}
+                          width={24}
+                          height={24}
+                          className={`w-6 h-6 object-contain shrink-0 ${
+                            store.invertOnDark ? 'brightness-0 invert' : ''
+                          }`}
+                        />
+                        <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
+                          <span className="text-[11px] text-blue-100/75 font-medium leading-tight mb-0.5">
+                            {store.caption}
+                          </span>
+                          <span className="text-sm font-bold font-en text-white leading-tight">
+                            {store.name} · {isAr ? 'قريباً' : 'Soon'}
+                          </span>
+                        </div>
                       </div>
-                    </span>
-                  </MagneticButton>
-                ) : (
-                  <div
-                    aria-disabled="true"
-                    className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/15 border border-white/20 text-white/80 opacity-85"
-                  >
-                    <Image
-                      src="/apple.svg"
-                      alt="App Store"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 object-contain opacity-80"
-                    />
-                    <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
-                      <span className="text-[10px] text-white/70 font-medium leading-tight">
-                        {pick(data.storeBadges?.appStoreCaption)}
-                      </span>
-                      <span className="text-sm font-black font-en leading-tight">
-                        App Store · {isAr ? 'قريباً' : 'Soon'}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {androidUrl ? (
-                  <MagneticButton
-                    strength={0.2}
-                    href={androidUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white hover:bg-neutral-100 text-neutral-900 shadow-md transition-all duration-200 cursor-pointer">
-                      <Image
-                        src="/google-play.svg"
-                        alt="Google Play"
-                        width={24}
-                        height={24}
-                        className="w-6 h-6 object-contain"
-                      />
-                      <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
-                        <span className="text-[10px] text-neutral-500 font-medium leading-tight">
-                          {pick(data.storeBadges?.googlePlayCaption)}
-                        </span>
-                        <span className="text-sm font-black font-en text-neutral-900 leading-tight">
-                          Google Play
-                        </span>
-                      </div>
-                    </span>
-                  </MagneticButton>
-                ) : (
-                  <div
-                    aria-disabled="true"
-                    className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/15 border border-white/20 text-white/80 opacity-85"
-                  >
-                    <Image
-                      src="/google-play.svg"
-                      alt="Google Play"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 object-contain opacity-80"
-                    />
-                    <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
-                      <span className="text-[10px] text-white/70 font-medium leading-tight">
-                        {pick(data.storeBadges?.googlePlayCaption)}
-                      </span>
-                      <span className="text-sm font-black font-en leading-tight">
-                        Google Play · {isAr ? 'قريباً' : 'Soon'}
-                      </span>
-                    </div>
-                  </div>
-                )}
+                    )
+                  )}
+                </div>
               </div>
             </div>
-
-            {hasQr ? (
-              <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-                  className="bg-white dark:bg-[#10182C] p-6 rounded-3xl text-neutral-900 dark:text-ink text-center shadow-2xl max-w-xs border border-neutral-200 dark:border-line transition-colors duration-200"
-                >
-                  <div className="w-40 h-40 bg-white mx-auto rounded-2xl p-2 flex items-center justify-center mb-3 border border-neutral-200">
-                    <QrCodeDisplay
-                      qrImageUrl={qrImageUrl}
-                      qrTargetUrl={qrTargetUrl}
-                      alt={pick(data.qrBox?.title)}
-                      size={140}
-                    />
-                  </div>
-                  <div className="text-xs font-bold text-neutral-800 dark:text-ink">
-                    {pick(data.qrBox?.title)}
-                  </div>
-                  <div className="text-[11px] text-neutral-400 dark:text-ink-subtle">
-                    {pick(data.qrBox?.subtitle)}
-                  </div>
-                </motion.div>
-              </div>
-            ) : null}
           </div>
         </motion.div>
       </div>

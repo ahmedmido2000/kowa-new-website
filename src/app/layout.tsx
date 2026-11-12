@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Cairo, Plus_Jakarta_Sans } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import './globals.css';
 import { WebsiteConfigProvider } from '@/context/WebsiteConfigContext';
 import { LanguageProvider } from '@/context/LanguageContext';
@@ -13,17 +13,17 @@ import { getWebsiteConfigSafe } from '@/lib/website-api.server';
 import { hexToRgbTriplet, pickText } from '@/lib/cms-helpers';
 import type { WebsiteThemeTokens } from '@/types/website-cms';
 
-const cairo = Cairo({
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ['arabic', 'latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-cairo',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-ibm-arabic',
   display: 'swap',
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-jakarta',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-ibm-sans',
   display: 'swap',
 });
 
@@ -162,7 +162,7 @@ export default async function RootLayout({
       lang={defaultLocale}
       dir={defaultLocale === 'ar' ? 'rtl' : 'ltr'}
       suppressHydrationWarning
-      className={`${cairo.variable} ${plusJakartaSans.variable} scroll-smooth`}
+      className={`${ibmPlexSansArabic.variable} ${ibmPlexSans.variable} scroll-smooth`}
     >
       <head>
         {themeCss ? <style dangerouslySetInnerHTML={{ __html: themeCss }} /> : null}

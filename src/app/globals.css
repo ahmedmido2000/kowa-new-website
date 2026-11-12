@@ -91,8 +91,8 @@
   --color-neutral-900: #0F172A;
   --color-neutral-950: #020617;
 
-  --font-sans: var(--font-cairo), var(--font-jakarta), system-ui, sans-serif;
-  --font-en: var(--font-jakarta), sans-serif;
+  --font-sans: var(--font-ibm-arabic), var(--font-ibm-sans), system-ui, sans-serif;
+  --font-en: var(--font-ibm-sans), sans-serif;
 
   --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   --shadow-elevated: 0 20px 40px -15px rgba(31, 15, 140, 0.08), 0 0 1px 1px rgba(226, 232, 240, 0.8);
