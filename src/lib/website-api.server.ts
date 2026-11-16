@@ -14,6 +14,8 @@ const serverApi = axios.create({
   timeout: 20000,
   headers: {
     Accept: 'application/json',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    Pragma: 'no-cache',
   },
 });
 
@@ -23,6 +25,10 @@ async function getWithRetry<T>(url: string, validateStatus?: (status: number) =>
     try {
       return await serverApi.get<{ data: T }>(url, {
         params: { locale: 'all' },
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+        },
         ...(validateStatus ? { validateStatus } : {}),
       });
     } catch (error) {
@@ -37,7 +43,7 @@ async function getWithRetry<T>(url: string, validateStatus?: (status: number) =>
 
 export async function getWebsiteConfigCached(): Promise<WebsiteConfigData> {
   'use cache';
-  cacheLife('minutes');
+  cacheLife('cms');
   cacheTag('website-config');
 
   const response = await getWithRetry<WebsiteConfigData>('/website/config');
@@ -57,7 +63,7 @@ export async function getWebsiteSectionCached<T = unknown>(
   key: string
 ): Promise<WebsiteSectionEnvelope<T> | null> {
   'use cache';
-  cacheLife('minutes');
+  cacheLife('cms');
   cacheTag(`website-section-${key}`);
 
   const response = await getWithRetry<WebsiteSectionEnvelope<T>>(

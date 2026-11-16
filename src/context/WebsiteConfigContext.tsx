@@ -79,23 +79,67 @@ export function WebsiteConfigProvider({
 
   useEffect(() => {
     let active = true;
-    const initialSerialized = initialConfig ? JSON.stringify(initialConfig) : '';
+    let isFetching = false;
 
-    fetchClientWebsiteConfig().then((fresh) => {
-      if (!active || !fresh) return;
-      if (!initialConfig || JSON.stringify(fresh) !== initialSerialized) {
-        setClientOverrideConfig(fresh);
+    const syncFreshConfig = async () => {
+      if (isFetching || !active) return;
+      isFetching = true;
+      try {
+        const fresh = await fetchClientWebsiteConfig();
+        if (!active || !fresh) return;
+
+        setClientOverrideConfig((prev) => {
+          const current = prev ?? initialConfig;
+          if (current && JSON.stringify(current) === JSON.stringify(fresh)) {
+            return prev;
+          }
+          return fresh;
+        });
+      } catch {
+        // ignore network error
+      } finally {
+        isFetching = false;
       }
-    });
+    };
+
+    // Immediate sync on mount to catch any changes since prerender
+    syncFreshConfig();
+
+    // Re-sync immediately when window receives focus (e.g. user switches from admin dashboard tab)
+    const handleFocus = () => {
+      syncFreshConfig();
+    };
+
+    // Re-sync when document becomes visible
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncFreshConfig();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Periodic live sync while tab is visible (every 10 seconds)
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        syncFreshConfig();
+      }
+    }, 10000);
 
     return () => {
       active = false;
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(interval);
     };
   }, [initialConfig]);
 
   const refreshConfig = async () => {
     const fresh = await fetchClientWebsiteConfig();
-    if (fresh) setClientOverrideConfig(fresh);
+    if (fresh) {
+      setClientOverrideConfig(fresh);
+    }
   };
 
   const value = useMemo<WebsiteConfigContextValue>(() => {

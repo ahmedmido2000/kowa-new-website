@@ -125,7 +125,14 @@ function parseAxiosError(error: unknown, fallbackMessage: string): WebsiteApiErr
 export async function fetchClientWebsiteConfig(): Promise<WebsiteConfigData | null> {
   try {
     const response = await clientApi.get<{ data: WebsiteConfigData }>('/website/config', {
-      params: { locale: 'all' },
+      params: {
+        locale: 'all',
+        _t: Date.now(),
+      },
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+      },
     });
     return response.data.data;
   } catch {
@@ -140,7 +147,14 @@ export async function fetchClientWebsiteSection<T = unknown>(
     const response = await clientApi.get<{ data: WebsiteSectionEnvelope<T> }>(
       `/website/sections/${encodeURIComponent(key)}`,
       {
-        params: { locale: 'all' },
+        params: {
+          locale: 'all',
+          _t: Date.now(),
+        },
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+        },
       }
     );
     return response.data.data;
