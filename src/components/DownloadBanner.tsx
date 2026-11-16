@@ -40,6 +40,13 @@ export const DownloadBanner: React.FC = () => {
     platform?.androidAppUrl && isSafeHref(platform.androidAppUrl)
       ? platform.androidAppUrl.trim()
       : '';
+  const huaweiUrl =
+    (platform?.huaweiAppUrl && isSafeHref(platform.huaweiAppUrl)
+      ? platform.huaweiAppUrl.trim()
+      : '') ||
+    (platform?.appGalleryUrl && isSafeHref(platform.appGalleryUrl)
+      ? platform.appGalleryUrl.trim()
+      : '');
 
   const qrImageUrl = data.qrBox?.qrImageUrl?.trim() || '';
   const qrTargetUrl = data.qrBox?.qrTargetUrl?.trim() || '';
@@ -85,7 +92,7 @@ export const DownloadBanner: React.FC = () => {
     {
       key: 'ios',
       name: 'App Store',
-      caption: pick(data.storeBadges?.appStoreCaption),
+      caption: pick(data.storeBadges?.appStoreCaption) || (isAr ? 'حمله من' : 'Download on'),
       href: iosUrl,
       iconSrc: '/apple.svg',
       invertOnDark: true,
@@ -93,9 +100,20 @@ export const DownloadBanner: React.FC = () => {
     {
       key: 'android',
       name: 'Google Play',
-      caption: pick(data.storeBadges?.googlePlayCaption),
+      caption: pick(data.storeBadges?.googlePlayCaption) || (isAr ? 'احصل عليه من' : 'Get it on'),
       href: androidUrl,
       iconSrc: '/google-play.svg',
+      invertOnDark: false,
+    },
+    {
+      key: 'huawei',
+      name: 'AppGallery',
+      caption:
+        pick(data.storeBadges?.huaweiCaption) ||
+        pick(data.storeBadges?.appGalleryCaption) ||
+        (isAr ? 'استكشفه في' : 'Explore on'),
+      href: huaweiUrl,
+      iconSrc: '/appgallery.svg',
       invertOnDark: false,
     },
   ];
@@ -253,7 +271,7 @@ export const DownloadBanner: React.FC = () => {
                 ) : null}
 
                 <div
-                  className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${
+                  className={`grid grid-cols-1 sm:grid-cols-3 gap-2.5 ${
                     showTopDockContent ? 'pt-4 border-t border-white/15' : ''
                   }`}
                 >
@@ -261,25 +279,25 @@ export const DownloadBanner: React.FC = () => {
                     store.href ? (
                       <MagneticButton
                         key={store.key}
-                        strength={0.18}
+                        strength={0.16}
                         href={store.href}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block"
                       >
-                        <span className="w-full inline-flex items-center justify-center sm:justify-start gap-3 px-4 py-3 rounded-2xl bg-white hover:bg-[#EFF6FF] text-neutral-900 shadow-md transition-all duration-200 cursor-pointer">
+                        <span className="w-full inline-flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-2xl bg-white hover:bg-[#EFF6FF] text-neutral-900 shadow-md transition-all duration-200 cursor-pointer">
                           <Image
                             src={store.iconSrc}
                             alt={store.name}
-                            width={24}
-                            height={24}
-                            className="w-6 h-6 object-contain shrink-0"
+                            width={22}
+                            height={22}
+                            className="w-5 h-5 sm:w-5.5 sm:h-5.5 object-contain shrink-0"
                           />
-                          <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
-                            <span className="text-[11px] text-neutral-500 font-medium leading-tight mb-0.5">
+                          <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none min-w-0">
+                            <span className="text-[10px] sm:text-[11px] text-neutral-500 font-medium leading-tight mb-0.5 truncate">
                               {store.caption}
                             </span>
-                            <span className="text-sm font-bold font-en text-neutral-900 leading-tight">
+                            <span className="text-xs sm:text-sm font-bold font-en text-neutral-900 leading-tight truncate">
                               {store.name}
                             </span>
                           </div>
@@ -289,23 +307,23 @@ export const DownloadBanner: React.FC = () => {
                       <div
                         key={store.key}
                         aria-disabled="true"
-                        className="w-full inline-flex items-center justify-center sm:justify-start gap-3 px-4 py-3 rounded-2xl bg-white/[0.1] border border-white/20 text-white"
+                        className="w-full inline-flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-2xl bg-white/[0.1] border border-white/20 text-white"
                       >
                         <Image
                           src={store.iconSrc}
                           alt={store.name}
-                          width={24}
-                          height={24}
-                          className={`w-6 h-6 object-contain shrink-0 ${
+                          width={22}
+                          height={22}
+                          className={`w-5 h-5 sm:w-5.5 sm:h-5.5 object-contain shrink-0 ${
                             store.invertOnDark ? 'brightness-0 invert' : ''
                           }`}
                         />
-                        <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none">
-                          <span className="text-[11px] text-blue-100/75 font-medium leading-tight mb-0.5">
-                            {store.caption}
+                        <div className="flex flex-col text-right rtl:text-right ltr:text-left leading-none min-w-0">
+                          <span className="text-[10px] sm:text-[11px] text-blue-100/75 font-medium leading-tight mb-0.5 whitespace-nowrap">
+                            {store.caption} · {isAr ? 'قريباً' : 'Soon'}
                           </span>
-                          <span className="text-sm font-bold font-en text-white leading-tight">
-                            {store.name} · {isAr ? 'قريباً' : 'Soon'}
+                          <span className="text-xs sm:text-sm font-bold font-en text-white leading-tight whitespace-nowrap">
+                            {store.name}
                           </span>
                         </div>
                       </div>

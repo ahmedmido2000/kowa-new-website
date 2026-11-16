@@ -495,6 +495,8 @@ export interface DownloadBannerContent {
   storeBadges: {
     appStoreCaption: LocalizedText;
     googlePlayCaption: LocalizedText;
+    huaweiCaption?: LocalizedText;
+    appGalleryCaption?: LocalizedText;
   };
   qrBox: {
     title: LocalizedText;
@@ -632,6 +634,8 @@ export interface WebsitePlatformConfig {
   address: LocalizedText;
   androidAppUrl: string;
   iosAppUrl: string;
+  huaweiAppUrl?: string;
+  appGalleryUrl?: string;
   siteLogoUrl: string;
   faviconUrl: string | null;
   hotline: string;

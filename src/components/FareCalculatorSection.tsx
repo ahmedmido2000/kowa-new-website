@@ -137,7 +137,7 @@ const QUICK_RIYADH_POINTS: {
   },
 ];
 
-function isValidGeoPoint(point: GeoPoint | null): point is GeoPoint {
+function isValidGeoPoint(point: GeoPoint | null | undefined): point is GeoPoint {
   if (!point) return false;
   return (
     typeof point.latitude === 'number' &&
@@ -346,6 +346,7 @@ const DynamicFareCalculatorView: React.FC<{
     destLng: '',
   });
   const [activeSelection, setActiveSelection] = useState<'pickup' | 'destination'>('pickup');
+  const [activePresetId, setActivePresetId] = useState<string>('');
   const [swapRotation, setSwapRotation] = useState(0);
   const [isLocating, setIsLocating] = useState(false);
   const [geoWarning, setGeoWarning] = useState<string | null>(null);
@@ -722,6 +723,7 @@ const DynamicFareCalculatorView: React.FC<{
 
   const handlePickupUpdate = useCallback(
     (point: GeoPoint, label?: string) => {
+      setActivePresetId('');
       invalidateFare();
       setGeoWarning(null);
       setPickup(point);
@@ -765,6 +767,7 @@ const DynamicFareCalculatorView: React.FC<{
 
   const handleDestinationUpdate = useCallback(
     (point: GeoPoint, label?: string) => {
+      setActivePresetId('');
       invalidateFare();
       setGeoWarning(null);
       setDestination(point);
@@ -853,6 +856,7 @@ const DynamicFareCalculatorView: React.FC<{
   };
 
   const handleClearPickup = useCallback(() => {
+    setActivePresetId('');
     invalidateFare();
     categoriesRevisionRef.current += 1;
     categoriesAbortRef.current?.abort();
@@ -871,6 +875,7 @@ const DynamicFareCalculatorView: React.FC<{
   }, [invalidateFare]);
 
   const handleClearDestination = useCallback(() => {
+    setActivePresetId('');
     invalidateFare();
     reverseDestRevRef.current += 1;
     reverseDestAbortRef.current?.abort();
@@ -883,6 +888,7 @@ const DynamicFareCalculatorView: React.FC<{
   }, [invalidateFare]);
 
   const handleResetAll = useCallback(() => {
+    setActivePresetId('');
     invalidateFare();
     categoriesRevisionRef.current += 1;
     categoriesAbortRef.current?.abort();
@@ -1015,11 +1021,15 @@ const DynamicFareCalculatorView: React.FC<{
     );
   };
 
-  const handleQuickPreset = (presetId: string) => {
-    const matched = QUICK_RIYADH_POINTS.find((q) => q.id === presetId);
-    const cmsPreset = (data.presets || []).find((p) => p.id === presetId && p.isEnabled !== false);
-    if (!matched) return;
+  const handleQuickPreset = async (presetId: string) => {
+    const cmsPreset = (data.presets || []).find(
+      (p) => p.id === presetId && p.isEnabled !== false
+    );
+    const matchedStatic = QUICK_RIYADH_POINTS.find((q) => q.id === presetId);
 
+    if (!cmsPreset && !matchedStatic) return;
+
+    setActivePresetId(presetId);
     invalidateFare();
     setGeoWarning(null);
     setOpenSearchField(null);
@@ -1028,27 +1038,92 @@ const DynamicFareCalculatorView: React.FC<{
     reverseDestRevRef.current += 1;
     reverseDestAbortRef.current?.abort();
 
-    const pName = cmsPreset ? pick(cmsPreset.pickup) : pick(matched.pickupName);
-    const dName = cmsPreset ? pick(cmsPreset.destination) : pick(matched.destinationName);
+    const pName = cmsPreset ? pick(cmsPreset.pickup) : pick(matchedStatic?.pickupName);
+    const dName = cmsPreset ? pick(cmsPreset.destination) : pick(matchedStatic?.destinationName);
 
-    setPickup(matched.pickup);
-    setDestination(matched.destination);
     setPickupName(pName);
     setPickupQuery(pName);
     setDestinationName(dName);
     setDestinationQuery(dName);
-    setCoordInputs({
-      pickupLat: String(matched.pickup.latitude),
-      pickupLng: String(matched.pickup.longitude),
-      destLat: String(matched.destination.latitude),
-      destLng: String(matched.destination.longitude),
-    });
 
-    loadCategoriesForPickup(matched.pickup, {
-      preferredDest: matched.destination,
-      prevSelectedId: selectedCategoryId,
-      autoPickFirstAvailable: true,
-    });
+    const directPickup =
+      (cmsPreset as unknown as { pickupCoords?: GeoPoint; pickupPoint?: GeoPoint })?.pickupCoords ||
+      (cmsPreset as unknown as { pickupCoords?: GeoPoint; pickupPoint?: GeoPoint })?.pickupPoint;
+    const directDest =
+      (cmsPreset as unknown as { destinationCoords?: GeoPoint; destinationPoint?: GeoPoint })?.destinationCoords ||
+      (cmsPreset as unknown as { destinationCoords?: GeoPoint; destinationPoint?: GeoPoint })?.destinationPoint;
+
+    const knownCoords = DYNAMIC_PRESET_COORDS[presetId];
+
+    let resolvedPickup: GeoPoint | null =
+      isValidGeoPoint(directPickup)
+        ? directPickup
+        : knownCoords?.pickup || matchedStatic?.pickup || null;
+
+    let resolvedDest: GeoPoint | null =
+      isValidGeoPoint(directDest)
+        ? directDest
+        : knownCoords?.destination || matchedStatic?.destination || null;
+
+    if (!resolvedPickup && pName) {
+      const localMatches = matchLocalLandmarks(pName, locale);
+      if (localMatches.length > 0 && isValidGeoPoint(localMatches[0].point)) {
+        resolvedPickup = localMatches[0].point;
+      } else {
+        try {
+          const suggestions = await searchSaudiPlaces(pName, locale);
+          if (suggestions.length > 0 && isValidGeoPoint(suggestions[0].point)) {
+            resolvedPickup = suggestions[0].point;
+          }
+        } catch {
+          // ignore geocode error
+        }
+      }
+    }
+
+    if (!resolvedDest && dName) {
+      const localMatches = matchLocalLandmarks(dName, locale);
+      if (localMatches.length > 0 && isValidGeoPoint(localMatches[0].point)) {
+        resolvedDest = localMatches[0].point;
+      } else {
+        try {
+          const suggestions = await searchSaudiPlaces(dName, locale);
+          if (suggestions.length > 0 && isValidGeoPoint(suggestions[0].point)) {
+            resolvedDest = suggestions[0].point;
+          }
+        } catch {
+          // ignore geocode error
+        }
+      }
+    }
+
+    if (resolvedPickup) {
+      setPickup(resolvedPickup);
+      setCoordInputs((prev) => ({
+        ...prev,
+        pickupLat: String(resolvedPickup.latitude),
+        pickupLng: String(resolvedPickup.longitude),
+      }));
+    }
+
+    if (resolvedDest) {
+      setDestination(resolvedDest);
+      setCoordInputs((prev) => ({
+        ...prev,
+        destLat: String(resolvedDest.latitude),
+        destLng: String(resolvedDest.longitude),
+      }));
+    }
+
+    if (resolvedPickup) {
+      loadCategoriesForPickup(resolvedPickup, {
+        preferredDest: resolvedDest || undefined,
+        prevSelectedId: selectedCategoryId,
+        autoPickFirstAvailable: true,
+      });
+    } else {
+      setActiveSelection('pickup');
+    }
   };
 
   const handleManualCoordChange = (
@@ -1113,10 +1188,10 @@ const DynamicFareCalculatorView: React.FC<{
     }
   };
 
-  // Determine available quick preset chips (only those backed by explicit coordinates)
+  // Determine available quick preset chips strictly from backend CMS data.presets
   const quickPresets = useMemo(() => {
     const enabledCmsPresets = (data.presets || []).filter(
-      (p) => p.isEnabled !== false && DYNAMIC_PRESET_COORDS[p.id]
+      (p) => p.isEnabled !== false
     );
     if (enabledCmsPresets.length > 0) {
       return enabledCmsPresets.map((p) => ({
@@ -1525,16 +1600,23 @@ const DynamicFareCalculatorView: React.FC<{
                         {pick(data.labels?.presetsTitle)}
                       </span>
                       <div className="flex flex-wrap gap-1.5">
-                        {quickPresets.map((preset) => (
-                          <button
-                            key={preset.id}
-                            type="button"
-                            onClick={() => handleQuickPreset(preset.id)}
-                            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border bg-neutral-50 dark:bg-[#141D35] text-neutral-700 dark:text-ink-muted border-neutral-200 dark:border-line hover:border-brand/50 dark:hover:border-brand-lime/50 hover:text-brand dark:hover:text-brand-lime"
-                          >
-                            {preset.label}
-                          </button>
-                        ))}
+                        {quickPresets.map((preset) => {
+                          const isActive = activePresetId === preset.id;
+                          return (
+                            <button
+                              key={preset.id}
+                              type="button"
+                              onClick={() => handleQuickPreset(preset.id)}
+                              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                                isActive
+                                  ? 'bg-brand text-white border-brand dark:bg-white dark:text-neutral-900 dark:border-white shadow-sm'
+                                  : 'bg-neutral-50 dark:bg-[#141D35] text-neutral-700 dark:text-ink-muted border-neutral-200 dark:border-line hover:border-brand/50 dark:hover:border-brand-lime/50 hover:text-brand dark:hover:text-brand-lime'
+                              }`}
+                            >
+                              {preset.label}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   ) : null}
