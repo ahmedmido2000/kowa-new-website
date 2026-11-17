@@ -131,7 +131,8 @@ export const DownloadBanner: React.FC = () => {
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#180C76] via-[#1F0F8C] to-[#091233] dark:from-[#180C76] dark:via-[#110852] dark:to-[#060A18] p-6 sm:p-10 lg:p-14 text-white shadow-[0_32px_70px_-20px_rgba(31,15,140,0.48)] border border-white/15"
+          style={{ background: 'linear-gradient(90deg, #0F3B82 0%, #093168 100%)' }}
+          className="relative overflow-hidden rounded-[2rem] p-6 sm:p-10 lg:p-14 text-white shadow-[0_32px_70px_-20px_rgba(15,59,130,0.48)] border border-white/15"
         >
           {/* Subtle atmospheric glow & geometric accents */}
           <div
@@ -212,7 +213,7 @@ export const DownloadBanner: React.FC = () => {
                   <div>
                     <form
                       onSubmit={handleSubmit}
-                      className="rounded-2xl bg-[#070C24]/70 border border-white/15 focus-within:border-white/50 p-1.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-colors"
+                      className="rounded-2xl bg-[#06152D]/75 border border-white/15 focus-within:border-white/50 p-1.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-colors"
                     >
                       <div
                         className="flex items-center gap-2.5 flex-1 px-3 py-2 sm:py-0 min-w-0"

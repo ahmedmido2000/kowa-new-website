@@ -1903,7 +1903,7 @@ const DynamicFareCalculatorView: React.FC<{
               </div>
 
               {/* Right Panel: Interactive Map (unless showMap=false) + Route Metrics & VAT Breakdown */}
-              <div className="lg:col-span-6 bg-gradient-to-br from-[#0E152B] via-[#130C47] to-[#080C18] text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-5 relative overflow-hidden">
+              <div className="lg:col-span-6 bg-gradient-to-br from-[#0E152B] via-[#093168] to-[#080C18] text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-5 relative overflow-hidden">
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 opacity-20 pointer-events-none"
@@ -2408,7 +2408,7 @@ const LegacyPreMigrationFareCalculator: React.FC<{ data: FareCalculatorContent }
                 </div>
               </div>
 
-              <div className="lg:col-span-6 bg-gradient-to-br from-[#0E152B] via-[#130C47] to-[#080C18] text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
+              <div className="lg:col-span-6 bg-gradient-to-br from-[#0E152B] via-[#093168] to-[#080C18] text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-bold">
                     <span className="w-2 h-2 rounded-full bg-white animate-ping" />

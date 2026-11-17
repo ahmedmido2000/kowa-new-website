@@ -55,7 +55,7 @@ export const AppExperience: React.FC = () => {
                 ) : (
                   <div
                     aria-hidden="true"
-                    className="w-full h-full bg-gradient-to-br from-[#0F172A] via-[#1A1354] to-[#111827] flex items-center justify-center"
+                    className="w-full h-full bg-gradient-to-br from-[#0F172A] via-[#093168] to-[#111827] flex items-center justify-center"
                   >
                     <Smartphone className="w-12 h-12 text-white/80" />
                   </div>

@@ -202,7 +202,7 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
         [serviceArea.north, serviceArea.east]
       );
       serviceAreaLayerRef.current = L.rectangle(bounds, {
-        color: '#634EEB',
+        color: '#0F3B82',
         weight: 1.5,
         opacity: 0.45,
         dashArray: '6 6',
@@ -224,8 +224,8 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
         html:
           variant === 'pickup'
             ? `<div style="position:relative;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">
-                <span style="position:absolute;inset:0;border-radius:9999px;background:rgba(99,78,235,0.28);"></span>
-                <span style="width:16px;height:16px;border-radius:9999px;background:#634EEB;border:3px solid #FFFFFF;box-shadow:0 3px 10px rgba(0,0,0,0.35);"></span>
+                <span style="position:absolute;inset:0;border-radius:9999px;background:rgba(15,59,130,0.28);"></span>
+                <span style="width:16px;height:16px;border-radius:9999px;background:#0F3B82;border:3px solid #FFFFFF;box-shadow:0 3px 10px rgba(0,0,0,0.35);"></span>
               </div>`
             : `<div style="position:relative;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">
                 <span style="position:absolute;inset:0;border-radius:9999px;background:rgba(14,165,233,0.34);"></span>
@@ -315,7 +315,7 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
 
       if (latLngs.length >= 2) {
         L.polyline(latLngs, {
-          color: '#634EEB',
+          color: '#0F3B82',
           weight: 9,
           opacity: 0.3,
           lineCap: 'round',

@@ -131,7 +131,7 @@ export const HeroSection: React.FC = () => {
               : 'bg-gradient-to-r from-[#0A0F1D]/95 via-[#0A0F1D]/65 to-transparent'
           }`}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(31,15,140,0.42),transparent_65%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(15,59,130,0.45),transparent_65%)]" />
       </motion.div>
 
       {showAmbient &&
@@ -169,8 +169,8 @@ export const HeroSection: React.FC = () => {
         >
           <defs>
             <linearGradient id="kowaStreamGrad" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stopColor="#1F0F8C" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="#634EEB" stopOpacity="0.9" />
+              <stop offset="0%" stopColor="#0F3B82" stopOpacity="0.7" />
+              <stop offset="50%" stopColor="#2563EB" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
             </linearGradient>
             <filter id="kowaGlow" x="-20%" y="-20%" width="140%" height="140%">

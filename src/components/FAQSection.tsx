@@ -181,7 +181,7 @@ export const FAQSection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-5"
             >
-              <div className="bg-gradient-to-br from-brand via-brand-dark to-neutral-900 dark:from-[#1F0F8C] dark:via-[#140959] dark:to-[#070B14] rounded-3xl p-8 sm:p-10 text-white shadow-elevated relative overflow-hidden flex flex-col justify-between">
+              <div className="bg-gradient-to-br from-brand via-brand-dark to-neutral-900 dark:from-[#0F3B82] dark:via-[#093168] dark:to-[#070B14] rounded-3xl p-8 sm:p-10 text-white shadow-elevated relative overflow-hidden flex flex-col justify-between">
                 <div className="absolute -top-16 -right-16 w-48 h-48 bg-white/15 rounded-full blur-2xl pointer-events-none" />
                 <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-sky-400/15 rounded-full blur-2xl pointer-events-none" />
 

@@ -38,7 +38,7 @@ export function QrCodeDisplay({
       width: size * 2,
       margin: 1,
       color: {
-        dark: '#140959',
+        dark: '#093168',
         light: '#FFFFFF',
       },
     })
