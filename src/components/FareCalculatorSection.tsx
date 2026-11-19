@@ -66,26 +66,45 @@ const FareRouteMap = dynamic(() => import('./FareRouteMap').then((mod) => mod.Fa
   ),
 });
 
-// Explicit real Riyadh landmark coordinates mapped to known CMS quick-route presets
+// Default Egyptian coordinates (Cairo Center)
+const DEFAULT_EGYPT_CENTER: GeoPoint = {
+  latitude: 30.0444,
+  longitude: 31.2357,
+};
+
+// Explicit real Egyptian landmark coordinates mapped to known CMS quick-route presets
 const DYNAMIC_PRESET_COORDS: Record<
   string,
   { pickup: GeoPoint; destination: GeoPoint }
 > = {
+  'cairo-airport': {
+    pickup: { latitude: 30.0286, longitude: 31.4705 },
+    destination: { latitude: 30.1123, longitude: 31.4005 },
+  },
+  'zayed-downtown': {
+    pickup: { latitude: 30.0216, longitude: 30.9839 },
+    destination: { latitude: 30.0444, longitude: 31.2357 },
+  },
+  'heliopolis-newcapital': {
+    pickup: { latitude: 30.0898, longitude: 31.3285 },
+    destination: { latitude: 30.0131, longitude: 31.7456 },
+  },
+  // Backward compatibility aliases for legacy CMS preset keys
   'kafd-airport': {
-    pickup: { latitude: 24.7647, longitude: 46.6406 },
-    destination: { latitude: 24.9576, longitude: 47.0017 },
+    pickup: { latitude: 30.0286, longitude: 31.4705 },
+    destination: { latitude: 30.1123, longitude: 31.4005 },
   },
   'olaya-dq': {
-    pickup: { latitude: 24.7115, longitude: 46.6743 },
-    destination: { latitude: 24.6775, longitude: 46.6256 },
+    pickup: { latitude: 30.0216, longitude: 30.9839 },
+    destination: { latitude: 30.0444, longitude: 31.2357 },
   },
   'park-diriyah': {
-    pickup: { latitude: 24.7562, longitude: 46.6305 },
-    destination: { latitude: 24.7366, longitude: 46.5752 },
+    pickup: { latitude: 30.0898, longitude: 31.3285 },
+    destination: { latitude: 30.0131, longitude: 31.7456 },
   },
 };
 
-const QUICK_RIYADH_POINTS: {
+const QUICK_EGYPT_POINTS: {
   id: string;
   label: { ar: string; en: string };
   pickup: GeoPoint;
@@ -94,48 +113,50 @@ const QUICK_RIYADH_POINTS: {
   destinationName: { ar: string; en: string };
 }[] = [
   {
-    id: 'kafd-airport',
-    label: { ar: 'المركز المالي ← المطار', en: 'KAFD → Airport T5' },
-    pickup: { latitude: 24.7647, longitude: 46.6406 },
+    id: 'cairo-airport',
+    label: { ar: 'التجمع الخامس ← المطار', en: 'New Cairo → Airport' },
+    pickup: { latitude: 30.0286, longitude: 31.4705 },
     pickupName: {
-      ar: 'الرياض - المركز المالي (KAFD)',
-      en: 'Riyadh - King Abdullah Financial District (KAFD)',
+      ar: 'التجمع الخامس - كايرو فستيفال سيتي',
+      en: 'New Cairo - Cairo Festival City',
     },
-    destination: { latitude: 24.9576, longitude: 47.0017 },
+    destination: { latitude: 30.1123, longitude: 31.4005 },
     destinationName: {
-      ar: 'مطار الملك خالد الدولي (صالة 5)',
-      en: 'King Khalid International Airport (Terminal 5)',
+      ar: 'مطار القاهرة الدولي (مبنى الركاب)',
+      en: 'Cairo International Airport (Terminals)',
     },
   },
   {
-    id: 'olaya-dq',
-    label: { ar: 'العليا ← الحي الدبلوماسي', en: 'Olaya → Diplomatic Qtr' },
-    pickup: { latitude: 24.7115, longitude: 46.6743 },
+    id: 'zayed-downtown',
+    label: { ar: 'الشيخ زايد ← وسط البلد', en: 'Sheikh Zayed → Downtown' },
+    pickup: { latitude: 30.0216, longitude: 30.9839 },
     pickupName: {
-      ar: 'برج المملكة - العليا',
-      en: 'Kingdom Centre - Al Olaya',
+      ar: 'الشيخ زايد - هايبر وان',
+      en: 'Sheikh Zayed - Hyper One',
     },
-    destination: { latitude: 24.6775, longitude: 46.6256 },
+    destination: { latitude: 30.0444, longitude: 31.2357 },
     destinationName: {
-      ar: 'حي السفارات - الحي الدبلوماسي',
-      en: 'Diplomatic Quarter (DQ)',
+      ar: 'وسط البلد - ميدان التحرير',
+      en: 'Downtown - Tahrir Square',
     },
   },
   {
-    id: 'park-diriyah',
-    label: { ar: 'الرياض بارك ← الدرعية', en: 'Riyadh Park → Diriyah' },
-    pickup: { latitude: 24.7562, longitude: 46.6305 },
+    id: 'heliopolis-newcapital',
+    label: { ar: 'مصر الجديدة ← العاصمة الإدارية', en: 'Heliopolis → New Capital' },
+    pickup: { latitude: 30.0898, longitude: 31.3285 },
     pickupName: {
-      ar: 'الرياض بارك - الدائري الشمالي',
-      en: 'Riyadh Park - Northern Ring Rd',
+      ar: 'مصر الجديدة - الكوربة',
+      en: 'Heliopolis - Korba',
     },
-    destination: { latitude: 24.7366, longitude: 46.5752 },
+    destination: { latitude: 30.0131, longitude: 31.7456 },
     destinationName: {
-      ar: 'مطل البجيري التاريخي - الدرعية',
-      en: 'Al-Bujairi Heritage Park - Diriyah',
+      ar: 'العاصمة الإدارية - حي المال والأعمال',
+      en: 'New Administrative Capital - CBD',
     },
   },
 ];
+
+const QUICK_RIYADH_POINTS = QUICK_EGYPT_POINTS;
 
 function isValidGeoPoint(point: GeoPoint | null | undefined): point is GeoPoint {
   if (!point) return false;
@@ -368,6 +389,31 @@ const DynamicFareCalculatorView: React.FC<{
   const estimateRevisionRef = useRef(0);
   const estimateAbortRef = useRef<AbortController | null>(null);
   const mapFrameRef = useRef<HTMLDivElement | null>(null);
+  const [isMapInView, setIsMapInView] = useState(false);
+
+  useEffect(() => {
+    if (!showMap || isMapInView) return;
+    const el = mapFrameRef.current;
+    if (!el) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsMapInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setIsMapInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [showMap, isMapInView]);
   const rideBoxRef = useRef<HTMLDivElement | null>(null);
   const pickupInputRef = useRef<HTMLInputElement | null>(null);
   const destinationInputRef = useRef<HTMLInputElement | null>(null);
@@ -992,9 +1038,14 @@ const DynamicFareCalculatorView: React.FC<{
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       setGeoWarning(
         isAr
-          ? 'المتصفح لا يدعم تحديد الموقع التلقائي، يرجى البحث أو الاختيار من الخريطة.'
-          : 'Browser geolocation is unavailable. Please search or pick on the map.'
+          ? 'المتصفح لا يدعم تحديد الموقع، تم اختيار مركز القاهرة الافتراضي.'
+          : 'Browser geolocation is unavailable. Defaulting to Cairo center.'
       );
+      handlePickupUpdate(
+        DEFAULT_EGYPT_CENTER,
+        isAr ? 'القاهرة - وسط البلد' : 'Cairo - Downtown'
+      );
+      resolveHumanPickupName(DEFAULT_EGYPT_CENTER);
       return;
     }
 
@@ -1009,13 +1060,19 @@ const DynamicFareCalculatorView: React.FC<{
         handlePickupUpdate(point, isAr ? 'موقعي الحالي (GPS)' : 'Current Location (GPS)');
         resolveHumanPickupName(point);
       },
-      () => {
+      (err) => {
         setIsLocating(false);
+        console.warn('[Geolocation] GPS position unavailable, falling back to Cairo center:', err);
         setGeoWarning(
           isAr
-            ? 'تعذر الوصول للموقع الحالي، يمكنك كتابة اسم المكان أو الضغط على الخريطة.'
-            : 'Unable to access your current location. Type a place name or tap the map.'
+            ? 'تعذر الوصول لموقعك الحالي عبر GPS، تم تعيين مركز القاهرة الافتراضي.'
+            : 'Unable to access GPS location. Centered on Cairo default.'
         );
+        handlePickupUpdate(
+          DEFAULT_EGYPT_CENTER,
+          isAr ? 'القاهرة - وسط البلد' : 'Cairo - Downtown'
+        );
+        resolveHumanPickupName(DEFAULT_EGYPT_CENTER);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -1228,8 +1285,16 @@ const DynamicFareCalculatorView: React.FC<{
   const trustStrip = (data.trustStrip || []).filter((item) => item.isEnabled !== false);
   const tgaLicense = (siteTgaLicense || '').trim();
 
+  const resolveCurrency = (raw?: string | null) => {
+    if (!raw || raw === 'SAR' || raw === 'ر.س' || raw === 'EGP' || raw === 'ج.م') {
+      return isAr ? 'ج.م' : 'EGP';
+    }
+    return raw;
+  };
+  const activeCurrency = resolveCurrency(estimateResult?.currency);
+
   const estimatedPriceLabel = estimateResult
-    ? `${formatPrice(estimateResult.price)} ${estimateResult.currency} ${
+    ? `${formatPrice(estimateResult.price)} ${activeCurrency} ${
         estimateResult.includesVat ? pick(data.labels?.vatNote) : ''
       }`.trim()
     : undefined;
@@ -1635,7 +1700,7 @@ const DynamicFareCalculatorView: React.FC<{
                           id="calc-pickup-lat"
                           type="number"
                           step="any"
-                          placeholder="24.7136"
+                          placeholder="30.0444"
                           value={coordInputs.pickupLat}
                           onChange={(e) => handleManualCoordChange('pickupLat', e.target.value)}
                           className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0E1528] border border-neutral-200 dark:border-line text-neutral-900 dark:text-ink focus:outline-none focus:border-brand dark:focus:border-brand-lime"
@@ -1652,7 +1717,7 @@ const DynamicFareCalculatorView: React.FC<{
                           id="calc-pickup-lng"
                           type="number"
                           step="any"
-                          placeholder="46.6753"
+                          placeholder="31.2357"
                           value={coordInputs.pickupLng}
                           onChange={(e) => handleManualCoordChange('pickupLng', e.target.value)}
                           className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0E1528] border border-neutral-200 dark:border-line text-neutral-900 dark:text-ink focus:outline-none focus:border-brand dark:focus:border-brand-lime"
@@ -1669,7 +1734,7 @@ const DynamicFareCalculatorView: React.FC<{
                           id="calc-dest-lat"
                           type="number"
                           step="any"
-                          placeholder="24.8000"
+                          placeholder="30.0286"
                           value={coordInputs.destLat}
                           onChange={(e) => handleManualCoordChange('destLat', e.target.value)}
                           className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0E1528] border border-neutral-200 dark:border-line text-neutral-900 dark:text-ink focus:outline-none focus:border-brand dark:focus:border-brand-lime"
@@ -1686,7 +1751,7 @@ const DynamicFareCalculatorView: React.FC<{
                           id="calc-dest-lng"
                           type="number"
                           step="any"
-                          placeholder="46.7000"
+                          placeholder="31.4705"
                           value={coordInputs.destLng}
                           onChange={(e) => handleManualCoordChange('destLng', e.target.value)}
                           className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0E1528] border border-neutral-200 dark:border-line text-neutral-900 dark:text-ink focus:outline-none focus:border-brand dark:focus:border-brand-lime"
@@ -1853,7 +1918,7 @@ const DynamicFareCalculatorView: React.FC<{
                                 transition={{ duration: 0.25 }}
                                 className="text-2xl sm:text-3xl font-black text-brand dark:text-brand-lime font-en"
                               >
-                                {formatPrice(estimateResult.price)} {estimateResult.currency}
+                                {formatPrice(estimateResult.price)} {activeCurrency}
                               </motion.span>
                             </AnimatePresence>
                             {estimateResult.includesVat ? (
@@ -1944,31 +2009,37 @@ const DynamicFareCalculatorView: React.FC<{
 
                 {/* Interactive Map (Hidden visually when dynamic.showMap === false) */}
                 {showMap ? (
-                  <div ref={mapFrameRef} className="relative z-10">
-                    <FareRouteMap
-                      pickup={pickup}
-                      destination={destination}
-                      activeSelection={activeSelection}
-                      onActiveSelectionChange={setActiveSelection}
-                      onPickupChange={(pt) => handlePickupUpdate(pt)}
-                      onDestinationChange={(pt) => handleDestinationUpdate(pt)}
-                      onClearPickup={handleClearPickup}
-                      onClearDestination={handleClearDestination}
-                      onClearAll={handleResetAll}
-                      routeGeometry={estimateResult?.route?.geometry || null}
-                      serviceArea={dynamicConfig.serviceArea}
-                      pickupLabel={pick(data.labels?.pickupPoint)}
-                      destinationLabel={pick(data.labels?.destination)}
-                      selectPickupPrompt={pick(
-                        dynLabels?.selectPickup,
-                        isAr ? 'حدد نقطة الانطلاق على الخريطة' : 'Select pickup on the map'
-                      )}
-                      selectDestinationPrompt={pick(
-                        dynLabels?.selectDestination,
-                        isAr ? 'حدد وجهتك على الخريطة' : 'Select destination on the map'
-                      )}
-                      isLoading={isEstimating || isLoadingCategories}
-                    />
+                  <div ref={mapFrameRef} className="relative z-10 min-h-[300px] sm:min-h-[340px] lg:min-h-[380px]">
+                    {isMapInView ? (
+                      <FareRouteMap
+                        pickup={pickup}
+                        destination={destination}
+                        activeSelection={activeSelection}
+                        onActiveSelectionChange={setActiveSelection}
+                        onPickupChange={(pt) => handlePickupUpdate(pt)}
+                        onDestinationChange={(pt) => handleDestinationUpdate(pt)}
+                        onClearPickup={handleClearPickup}
+                        onClearDestination={handleClearDestination}
+                        onClearAll={handleResetAll}
+                        routeGeometry={estimateResult?.route?.geometry || null}
+                        serviceArea={dynamicConfig.serviceArea}
+                        pickupLabel={pick(data.labels?.pickupPoint)}
+                        destinationLabel={pick(data.labels?.destination)}
+                        selectPickupPrompt={pick(
+                          dynLabels?.selectPickup,
+                          isAr ? 'حدد نقطة الانطلاق على الخريطة' : 'Select pickup on the map'
+                        )}
+                        selectDestinationPrompt={pick(
+                          dynLabels?.selectDestination,
+                          isAr ? 'حدد وجهتك على الخريطة' : 'Select destination on the map'
+                        )}
+                        isLoading={isEstimating || isLoadingCategories}
+                      />
+                    ) : (
+                      <div className="w-full h-[300px] sm:h-[340px] lg:h-[380px] rounded-3xl border border-white/15 bg-[#070B16]/80 flex items-center justify-center">
+                        <Loader2 className="w-6 h-6 animate-spin text-brand-lime" />
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="relative z-10 rounded-3xl bg-[#070B16]/75 border border-white/10 p-6 text-center space-y-2">
@@ -2013,7 +2084,7 @@ const DynamicFareCalculatorView: React.FC<{
                             {pick(dynLabels?.total, isAr ? 'الإجمالي' : 'Total')}
                           </span>
                           <span className="text-sm sm:text-base font-black text-white font-en">
-                            {formatPrice(estimateResult.price)} {estimateResult.currency}
+                            {formatPrice(estimateResult.price)} {activeCurrency}
                           </span>
                         </div>
                       </div>
@@ -2027,21 +2098,21 @@ const DynamicFareCalculatorView: React.FC<{
                             </span>
                             <span className="font-bold font-en">
                               {formatPrice(estimateResult.breakdown.fareBeforeVat)}{' '}
-                              {estimateResult.currency}
+                              {activeCurrency}
                             </span>
                           </div>
                           <div className="flex items-center justify-between text-neutral-300">
                             <span>{isAr ? 'ضريبة القيمة المضافة' : 'VAT'}</span>
                             <span className="font-bold font-en">
                               {formatPrice(estimateResult.breakdown.vatAmount)}{' '}
-                              {estimateResult.currency}
+                              {activeCurrency}
                             </span>
                           </div>
                           <div className="flex items-center justify-between text-white font-black pt-1 border-t border-white/10">
                             <span>{pick(dynLabels?.total, isAr ? 'الإجمالي' : 'Total')}</span>
                             <span className="text-white font-en">
                               {formatPrice(estimateResult.breakdown.total)}{' '}
-                              {estimateResult.currency}
+                              {activeCurrency}
                             </span>
                           </div>
                         </div>

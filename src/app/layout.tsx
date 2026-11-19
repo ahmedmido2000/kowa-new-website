@@ -10,21 +10,23 @@ import BackToTop from '@/components/BackToTop';
 import { MaintenanceGate } from '@/components/MaintenanceScreen';
 import { COMPANY_DATA } from '@/data/company';
 import { getWebsiteConfigSafe } from '@/lib/website-api.server';
-import { hexToRgbTriplet, pickText } from '@/lib/cms-helpers';
+import { hexToRgbTriplet, pickText, optimizeCloudinary } from '@/lib/cms-helpers';
 import type { WebsiteThemeTokens } from '@/types/website-cms';
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
-  subsets: ['arabic', 'latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['arabic'],
+  weight: ['400', '500', '700'],
   variable: '--font-ibm-arabic',
   display: 'swap',
+  preload: true,
 });
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600', '700'],
   variable: '--font-ibm-sans',
   display: 'swap',
+  preload: false,
 });
 
 function buildSafeThemeCss(tokens: Partial<WebsiteThemeTokens> | undefined): string {
@@ -155,6 +157,20 @@ export default async function RootLayout({
   const safeDefaultTheme =
     defaultTheme === 'dark' || defaultTheme === 'system' ? defaultTheme : 'light';
 
+  const rawHeroBg = config?.sections?.hero?.backgroundImage?.url;
+  const isCloudinary = typeof rawHeroBg === 'string' && rawHeroBg.includes('res.cloudinary.com');
+  const isProdDomain =
+    typeof process.env.NEXT_PUBLIC_SITE_URL === 'string' &&
+    process.env.NEXT_PUBLIC_SITE_URL.includes('kowa.sa');
+  const heroPreloadMobileUrl =
+    isProdDomain && isCloudinary
+      ? optimizeCloudinary(rawHeroBg, { width: 480, quality: 'auto:eco', crop: 'fit' })
+      : '/hero-bg-kowa-mobile.webp';
+  const heroPreloadDesktopUrl =
+    isProdDomain && isCloudinary
+      ? optimizeCloudinary(rawHeroBg, { width: 1200, quality: 'auto:eco', crop: 'fit' })
+      : '/hero-bg-kowa.webp';
+
   const themeScript = `(function(){try{var allow=${enableThemeToggle ? 'true' : 'false'};var def="${safeDefaultTheme}";var t=allow?localStorage.getItem("theme"):null;var isDark=t==="dark"||(!t&&(def==="dark"||(def==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches)));if(isDark){document.documentElement.classList.add("dark");}else{document.documentElement.classList.remove("dark");}}catch(e){}})();`;
 
   return (
@@ -165,6 +181,14 @@ export default async function RootLayout({
       className={`${ibmPlexSansArabic.variable} ${ibmPlexSans.variable} scroll-smooth`}
     >
       <head>
+        {isProdDomain ? (
+          <>
+            <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+            <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+          </>
+        ) : null}
+        <link rel="preload" as="image" href={heroPreloadMobileUrl} media="(max-width: 640px)" fetchPriority="high" {...{ fetchpriority: 'high' }} />
+        <link rel="preload" as="image" href={heroPreloadDesktopUrl} media="(min-width: 641px)" fetchPriority="high" {...{ fetchpriority: 'high' }} />
         {themeCss ? <style dangerouslySetInnerHTML={{ __html: themeCss }} /> : null}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

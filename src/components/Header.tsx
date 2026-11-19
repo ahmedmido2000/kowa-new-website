@@ -2,13 +2,12 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { Globe, Download, Menu, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import MagneticButton from '@/components/MagneticButton';
-import { isSafeHref, resolveBackendLogoUrl } from '@/lib/cms-helpers';
+import { isSafeHref, resolveBackendLogoUrl, optimizeCloudinary } from '@/lib/cms-helpers';
 
 interface HeaderProps {
   hashBasePath?: string;
@@ -32,7 +31,17 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
     return safe;
   };
 
-  const logoSrc = resolveBackendLogoUrl(platform, site?.company?.headerLogoUrl);
+  const rawLogoSrc = resolveBackendLogoUrl(platform, site?.company?.headerLogoUrl);
+  const isCloudinary = typeof rawLogoSrc === 'string' && rawLogoSrc.includes('res.cloudinary.com');
+  const isProd =
+    typeof window !== 'undefined'
+      ? window.location.hostname.includes('kowa.sa')
+      : typeof process.env.NEXT_PUBLIC_SITE_URL === 'string' &&
+        process.env.NEXT_PUBLIC_SITE_URL.includes('kowa.sa');
+  const logoSrc =
+    isProd && rawLogoSrc && isCloudinary
+      ? optimizeCloudinary(rawLogoSrc, { width: 88, height: 88, crop: 'fit', quality: 'auto' })
+      : '/logo-header.webp';
 
   const brandTitle = pick(data.brandTitle, 'كـوا');
   const brandBadge = pick(data.brandBadge, 'KOWA');
@@ -43,10 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
   const ctaMobileLabel = pick(data.cta?.mobileLabel, ctaLabel);
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    <header
       className="sticky top-0 z-50 bg-white/95 dark:bg-[#0C1222]/95 backdrop-blur-md border-b border-neutral-200 dark:border-line transition-colors duration-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4 lg:gap-8 flex-nowrap">
@@ -187,6 +193,6 @@ export const Header: React.FC<HeaderProps> = ({ hashBasePath = '' }) => {
           </div>
         </div>
       ) : null}
-    </motion.header>
+    </header>
   );
 };

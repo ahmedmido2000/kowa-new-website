@@ -1,4 +1,3 @@
-import axios from 'axios';
 import type {
   ContactSubmissionRequest,
   ContactSubmissionResponse,
@@ -20,15 +19,6 @@ const CLIENT_API_BASE = (
 export function getClientApiBaseUrl(): string {
   return CLIENT_API_BASE;
 }
-
-const clientApi = axios.create({
-  baseURL: CLIENT_API_BASE,
-  timeout: 15000,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-});
 
 export class WebsiteApiError extends Error {
   status: number;
@@ -66,20 +56,7 @@ export class WebsiteApiError extends Error {
   }
 }
 
-function parseAxiosError(error: unknown, fallbackMessage: string): WebsiteApiError {
-  if (!axios.isAxiosError(error)) {
-    return new WebsiteApiError({
-      message: error instanceof Error ? error.message : fallbackMessage,
-      status: 0,
-    });
-  }
-
-  const status = error.response?.status ?? 0;
-  const payload =
-    error.response?.data && typeof error.response.data === 'object'
-      ? (error.response.data as Record<string, unknown>)
-      : null;
-
+function parseFetchError(error: unknown, fallbackMessage: string, status = 0, payload?: Record<string, unknown> | null): WebsiteApiError {
   const code = typeof payload?.code === 'string' ? payload.code : undefined;
   const rawMessage = payload?.message;
 
@@ -116,15 +93,95 @@ function parseAxiosError(error: unknown, fallbackMessage: string): WebsiteApiErr
   }
 
   return new WebsiteApiError({
-    message: error.message || fallbackMessage,
+    message: error instanceof Error ? error.message : fallbackMessage,
     status,
     code,
   });
 }
 
+export function isRequestAbortedError(error: unknown): boolean {
+  if (error instanceof Error && (error.name === 'AbortError' || error.name === 'CanceledError')) {
+    return true;
+  }
+  return false;
+}
+
+interface RequestOptions {
+  method?: string;
+  params?: Record<string, string | number | undefined>;
+  body?: unknown;
+  headers?: Record<string, string>;
+  signal?: AbortSignal;
+  timeout?: number;
+}
+
+async function requestJson<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  let url = `${CLIENT_API_BASE}${path.startsWith('/') ? path : `/${path}`}`;
+  if (options.params) {
+    const search = new URLSearchParams();
+    for (const [k, v] of Object.entries(options.params)) {
+      if (v !== undefined && v !== null) {
+        search.set(k, String(v));
+      }
+    }
+    const query = search.toString();
+    if (query) {
+      url += (url.includes('?') ? '&' : '?') + query;
+    }
+  }
+
+  const timeoutMs = options.timeout ?? 15000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const combinedSignal = options.signal
+    ? (typeof AbortSignal.any === 'function'
+        ? AbortSignal.any([options.signal, controller.signal])
+        : options.signal)
+    : controller.signal;
+
+  try {
+    const res = await fetch(url, {
+      method: options.method || 'GET',
+      headers: {
+        Accept: 'application/json',
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...options.headers,
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+      signal: combinedSignal,
+    });
+
+    clearTimeout(timeoutId);
+
+    const isJson = res.headers.get('content-type')?.includes('application/json');
+    const data = isJson ? await res.json() : null;
+
+    if (!res.ok) {
+      throw parseFetchError(
+        new Error(`HTTP error ${res.status}`),
+        `Request failed with status ${res.status}`,
+        res.status,
+        data
+      );
+    }
+
+    return (data?.data !== undefined ? data.data : data) as T;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (isRequestAbortedError(error)) {
+      throw error;
+    }
+    if (error instanceof WebsiteApiError) {
+      throw error;
+    }
+    throw parseFetchError(error, 'Network request failed');
+  }
+}
+
 export async function fetchClientWebsiteConfig(): Promise<WebsiteConfigData | null> {
   try {
-    const response = await clientApi.get<{ data: WebsiteConfigData }>('/website/config', {
+    return await requestJson<WebsiteConfigData>('/website/config', {
       params: {
         locale: 'all',
         _t: Date.now(),
@@ -133,8 +190,8 @@ export async function fetchClientWebsiteConfig(): Promise<WebsiteConfigData | nu
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         Pragma: 'no-cache',
       },
+      timeout: 10000,
     });
-    return response.data.data;
   } catch {
     return null;
   }
@@ -144,7 +201,7 @@ export async function fetchClientWebsiteSection<T = unknown>(
   key: string
 ): Promise<WebsiteSectionEnvelope<T> | null> {
   try {
-    const response = await clientApi.get<{ data: WebsiteSectionEnvelope<T> }>(
+    return await requestJson<WebsiteSectionEnvelope<T>>(
       `/website/sections/${encodeURIComponent(key)}`,
       {
         params: {
@@ -155,9 +212,9 @@ export async function fetchClientWebsiteSection<T = unknown>(
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           Pragma: 'no-cache',
         },
+        timeout: 10000,
       }
     );
-    return response.data.data;
   } catch {
     return null;
   }
@@ -166,37 +223,21 @@ export async function fetchClientWebsiteSection<T = unknown>(
 export async function submitContactInquiry(
   payload: ContactSubmissionRequest
 ): Promise<ContactSubmissionResponse> {
-  try {
-    const response = await clientApi.post<{ data: ContactSubmissionResponse }>(
-      '/website/contact',
-      payload
-    );
-    return response.data.data;
-  } catch (error) {
-    throw parseAxiosError(error, 'Contact submission failed');
-  }
+  return await requestJson<ContactSubmissionResponse>('/website/contact', {
+    method: 'POST',
+    body: payload,
+    timeout: 15000,
+  });
 }
 
 export async function requestAppLinkSms(
   payload: SmsAppLinkRequest
 ): Promise<SmsAppLinkResponse> {
-  try {
-    const response = await clientApi.post<{ data: SmsAppLinkResponse }>(
-      '/website/app-link/sms',
-      payload
-    );
-    return response.data.data;
-  } catch (error) {
-    throw parseAxiosError(error, 'SMS app link request failed');
-  }
-}
-
-export function isRequestAbortedError(error: unknown): boolean {
-  if (axios.isCancel(error)) return true;
-  if (error instanceof Error && (error.name === 'AbortError' || error.name === 'CanceledError')) {
-    return true;
-  }
-  return false;
+  return await requestJson<SmsAppLinkResponse>('/website/app-link/sms', {
+    method: 'POST',
+    body: payload,
+    timeout: 15000,
+  });
 }
 
 export async function fetchFareCalculatorCategories(
@@ -207,53 +248,42 @@ export async function fetchFareCalculatorCategories(
   },
   signal?: AbortSignal
 ): Promise<FareCalculatorCategoriesResponse> {
-  try {
-    const response = await clientApi.get<{ data: FareCalculatorCategoriesResponse }>(
-      '/website/fare-calculator/categories',
-      {
-        params: {
-          pickupLatitude: Number(params.pickupLatitude),
-          pickupLongitude: Number(params.pickupLongitude),
-          locale: params.locale ?? 'all',
-        },
-        signal,
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    if (isRequestAbortedError(error)) {
-      throw error;
+  return await requestJson<FareCalculatorCategoriesResponse>(
+    '/website/fare-calculator/categories',
+    {
+      params: {
+        pickupLatitude: Number(params.pickupLatitude),
+        pickupLongitude: Number(params.pickupLongitude),
+        locale: params.locale ?? 'all',
+      },
+      signal,
+      timeout: 15000,
     }
-    throw parseAxiosError(error, 'Failed to load fare categories');
-  }
+  );
 }
 
 export async function estimateWebsiteTripFare(
   payload: EstimateFareRequest,
   signal?: AbortSignal
 ): Promise<EstimateFareResponse> {
-  try {
-    const body: EstimateFareRequest = {
-      pickup: {
-        latitude: Number(payload.pickup.latitude),
-        longitude: Number(payload.pickup.longitude),
-      },
-      destination: {
-        latitude: Number(payload.destination.latitude),
-        longitude: Number(payload.destination.longitude),
-      },
-      deliveryCategoryId: payload.deliveryCategoryId,
-    };
-    const response = await clientApi.post<{ data: EstimateFareResponse }>(
-      '/website/trips/estimate-fare',
+  const body: EstimateFareRequest = {
+    pickup: {
+      latitude: Number(payload.pickup.latitude),
+      longitude: Number(payload.pickup.longitude),
+    },
+    destination: {
+      latitude: Number(payload.destination.latitude),
+      longitude: Number(payload.destination.longitude),
+    },
+    deliveryCategoryId: payload.deliveryCategoryId,
+  };
+  return await requestJson<EstimateFareResponse>(
+    '/website/trips/estimate-fare',
+    {
+      method: 'POST',
       body,
-      { signal }
-    );
-    return response.data.data;
-  } catch (error) {
-    if (isRequestAbortedError(error)) {
-      throw error;
+      signal,
+      timeout: 15000,
     }
-    throw parseAxiosError(error, 'Failed to estimate trip fare');
-  }
+  );
 }

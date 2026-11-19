@@ -102,30 +102,35 @@ export function WebsiteConfigProvider({
       }
     };
 
-    // Immediate sync on mount to catch any changes since prerender
-    syncFreshConfig();
-
-    // Re-sync immediately when window receives focus (e.g. user switches from admin dashboard tab)
-    const handleFocus = () => {
+    let lastSyncTime = Date.now();
+    const throttledSync = () => {
+      const now = Date.now();
+      if (now - lastSyncTime < 25000) return;
+      lastSyncTime = now;
       syncFreshConfig();
+    };
+
+    // Re-sync when window receives focus (user switching back to tab from CMS)
+    const handleFocus = () => {
+      throttledSync();
     };
 
     // Re-sync when document becomes visible
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        syncFreshConfig();
+        throttledSync();
       }
     };
 
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Periodic live sync while tab is visible (every 10 seconds)
+    // Periodic live sync while tab is actively visible (every 30 seconds)
     const interval = setInterval(() => {
       if (document.visibilityState === 'visible') {
-        syncFreshConfig();
+        throttledSync();
       }
-    }, 10000);
+    }, 30000);
 
     return () => {
       active = false;

@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { cacheLife, cacheTag } from 'next/cache';
 import type { WebsiteConfigData, WebsiteSectionEnvelope } from '@/types/website-cms';
 
 const SERVER_API_BASE = (
@@ -8,83 +6,46 @@ const SERVER_API_BASE = (
   'https://api.kowa.sa'
 ).replace(/\/+$/, '');
 
-const serverApi = axios.create({
-  baseURL: SERVER_API_BASE,
-  adapter: 'fetch',
-  timeout: 20000,
-  headers: {
-    Accept: 'application/json',
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    Pragma: 'no-cache',
-  },
-});
-
-async function getWithRetry<T>(url: string, validateStatus?: (status: number) => boolean) {
-  let lastError: unknown;
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    try {
-      return await serverApi.get<{ data: T }>(url, {
-        params: { locale: 'all' },
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-        },
-        ...(validateStatus ? { validateStatus } : {}),
-      });
-    } catch (error) {
-      lastError = error;
-      if (attempt === 0) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-    }
-  }
-  throw lastError;
-}
-
-export async function getWebsiteConfigCached(): Promise<WebsiteConfigData> {
-  'use cache';
-  cacheLife('cms');
-  cacheTag('website-config');
-
-  const response = await getWithRetry<WebsiteConfigData>('/website/config');
-  return response.data.data;
-}
-
 export async function getWebsiteConfigSafe(): Promise<WebsiteConfigData | null> {
   try {
-    return await getWebsiteConfigCached();
+    const res = await fetch(`${SERVER_API_BASE}/website/config?locale=all`, {
+      headers: {
+        Accept: 'application/json',
+      },
+      next: { revalidate: 60, tags: ['website-config'] },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) {
+      console.warn(`[WebsiteCMS] Server API returned status ${res.status}`);
+      return null;
+    }
+    const json = await res.json();
+    return json?.data ?? null;
   } catch (error) {
     console.error('[WebsiteCMS] Failed to load /website/config:', error);
     return null;
   }
 }
 
-export async function getWebsiteSectionCached<T = unknown>(
-  key: string
-): Promise<WebsiteSectionEnvelope<T> | null> {
-  'use cache';
-  cacheLife('cms');
-  cacheTag(`website-section-${key}`);
-
-  const response = await getWithRetry<WebsiteSectionEnvelope<T>>(
-    `/website/sections/${encodeURIComponent(key)}`,
-    (status) => status === 200 || status === 404
-  );
-
-  if (response.status === 404) {
-    return null;
-  }
-
-  return response.data.data;
-}
-
 export async function getWebsiteSectionSafe<T = unknown>(
   key: string
 ): Promise<WebsiteSectionEnvelope<T> | null> {
   try {
-    return await getWebsiteSectionCached<T>(key);
+    const res = await fetch(
+      `${SERVER_API_BASE}/website/sections/${encodeURIComponent(key)}?locale=all`,
+      {
+        headers: {
+          Accept: 'application/json',
+        },
+        next: { revalidate: 60, tags: [`website-section-${key}`] },
+        signal: AbortSignal.timeout(8000),
+      }
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json?.data ?? null;
   } catch (error) {
-    console.error(`[WebsiteCMS] Failed to load section "${key}":`, error);
+    console.error(`[WebsiteCMS] Failed to load section ${key}:`, error);
     return null;
   }
 }

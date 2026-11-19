@@ -148,3 +148,45 @@ export function resolveBackendLogoUrl(
   }
   return null;
 }
+
+export interface CloudinaryOptimizeOptions {
+  width?: number;
+  height?: number;
+  crop?: 'fill' | 'fit' | 'limit' | 'scale';
+  quality?: 'auto' | 'auto:eco' | 'auto:good' | 'auto:best' | 'auto:low';
+}
+
+/**
+ * Optimizes a Cloudinary asset URL by inserting or updating format, dimensions, and compression quality.
+ */
+export function optimizeCloudinary(
+  url: string | null | undefined,
+  options: CloudinaryOptimizeOptions = {}
+): string {
+  if (!url || typeof url !== 'string' || !url.includes('res.cloudinary.com')) {
+    return url || '';
+  }
+
+  const { width, height, crop = 'fit', quality = 'auto:eco' } = options;
+  const parts = ['f_auto', `q_${quality}`];
+  if (width) parts.push(`w_${width}`);
+  if (height) parts.push(`h_${height}`);
+  if (width || height) parts.push(`c_${crop}`);
+  const transformSegment = parts.join(',');
+
+  const uploadIdx = url.indexOf('/upload/');
+  if (uploadIdx === -1) return url;
+  const afterUpload = url.slice(uploadIdx + 8);
+  const segments = afterUpload.split('/');
+  if (
+    segments[0] &&
+    !segments[0].match(/^v\d+$/) &&
+    (segments[0].includes(',') || segments[0].startsWith('w_') || segments[0].startsWith('f_'))
+  ) {
+    segments[0] = transformSegment;
+  } else {
+    segments.unshift(transformSegment);
+  }
+  return url.slice(0, uploadIdx + 8) + segments.join('/');
+}
+

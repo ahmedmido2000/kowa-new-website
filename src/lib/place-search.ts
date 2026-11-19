@@ -18,114 +18,132 @@ interface LocalLandmark {
   point: GeoPoint;
 }
 
-const SAUDI_LANDMARKS: LocalLandmark[] = [
+const EGYPT_LANDMARKS: LocalLandmark[] = [
   {
-    id: 'kkia',
-    ar: 'مطار الملك خالد الدولي',
-    en: 'King Khalid International Airport',
-    cityAr: 'الرياض',
-    cityEn: 'Riyadh',
-    keywords: ['مطار', 'الملك خالد', 'airport', 'kkia', 'riyadh airport'],
-    point: { latitude: 24.9576, longitude: 47.0017 },
+    id: 'cairo-airport',
+    ar: 'مطار القاهرة الدولي (مبنى الركاب)',
+    en: 'Cairo International Airport (Terminals)',
+    cityAr: 'مصر الجديدة، القاهرة',
+    cityEn: 'Heliopolis, Cairo',
+    keywords: ['مطار', 'القاهرة', 'صالة 3', 'صالة 2', 'صالة 1', 'airport', 'cairo airport', 'cai'],
+    point: { latitude: 30.1123, longitude: 31.4005 },
   },
   {
-    id: 'kafd',
-    ar: 'مركز الملك عبدالله المالي (KAFD)',
-    en: 'King Abdullah Financial District (KAFD)',
-    cityAr: 'الرياض',
-    cityEn: 'Riyadh',
-    keywords: ['المركز المالي', 'المالي', 'kafd', 'العقيق', 'financial'],
-    point: { latitude: 24.7647, longitude: 46.6406 },
+    id: 'cfc-mall',
+    ar: 'كايرو فستيفال سيتي مول (CFC)',
+    en: 'Cairo Festival City Mall (CFC)',
+    cityAr: 'التجمع الخامس، القاهرة الجديدة',
+    cityEn: '5th Settlement, New Cairo',
+    keywords: ['فستيفال', 'كايرو فستيفال', 'التجمع', 'التجمع الخامس', 'cfc', 'festival city', 'new cairo'],
+    point: { latitude: 30.0286, longitude: 31.4705 },
   },
   {
-    id: 'kingdom-centre',
-    ar: 'برج المملكة - العليا',
-    en: 'Kingdom Centre - Al Olaya',
-    cityAr: 'الرياض',
-    cityEn: 'Riyadh',
-    keywords: ['برج المملكة', 'المملكة', 'العليا', 'kingdom', 'olaya'],
-    point: { latitude: 24.7115, longitude: 46.6743 },
+    id: 'tahrir-downtown',
+    ar: 'ميدان التحرير - وسط البلد',
+    en: 'Tahrir Square - Downtown',
+    cityAr: 'وسط البلد، القاهرة',
+    cityEn: 'Downtown, Cairo',
+    keywords: ['التحرير', 'ميدان التحرير', 'وسط البلد', 'وسط البلد القاهرة', 'tahrir', 'downtown'],
+    point: { latitude: 30.0444, longitude: 31.2357 },
   },
   {
-    id: 'riyadh-park',
-    ar: 'الرياض بارك مول',
-    en: 'Riyadh Park Mall',
-    cityAr: 'الرياض',
-    cityEn: 'Riyadh',
-    keywords: ['الرياض بارك', 'بارك', 'مول', 'riyadh park', 'mall'],
-    point: { latitude: 24.7562, longitude: 46.6305 },
+    id: 'giza-pyramids',
+    ar: 'أهرامات الجيزة - نزلة السمان',
+    en: 'Giza Pyramids Complex',
+    cityAr: 'الهرم، الجيزة',
+    cityEn: 'Al Haram, Giza',
+    keywords: ['الأهرامات', 'أهرامات الجيزة', 'الهرم', 'أبو الهول', 'pyramids', 'giza'],
+    point: { latitude: 29.9792, longitude: 31.1342 },
   },
   {
-    id: 'boulevard',
-    ar: 'بوليفارد رياض سيتي',
-    en: 'Boulevard Riyadh City',
-    cityAr: 'الرياض',
-    cityEn: 'Riyadh',
-    keywords: ['البوليفارد', 'بوليفارد', 'حطين', 'boulevard', 'blvd'],
-    point: { latitude: 24.7676, longitude: 46.6039 },
+    id: 'mall-of-arabia',
+    ar: 'مول العرب - ميدان جهينة',
+    en: 'Mall of Arabia - Juhayna Sq',
+    cityAr: '6 أكتوبر، الجيزة',
+    cityEn: '6th of October, Giza',
+    keywords: ['مول العرب', 'أكتوبر', 'جهينة', 'mall of arabia', 'october'],
+    point: { latitude: 30.0074, longitude: 30.9733 },
   },
   {
-    id: 'diriyah',
-    ar: 'الدرعية التاريخية - مطل البجيري',
-    en: 'Diriyah - Al-Bujairi Heritage Park',
-    cityAr: 'الدرعية، الرياض',
-    cityEn: 'Diriyah, Riyadh',
-    keywords: ['الدرعية', 'البجيري', 'diriyah', 'bujairi'],
-    point: { latitude: 24.7366, longitude: 46.5752 },
+    id: 'mall-of-egypt',
+    ar: 'مول مصر - طريق الواحات',
+    en: 'Mall of Egypt - Al Wahat Rd',
+    cityAr: '6 أكتوبر، الجيزة',
+    cityEn: '6th of October, Giza',
+    keywords: ['مول مصر', 'الواحات', 'أكتوبر', 'mall of egypt'],
+    point: { latitude: 29.9725, longitude: 31.0167 },
   },
   {
-    id: 'dq',
-    ar: 'الحي الدبلوماسي (حي السفارات)',
-    en: 'Diplomatic Quarter (DQ)',
-    cityAr: 'الرياض',
-    cityEn: 'Riyadh',
-    keywords: ['السفارات', 'الدبلوماسي', 'diplomatic', 'dq'],
-    point: { latitude: 24.6775, longitude: 46.6256 },
+    id: 'hyper-one-zayed',
+    ar: 'هايبر وان - الشيخ زايد',
+    en: 'Hyper One - Sheikh Zayed',
+    cityAr: 'الشيخ زايد، الجيزة',
+    cityEn: 'Sheikh Zayed, Giza',
+    keywords: ['هايبر وان', 'الشيخ زايد', 'زايد', 'محور 26 يوليو', 'hyper one', 'sheikh zayed'],
+    point: { latitude: 30.0216, longitude: 30.9839 },
   },
   {
-    id: 'faisaliah',
-    ar: 'برج الفيصلية',
-    en: 'Al Faisaliah Tower',
-    cityAr: 'العليا، الرياض',
-    cityEn: 'Al Olaya, Riyadh',
-    keywords: ['الفيصلية', 'faisaliah'],
-    point: { latitude: 24.6904, longitude: 46.6853 },
+    id: 'citystars',
+    ar: 'سيتي ستارز مول - مدينة نصر',
+    en: 'Citystars Mall - Nasr City',
+    cityAr: 'مدينة نصر، القاهرة',
+    cityEn: 'Nasr City, Cairo',
+    keywords: ['سيتي ستارز', 'مدينة نصر', 'citystars', 'nasr city'],
+    point: { latitude: 30.0734, longitude: 31.3456 },
   },
   {
-    id: 'jeddah-corniche',
-    ar: 'واجهة روشن البحرية - كورنيش جدة',
-    en: 'Jeddah Waterfront Corniche',
-    cityAr: 'جدة',
-    cityEn: 'Jeddah',
-    keywords: ['جدة', 'كورنيش', 'روشن', 'jeddah', 'corniche'],
-    point: { latitude: 21.6203, longitude: 39.1086 },
+    id: 'new-capital-cbd',
+    ar: 'العاصمة الإدارية - حي المال والأعمال (البرج الأيقوني)',
+    en: 'New Capital - CBD (Iconic Tower)',
+    cityAr: 'العاصمة الإدارية الجديدة',
+    cityEn: 'New Administrative Capital',
+    keywords: ['العاصمة الإدارية', 'البرج الأيقوني', 'حي المال', 'iconic tower', 'new capital'],
+    point: { latitude: 30.0131, longitude: 31.7456 },
   },
   {
-    id: 'kaia-jeddah',
-    ar: 'مطار الملك عبدالعزيز الدولي',
-    en: 'King Abdulaziz International Airport',
-    cityAr: 'جدة',
-    cityEn: 'Jeddah',
-    keywords: ['مطار جدة', 'الملك عبدالعزيز', 'jeddah airport', 'kaia'],
-    point: { latitude: 21.6796, longitude: 39.1565 },
+    id: 'korba-heliopolis',
+    ar: 'حي الكوربة التاريخي - مصر الجديدة',
+    en: 'Al Korba Heritage District - Heliopolis',
+    cityAr: 'مصر الجديدة، القاهرة',
+    cityEn: 'Heliopolis, Cairo',
+    keywords: ['الكوربة', 'مصر الجديدة', 'روكسي', 'korba', 'heliopolis'],
+    point: { latitude: 30.0898, longitude: 31.3285 },
   },
   {
-    id: 'khobar-corniche',
-    ar: 'كورنيش الخبر',
-    en: 'Al Khobar Corniche',
-    cityAr: 'الخبر',
-    cityEn: 'Al Khobar',
-    keywords: ['الخبر', 'كورنيش الخبر', 'khobar'],
-    point: { latitude: 26.2929, longitude: 50.2202 },
+    id: 'zamalek-tower',
+    ar: 'برج القاهرة - الجزيرة',
+    en: 'Cairo Tower - Gezira',
+    cityAr: 'الزمالك، القاهرة',
+    cityEn: 'Zamalek, Cairo',
+    keywords: ['برج القاهرة', 'الزمالك', 'الجزيرة', 'cairo tower', 'zamalek'],
+    point: { latitude: 30.0459, longitude: 31.2243 },
   },
   {
-    id: 'nakheel-mall',
-    ar: 'النخيل مول - الرياض',
-    en: 'Al Nakheel Mall - Riyadh',
-    cityAr: 'حي المغرزات، الرياض',
-    cityEn: 'Al Mughrizat, Riyadh',
-    keywords: ['النخيل', 'النخيل مول', 'المغرزات', 'nakheel', 'mall'],
-    point: { latitude: 24.7697, longitude: 46.7155 },
+    id: 'maadi-degla',
+    ar: 'شارع 9 - دجلة المعادي',
+    en: 'Street 9 - Degla Maadi',
+    cityAr: 'المعادي، القاهرة',
+    cityEn: 'Maadi, Cairo',
+    keywords: ['المعادي', 'شارع 9', 'دجلة', 'maadi', 'street 9'],
+    point: { latitude: 29.9602, longitude: 31.2585 },
+  },
+  {
+    id: 'alex-corniche',
+    ar: 'كورنيش الإسكندرية - محطة الرمل',
+    en: 'Alexandria Waterfront - Raml Station',
+    cityAr: 'محطة الرمل، الإسكندرية',
+    cityEn: 'Raml Station, Alexandria',
+    keywords: ['الإسكندرية', 'الكورنيش', 'محطة الرمل', 'alexandria', 'corniche'],
+    point: { latitude: 31.2001, longitude: 29.9015 },
+  },
+  {
+    id: 'borg-elarab-airport',
+    ar: 'مطار برج العرب الدولي',
+    en: 'Borg El Arab International Airport',
+    cityAr: 'برج العرب، الإسكندرية',
+    cityEn: 'Borg El Arab, Alexandria',
+    keywords: ['مطار برج العرب', 'برج العرب', 'الإسكندرية', 'borg el arab', 'airport'],
+    point: { latitude: 30.9177, longitude: 29.6964 },
   },
 ];
 
@@ -143,7 +161,7 @@ function normalizeSearchText(value: string): string {
 export function matchLocalLandmarks(query: string, locale: Locale): PlaceSuggestion[] {
   const q = normalizeSearchText(query);
   const list = q
-    ? SAUDI_LANDMARKS.filter(
+    ? EGYPT_LANDMARKS.filter(
         (item) =>
           normalizeSearchText(item.ar).includes(q) ||
           normalizeSearchText(item.en).includes(q) ||
@@ -151,7 +169,7 @@ export function matchLocalLandmarks(query: string, locale: Locale): PlaceSuggest
           normalizeSearchText(item.cityEn).includes(q) ||
           item.keywords.some((k) => normalizeSearchText(k).includes(q))
       )
-    : SAUDI_LANDMARKS.slice(0, 6);
+    : EGYPT_LANDMARKS.slice(0, 6);
 
   return list.slice(0, 5).map((item) => ({
     id: `local-${item.id}`,
@@ -162,7 +180,7 @@ export function matchLocalLandmarks(query: string, locale: Locale): PlaceSuggest
   }));
 }
 
-export async function searchSaudiPlaces(
+export async function searchPlaces(
   query: string,
   locale: Locale,
   signal?: AbortSignal
@@ -175,7 +193,7 @@ export async function searchSaudiPlaces(
     const url = new URL('https://nominatim.openstreetmap.org/search');
     url.searchParams.set('format', 'jsonv2');
     url.searchParams.set('q', trimmed);
-    url.searchParams.set('countrycodes', 'sa');
+    url.searchParams.set('countrycodes', 'eg'); // Restrict strictly to Egypt
     url.searchParams.set('limit', '5');
     url.searchParams.set('addressdetails', '1');
     url.searchParams.set('accept-language', locale === 'ar' ? 'ar' : 'en');
@@ -246,7 +264,7 @@ export async function searchSaudiPlaces(
   }
 }
 
-export async function reverseGeocodeSaudiPlace(
+export async function reverseGeocodePlace(
   point: GeoPoint,
   locale: Locale,
   signal?: AbortSignal
@@ -286,3 +304,7 @@ export async function reverseGeocodeSaudiPlace(
     return null;
   }
 }
+
+// Backward compatibility aliases
+export const searchSaudiPlaces = searchPlaces;
+export const reverseGeocodeSaudiPlace = reverseGeocodePlace;

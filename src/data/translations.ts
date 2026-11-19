@@ -27,7 +27,7 @@ export const CATEGORIES: CategoryData[] = [
     capacity: { ar: '4 ركاب + 1 حقيبة', en: '4 Passengers + 1 Luggage' },
     eta: { ar: '< 2 دقيقة', en: '< 2 mins' },
     feature: { ar: 'تكييف قوي + تثبيت السعر', en: 'Strong AC + Fixed Fare' },
-    price: { ar: '18.00 ر.س', en: '18.00 SAR' },
+    price: { ar: '45.00 ج.م', en: '45.00 EGP' },
     carName: 'Toyota Yaris / Hyundai Accent 2024',
     image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=1000&q=80'
   },
@@ -43,7 +43,7 @@ export const CATEGORIES: CategoryData[] = [
     capacity: { ar: '4 ركاب + 2 حقيبة', en: '4 Passengers + 2 Luggage' },
     eta: { ar: '< 3 دقائق', en: '< 3 mins' },
     feature: { ar: 'مياه وضيافة + شاحن سريع', en: 'Complimentary Water + Fast Charging' },
-    price: { ar: '28.00 ر.س', en: '28.00 SAR' },
+    price: { ar: '65.00 ج.م', en: '65.00 EGP' },
     carName: 'Toyota Camry / Ford Taurus 2024',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3FCu6-QfkrRp_G7ngS_EtUnaTAseJKOwOZiIFMBokxeebFZF1urnsEGTDzfbrLcSJmsmaXqxRgcEzmpwJO4u8ncXXfa2ivR442blsiM8Kb3kxC4InMsq6GDEWycrLsZDCKqTY_4bWJ9cVXU71BdruG5T5FkpGbsI5oLRAitqUxEMXyjF8ALkUo6c77BY6z64-5CjEVwlh6eNMrkT_GTryA4KV_zj-ghpUG6rdX0BI'
   },
@@ -59,7 +59,7 @@ export const CATEGORIES: CategoryData[] = [
     capacity: { ar: '3 ركاب + 3 حقائب', en: '3 Passengers + 3 Luggage' },
     eta: { ar: '< 5 دقائق', en: '< 5 mins' },
     feature: { ar: 'واي فاي 5G + بروتوكول استقبال', en: '5G Wi-Fi + Protocol Reception' },
-    price: { ar: '55.00 ر.س', en: '55.00 SAR' },
+    price: { ar: '140.00 ج.م', en: '140.00 EGP' },
     carName: 'Lucid Air / Lexus ES VIP 2024',
     image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=80'
   },
@@ -75,7 +75,7 @@ export const CATEGORIES: CategoryData[] = [
     capacity: { ar: '7 ركاب + 6 حقائب كبيرة', en: '7 Passengers + 6 Luggage' },
     eta: { ar: '< 6 دقائق', en: '< 6 mins' },
     feature: { ar: 'مكيف مستقل + مقاعد أطفال', en: 'Dual AC + Child Safety Seats' },
-    price: { ar: '45.00 ر.س', en: '45.00 SAR' },
+    price: { ar: '110.00 ج.م', en: '110.00 EGP' },
     carName: 'GMC Yukon / Tahoe XL 2024',
     image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80'
   }

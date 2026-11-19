@@ -1,9 +1,7 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useRef } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type Lenis from 'lenis';
 import { useWebsiteConfig } from '@/context/WebsiteConfigContext';
 
 interface SmoothScrollContextType {
@@ -100,62 +98,100 @@ export default function SmoothScrollProvider({
       return;
     }
 
-    gsap.registerPlugin(ScrollTrigger);
+    // Skip on mobile & touch viewports: native mobile momentum scrolling is hardware-accelerated
+    // and eliminates heavy GSAP ticker & Lenis CPU execution on mobile devices and emulation.
+    const isMobileOrTouch =
+      window.innerWidth < 1024 ||
+      window.matchMedia('(max-width: 1023px)').matches ||
+      window.matchMedia('(pointer: coarse)').matches;
+    if (isMobileOrTouch) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let destroyed = false;
+    let removeTicker: (() => void) | null = null;
+    let removeClickListener: (() => void) | null = null;
+    let activeLenis: Lenis | null = null;
 
-    const lenis = new Lenis({
-      duration: prefersReducedMotion ? 0.05 : 0.9,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: !prefersReducedMotion,
-      allowNestedScroll: true,
-      wheelMultiplier: 1.25,
-      touchMultiplier: 1.35,
-      infinite: false,
-    });
+    Promise.all([
+      import('lenis'),
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+    ]).then(([lenisMod, gsapMod, scrollTriggerMod]) => {
+      if (destroyed) return;
 
-    lenisRef.current = lenis;
+      const LenisClass = lenisMod.default;
+      const gsap = gsapMod.default;
+      const ScrollTrigger = scrollTriggerMod.ScrollTrigger;
 
-    if (lockCountRef.current > 0) {
-      lenis.stop();
-    }
+      gsap.registerPlugin(ScrollTrigger);
 
-    lenis.on('scroll', () => {
-      ScrollTrigger.update();
-    });
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const updateTicker = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+      const lenis = new LenisClass({
+        duration: prefersReducedMotion ? 0.05 : 0.9,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: !prefersReducedMotion,
+        allowNestedScroll: true,
+        wheelMultiplier: 1.25,
+        touchMultiplier: 1.35,
+        infinite: false,
+      });
 
-    gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
+      activeLenis = lenis;
+      lenisRef.current = lenis;
 
-    const handleAnchorClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement)?.closest('a');
-      if (!target) return;
-      const href = target.getAttribute('href');
-      if (href && href.startsWith('#') && href.length > 1) {
-        const el = document.querySelector(href);
-        if (el) {
-          e.preventDefault();
-          lenis.scrollTo(el as HTMLElement, {
-            offset: -80,
-            duration: 0.9,
-            easing: (t) => 1 - Math.pow(1 - t, 3),
-          });
-        }
+      if (lockCountRef.current > 0) {
+        lenis.stop();
       }
-    };
 
-    document.addEventListener('click', handleAnchorClick);
+      lenis.on('scroll', () => {
+        ScrollTrigger.update();
+      });
+
+      const updateTicker = (time: number) => {
+        lenis.raf(time * 1000);
+      };
+
+      gsap.ticker.add(updateTicker);
+      gsap.ticker.lagSmoothing(0);
+
+      removeTicker = () => {
+        gsap.ticker.remove(updateTicker);
+      };
+
+      const handleAnchorClick = (e: MouseEvent) => {
+        const target = (e.target as HTMLElement)?.closest('a');
+        if (!target) return;
+        const href = target.getAttribute('href');
+        if (href && href.startsWith('#') && href.length > 1) {
+          const el = document.querySelector(href);
+          if (el) {
+            e.preventDefault();
+            lenis.scrollTo(el as HTMLElement, {
+              offset: -80,
+              duration: 0.9,
+              easing: (t) => 1 - Math.pow(1 - t, 3),
+            });
+          }
+        }
+      };
+
+      document.addEventListener('click', handleAnchorClick);
+      removeClickListener = () => {
+        document.removeEventListener('click', handleAnchorClick);
+      };
+    }).catch((err) => {
+      console.warn('[SmoothScroll] Failed to load smooth scroll engine:', err);
+    });
 
     return () => {
-      document.removeEventListener('click', handleAnchorClick);
-      gsap.ticker.remove(updateTicker);
-      lenis.destroy();
+      destroyed = true;
+      if (removeClickListener) removeClickListener();
+      if (removeTicker) removeTicker();
+      if (activeLenis) {
+        activeLenis.destroy();
+      }
       lenisRef.current = null;
     };
   }, [enableSmoothScroll]);

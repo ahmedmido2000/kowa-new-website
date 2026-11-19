@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import 'leaflet/dist/leaflet.css';
 import type LType from 'leaflet';
 import { Check, Crosshair, Loader2, MapPin, Navigation, RotateCcw, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
@@ -31,7 +30,7 @@ interface FareRouteMapProps {
   isLoading?: boolean;
 }
 
-const DEFAULT_CENTER: [number, number] = [24.7136, 46.6753];
+const DEFAULT_CENTER: [number, number] = [30.0444, 31.2357];
 const DEFAULT_ZOOM = 11;
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -113,7 +112,10 @@ export const FareRouteMap: React.FC<FareRouteMapProps> = ({
       const container = containerRef.current;
       if (!container) return;
 
-      const L = await import('leaflet');
+      const [L] = await Promise.all([
+        import('leaflet'),
+        import('leaflet/dist/leaflet.css'),
+      ]);
       if (isDisposed || !containerRef.current) return;
 
       leafletRef.current = L;

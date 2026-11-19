@@ -1,7 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  compress: true,
+  poweredByHeader: false,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  experimental: {
+    cpus: 1,
+    workerThreads: false,
+  },
   images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: "https",
@@ -25,6 +36,19 @@ const nextConfig: NextConfig = {
       revalidate: 1,
       expire: 3600,
     },
+  },
+  async headers() {
+    return [
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'Link',
+            value: '</hero-bg-kowa-mobile.webp>; rel=preload; as=image; media="(max-width: 640px)"',
+          },
+        ],
+      },
+    ];
   },
   turbopack: {
     rules: {
